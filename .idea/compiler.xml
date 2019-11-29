@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="gra_go" target="1.5" />
+      <module name="gra_go" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
