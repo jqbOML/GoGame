@@ -29,7 +29,7 @@ class Game {
 
     public synchronized void move(int location, Player player) {
         if (player != currentPlayer) {
-            throw new IllegalStateException("Not your turn");
+            throw new IllegalStateException("Nie Twój ruch");
         } else if (player.opponent == null) {
             throw new IllegalStateException("You don't have an opponent yet");
         } else if (board[location] != null) {
