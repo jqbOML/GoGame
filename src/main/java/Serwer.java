@@ -23,9 +23,9 @@ class Game {
         if (player != currentPlayer) {
             throw new IllegalStateException("Nie Twój ruch");
         } else if (player.opponent == null) {
-            throw new IllegalStateException("You don't have an opponent yet");
+            throw new IllegalStateException("Nie masz jeszcze przeciwnika");
         } else if (board[location] != null) {
-            throw new IllegalStateException("Cell already occupied");
+            throw new IllegalStateException("Pole jest już zajęte");
         }
         board[location] = currentPlayer;
         currentPlayer = currentPlayer.opponent;
