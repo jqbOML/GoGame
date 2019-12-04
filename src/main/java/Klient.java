@@ -18,14 +18,12 @@ public class Klient{
 
     public JFrame ramka = new JFrame("Gra Go");
     private JLabel belkaStatusu = new JLabel("...");
-    private static Plansza plansza_go;
-    private JLabel[] pole;
+    private static GUI_Plansza plansza_go;
+    private JLabel[][] pole;
     private JLabel wybrane_pole;
     private int rozmiar_pola;
 
     public static int rozmiarBoku_planszy;
-    public static int[] pozycje_kamienii;
-
 
     private Socket socket;
     private Scanner in;
@@ -37,26 +35,17 @@ public class Klient{
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
 
-        belkaStatusu.setBackground(Color.lightGray);
-        ramka.getContentPane().add(belkaStatusu, BorderLayout.SOUTH);
-
         rozmiarBoku_planszy = bok_planszy - 1;
-        rozmiar_pola = Math.min(700 / rozmiarBoku_planszy, 700 / rozmiarBoku_planszy);
-
-        pozycje_kamienii = new int[(rozmiarBoku_planszy+1)*(rozmiarBoku_planszy+1)];
-        for (int a = 0; a < (rozmiarBoku_planszy+1)*(rozmiarBoku_planszy+1); a++) {
-            //for (int b = 0; b < rozmiarBoku_planszy; b++) {
-            pozycje_kamienii[a] = 0;
-
-        }
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize(); //pobranie parametrów rozdzielczości ekranu
+        rozmiar_pola = (int)(d.height / rozmiarBoku_planszy);
 
         ramka.setVisible(true);
-        ramka.setLocation(90, 5);
+        ramka.setLocation(0, 0);
         ramka.setSize(rozmiarBoku_planszy * rozmiar_pola, rozmiarBoku_planszy * rozmiar_pola);
-        System.out.println("setSize: " + rozmiarBoku_planszy * rozmiar_pola + ", " + rozmiarBoku_planszy * rozmiar_pola);
+        //System.out.println("setSize: " + rozmiarBoku_planszy * rozmiar_pola + ", " + rozmiarBoku_planszy * rozmiar_pola);
         ramka.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pole = new JLabel[(rozmiarBoku_planszy+1)*(rozmiarBoku_planszy+1)];
-        plansza_go = new Plansza();
+        pole = new JLabel[rozmiarBoku_planszy+1][rozmiarBoku_planszy+1];
+        plansza_go = new GUI_Plansza();
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setSize(rozmiarBoku_planszy * rozmiar_pola, rozmiarBoku_planszy * rozmiar_pola);
@@ -68,118 +57,131 @@ public class Klient{
         ramka.add(mainPanel);
         ramka.setVisible(true);
 
-
-
-
     }
 
-    public class Plansza extends JPanel {
-        ImageIcon ImI_p00 = new ImageIcon("tekstury/00polePuste.jpg");
-        //dostosuj rozmiare ikony
-        Image newimg1 = ImI_p00.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon Im_puste00 = new ImageIcon(newimg1);
+    public class GUI_Plansza extends JPanel {
+        Tekstury tekstury = new Tekstury();
 
-        ImageIcon ImI_p0x = new ImageIcon("tekstury/0xpolePuste.jpg");
-        //dostosuj rozmiare ikony
-        Image newimg2 = ImI_p0x.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon Im_puste0x = new ImageIcon(newimg2);
-
-        ImageIcon ImI_p08 = new ImageIcon("tekstury/08polePuste.jpg");
-        //dostosuj rozmiare ikony
-        Image newimg3 = ImI_p08.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon Im_puste08 = new ImageIcon(newimg3);
-
-        ImageIcon ImI_p8x = new ImageIcon("tekstury/8xpolePuste.jpg");
-        //dostosuj rozmiare ikony
-        Image newimg4 = ImI_p8x.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon Im_puste8x = new ImageIcon(newimg4);
-
-        ImageIcon ImI_p80 = new ImageIcon("tekstury/80polePuste.jpg");
-        //dostosuj rozmiare ikony
-        Image newimg5 = ImI_p80.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon Im_puste80 = new ImageIcon(newimg5);
-
-        ImageIcon ImI_p88 = new ImageIcon("tekstury/88polePuste.jpg");
-        //dostosuj rozmiare ikony
-        Image newimg6 = ImI_p88.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon Im_puste88 = new ImageIcon(newimg6);
-
-        ImageIcon ImI_pxx = new ImageIcon("tekstury/srodkowepolePuste.jpg");
-        //dostosuj rozmiare ikony
-        Image newimg7 = ImI_pxx.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon Im_pustexx = new ImageIcon(newimg7);
-
-        ImageIcon ImI_px0 = new ImageIcon("tekstury/x0polePuste.jpg");
-        //dostosuj rozmiare ikony
-        Image newimg8 = ImI_px0.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon Im_pustex0 = new ImageIcon(newimg8);
-
-        ImageIcon ImI_px8 = new ImageIcon("tekstury/x8polePuste.jpg");
-        //dostosuj rozmiare ikony
-        Image newimg9 = ImI_px8.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon Im_pustex8 = new ImageIcon(newimg9);
-
-        ImageIcon ImI_cxx = new ImageIcon("tekstury/srodkowepoleCzarny.jpg");
-        //dostosuj rozmiare ikony
-        Image newimg10 = ImI_cxx.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon Im_czarnyxx = new ImageIcon(newimg10);
-
-        ImageIcon ImI_bxx = new ImageIcon("tekstury/srodkowepoleBialy.jpg");
-        //dostosuj rozmiare ikony
-        Image newimg11 = ImI_bxx.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon Im_bialyxx = new ImageIcon(newimg11);
-
-        Plansza() throws IOException {
+        GUI_Plansza() throws IOException {
             setLayout(new GridLayout(rozmiarBoku_planszy+1, rozmiarBoku_planszy+1, 0, 0));
 
             /**
              * Inicjalizacja planszy o podanych (NxM) wymiarach
              */
             System.out.println("Plansza Width: "+rozmiarBoku_planszy+", Plansza height: "+rozmiarBoku_planszy);
-            //for(int b=0; b<rozmiarBoku_planszy; b++){
-            for(int a=0; a<(rozmiarBoku_planszy+1)*(rozmiarBoku_planszy+1); a++){
-                System.out.println("a="+a);
-                pole[a] = new JLabel();
-                pole[a].setLayout(new GridBagLayout());
-                int finalA = a;
-                pole[a].addMouseListener(new MouseAdapter() {
-                    public void mousePressed(MouseEvent e) {
-                        pozycje_kamienii[finalA] = 1;
-                        wybrane_pole = pole[finalA];
-                        out.println("MOVE " + finalA);
+            for(int b = 0; b < rozmiarBoku_planszy + 1; b++) {
+                for (int a = 0; a < rozmiarBoku_planszy + 1; a++) {
+                    pole[a][b] = new JLabel();
+                    pole[a][b].setLayout(new GridBagLayout());
+                    //WCZYTANIE ODPOWIEDNIEJ TEKSTURY
+                    if (a == 0)                        pole[a][b].setIcon(tekstury.Im_puste0x);
+                    else if (b == 0)                   pole[a][b].setIcon(tekstury.Im_pustex0);
+                    else if (a == rozmiarBoku_planszy) pole[a][b].setIcon(tekstury.Im_puste8x);
+                    else if (b == rozmiarBoku_planszy) pole[a][b].setIcon(tekstury.Im_pustex8);
+                    else                               pole[a][b].setIcon(tekstury.Im_pustexx);
+                    //
+                    int finalA = a;
+                    int finalB = b;
+                    pole[a][b].addMouseListener(new MouseAdapter() {
+                        public void mousePressed(MouseEvent e) {
+                            //pozycje_kamienii[finalA] = 1;
+                            wybrane_pole = pole[finalA][finalB];
+                            out.println("MOVE " + finalA + " " + finalB);
+                            System.out.println("My move> locX: "+finalA+", locY: "+finalB);
 
-                    }
-                });
-                add(pole[a]);
+                        }
+                    });
+                    add(pole[a][b]);
+                }
             }
 
-
-
-            paintBoard();
+            pole[0][0].setIcon(tekstury.Im_puste00);
+            pole[0][rozmiarBoku_planszy].setIcon(tekstury.Im_puste08);
+            pole[rozmiarBoku_planszy][rozmiarBoku_planszy].setIcon(tekstury.Im_puste88);
+            pole[rozmiarBoku_planszy][0].setIcon(tekstury.Im_puste80);
             repaint();
         }
 
-        public void paintBoard(){
+        /*public void paintBoard(){
             for(int i = 0; i < (rozmiarBoku_planszy+1)*(rozmiarBoku_planszy+1); i++){
-                //for(int j = 0; j < rozmiarBoku_planszy; j++){
-                pole[i].removeAll();
-                if (i%(rozmiarBoku_planszy+1) == 0) pole[i].setIcon(Im_puste0x);
-                else if (i <= rozmiarBoku_planszy) pole[i].setIcon(Im_pustex0);
-                else if ((i-rozmiarBoku_planszy)%(rozmiarBoku_planszy+1) == 0) pole[i].setIcon(Im_puste8x);
-                else if (i >= ((rozmiarBoku_planszy+1)*(rozmiarBoku_planszy+1)-(rozmiarBoku_planszy+1))) pole[i].setIcon(Im_pustex8);
-                else {
-                    if (pozycje_kamienii[i] == 0) pole[i].setIcon(Im_pustexx);
-                    else pole[i].setIcon(Im_czarnyxx);
+                for(int j = 0; j < rozmiarBoku_planszy; j++) {
+                    pole[i][j].removeAll();
+                    if (i % (rozmiarBoku_planszy + 1) == 0) pole[i][j].setIcon(tekstury.Im_puste0x);
+                    else if (i <= rozmiarBoku_planszy) pole[i][j].setIcon(tekstury.Im_pustex0);
+                    else if ((i - rozmiarBoku_planszy) % (rozmiarBoku_planszy + 1) == 0) pole[i][j].setIcon(tekstury.Im_puste8x);
+                    else if (i >= ((rozmiarBoku_planszy + 1) * (rozmiarBoku_planszy + 1) - (rozmiarBoku_planszy + 1)))
+                        pole[i][j].setIcon(tekstury.Im_pustex8);
+                    else {
+                        if (pozycje_kamienii[i] == 0) pole[i][j].setIcon(tekstury.Im_pustexx);
+                        else pole[i][j].setIcon(tekstury.Im_czarnyxx);
+                    }
                 }
-
             }
-            pole[0].setIcon(Im_puste00);
-            pole[(((rozmiarBoku_planszy+1)*(rozmiarBoku_planszy+1))-(rozmiarBoku_planszy+1))].setIcon(Im_puste08);
-            pole[(rozmiarBoku_planszy+1)*(rozmiarBoku_planszy+1)-1].setIcon(Im_puste88);
-            pole[rozmiarBoku_planszy].setIcon(Im_puste80);
+            pole[0][0].setIcon(tekstury.Im_puste00);
+            pole[0][rozmiarBoku_planszy].setIcon(tekstury.Im_puste08);
+            pole[rozmiarBoku_planszy][rozmiarBoku_planszy].setIcon(tekstury.Im_puste88);
+            pole[rozmiarBoku_planszy][0].setIcon(tekstury.Im_puste80);
 
             validate();
             repaint();
+        }*/
+
+        class Tekstury{
+            ArrayList<ImageIcon> tekstury = new ArrayList<>();
+            ImageIcon ImI_p00 = new ImageIcon("tekstury/00polePuste.jpg");
+            //dostosuj rozmiare ikony
+            Image newimg1 = ImI_p00.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
+            ImageIcon Im_puste00 = new ImageIcon(newimg1);
+
+            ImageIcon ImI_p0x = new ImageIcon("tekstury/0xpolePuste.jpg");
+            //dostosuj rozmiare ikony
+            Image newimg2 = ImI_p0x.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
+            ImageIcon Im_puste0x = new ImageIcon(newimg2);
+
+            ImageIcon ImI_p08 = new ImageIcon("tekstury/08polePuste.jpg");
+            //dostosuj rozmiare ikony
+            Image newimg3 = ImI_p08.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
+            ImageIcon Im_puste08 = new ImageIcon(newimg3);
+
+            ImageIcon ImI_p8x = new ImageIcon("tekstury/8xpolePuste.jpg");
+            //dostosuj rozmiare ikony
+            Image newimg4 = ImI_p8x.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
+            ImageIcon Im_puste8x = new ImageIcon(newimg4);
+
+            ImageIcon ImI_p80 = new ImageIcon("tekstury/80polePuste.jpg");
+            //dostosuj rozmiare ikony
+            Image newimg5 = ImI_p80.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
+            ImageIcon Im_puste80 = new ImageIcon(newimg5);
+
+            ImageIcon ImI_p88 = new ImageIcon("tekstury/88polePuste.jpg");
+            //dostosuj rozmiare ikony
+            Image newimg6 = ImI_p88.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
+            ImageIcon Im_puste88 = new ImageIcon(newimg6);
+
+            ImageIcon ImI_pxx = new ImageIcon("tekstury/srodkowepolePuste.jpg");
+            //dostosuj rozmiare ikony
+            Image newimg7 = ImI_pxx.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
+            ImageIcon Im_pustexx = new ImageIcon(newimg7);
+
+            ImageIcon ImI_px0 = new ImageIcon("tekstury/x0polePuste.jpg");
+            //dostosuj rozmiare ikony
+            Image newimg8 = ImI_px0.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
+            ImageIcon Im_pustex0 = new ImageIcon(newimg8);
+
+            ImageIcon ImI_px8 = new ImageIcon("tekstury/x8polePuste.jpg");
+            //dostosuj rozmiare ikony
+            Image newimg9 = ImI_px8.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
+            ImageIcon Im_pustex8 = new ImageIcon(newimg9);
+
+            ImageIcon ImI_cxx = new ImageIcon("tekstury/srodkowepoleCzarny.jpg");
+            //dostosuj rozmiare ikony
+            Image newimg10 = ImI_cxx.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
+            ImageIcon Im_czarnyxx = new ImageIcon(newimg10);
+
+            ImageIcon ImI_bxx = new ImageIcon("tekstury/srodkowepoleBialy.jpg");
+            //dostosuj rozmiare ikony
+            Image newimg11 = ImI_bxx.getImage().getScaledInstance(rozmiar_pola, rozmiar_pola,  java.awt.Image.SCALE_SMOOTH);
+            ImageIcon Im_bialyxx = new ImageIcon(newimg11);
         }
     }
 
@@ -195,24 +197,27 @@ public class Klient{
     public void play() throws Exception {
         try {
             String response = in.nextLine();
+            System.out.println("Wiadomosc z serwera: "+ response);
             char mark = response.charAt(8);
-            char opponentMark = (mark == 'X') ? 'O' : 'X';
             ramka.setTitle("Gra Go: Gracz " + ((mark == 'X') ? "czarny" : "biały"));
             while (in.hasNextLine()) {
-                response = in.nextLine();
-                if (response.startsWith("VALID_MOVE")) {
+                response = in.next();
+                System.out.println("Respons in.next: "+response);
+                if (response.startsWith("POPRAWNY_RUCH")) {
                     belkaStatusu.setText("Runda przeciwnika, proszę czekać");
-                    if(mark == 'X') wybrane_pole.setIcon(plansza_go.Im_czarnyxx);
-                    else wybrane_pole.setIcon(plansza_go.Im_bialyxx);
+                    if(mark == 'X') wybrane_pole.setIcon(plansza_go.tekstury.Im_czarnyxx);
+                    else wybrane_pole.setIcon(plansza_go.tekstury.Im_bialyxx);
                     wybrane_pole.repaint();
                 } else if (response.startsWith("OPPONENT_MOVED")) {
-                    int loc = Integer.parseInt(response.substring(15));
-                    if(mark == 'X') pole[loc].setIcon(plansza_go.Im_bialyxx);
-                    else pole[loc].setIcon(plansza_go.Im_czarnyxx);
-                    pole[loc].repaint();
+                    int locX = Integer.parseInt(in.next());
+                    int locY = Integer.parseInt(in.next());
+                    System.out.println("Oponent> locX: "+locX+", locY: "+locY);
+                    if(mark == 'X') pole[locX][locY].setIcon(plansza_go.tekstury.Im_bialyxx);
+                    else pole[locX][locY].setIcon(plansza_go.tekstury.Im_czarnyxx);
+                    pole[locX][locY].repaint();
                     belkaStatusu.setText("Przeciwnik wykonał ruch, Twoja kolej");
                 } else if (response.startsWith("MESSAGE")) {
-                    belkaStatusu.setText(response.substring(8));
+                    belkaStatusu.setText(in.nextLine());
                 } else if (response.startsWith("VICTORY")) {
                     JOptionPane.showMessageDialog(ramka, "Wygrałeś, gratulacje!");
                     break;
@@ -234,22 +239,6 @@ public class Klient{
         finally {
             socket.close();
             ramka.dispose();
-        }
-    }
-
-    static class Square extends JPanel {
-        JLabel label = new JLabel();
-
-        public Square() {
-            setBackground(Color.white);
-            setLayout(new GridBagLayout());
-            label.setFont(new Font("Arial", Font.BOLD, 40));
-            add(label);
-        }
-
-        public void setText(char text) {
-            label.setForeground(text == 'X' ? Color.BLUE : Color.RED);
-            label.setText(text + "");
         }
     }
 }

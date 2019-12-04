@@ -1,11 +1,10 @@
-import java.util.ArrayList;
+/*import java.util.ArrayList;
 import java.util.List;
 
 public class Kamien {
-public int mojkolor;
-int [][] kamien;
-
-
+    int x;
+    int y;
+    public int mojkolor;
 
     public  boolean czyOddech( int x, int y){
         if (kamien[x+1][y]==mojkolor && kamien[x-1][y]==mojkolor && kamien[x][y+1]==mojkolor && kamien[x][y-1]==mojkolor)
@@ -52,4 +51,4 @@ int [][] kamien;
             czyKolega(a, b-1);
         }
         return (ArrayList<Integer>) lista;
-}}
+}}*/

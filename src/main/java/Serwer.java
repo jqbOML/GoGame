@@ -1,33 +1,28 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.Scanner;
 class Game {
 
     // Board cells numbered 0-361, top to bottom, left to right; null if empty
-    private Player[] board = new Player[361];
-
+    private Player[][] board = new Player[19][19];
     Player currentPlayer;
+    /*public static int[][] pozycje_kamienii;
+    pozycje_kamienii =
+    for (int a = 0; a < (rozmiarBoku_planszy+1)*(rozmiarBoku_planszy+1); a++) {
+        //for (int b = 0; b < rozmiarBoku_planszy; b++) {
+        pozycje_kamienii[a] = 0;
+    }*/
 
-    public boolean hasWinner() {
-        return false;
-    }
-
-    public boolean boardFilledUp() {
-        return Arrays.stream(board).allMatch(Objects::nonNull);
-    }
-
-    public synchronized void move(int location, Player player) {
+    public synchronized void move(int x, int y, Player player) {
         if (player != currentPlayer) {
             throw new IllegalStateException("Nie Twój ruch");
         } else if (player.opponent == null) {
             throw new IllegalStateException("Nie masz jeszcze przeciwnika");
-        } else if (board[location] != null) {
+        } else if (board[x][y] != null) {
             throw new IllegalStateException("Pole jest już zajęte");
         }
-        board[location] = currentPlayer;
+        board[x][y] = currentPlayer;
         currentPlayer = currentPlayer.opponent;
     }
 
@@ -74,31 +69,29 @@ class Game {
                 opponent = currentPlayer;
                 opponent.opponent = this;
                 opponent.output.println("MESSAGE Your move");
+                this.output.println("MESSAGE Runda przeciwnika, proszę czekać");
             }
         }
 
         private void processCommands() {
-            while (input.hasNextLine()) {
-                String command = input.nextLine();
+            while (input.hasNext()) {
+                String command = input.next();
                 if (command.startsWith("QUIT")) {
                     return;
                 } else if (command.startsWith("MOVE")) {
-                    processMoveCommand(Integer.parseInt(command.substring(5)));
+                    processMoveCommand(Integer.parseInt(input.next()), Integer.parseInt(input.next()));
                 }
             }
         }
 
-        private void processMoveCommand(int location) {
+        private void processMoveCommand(int locX, int locY) {
             try {
-                move(location, this);
-                output.println("VALID_MOVE");
-                opponent.output.println("OPPONENT_MOVED " + location);
-                if (hasWinner()) {
+                move(locX, locY, this);
+                output.println("POPRAWNY_RUCH");
+                opponent.output.println("OPPONENT_MOVED " + locX + " " + locY);
+                if (false) {
                     output.println("VICTORY");
                     opponent.output.println("DEFEAT");
-                } else if (boardFilledUp()) {
-                    output.println("TIE");
-                    opponent.output.println("TIE");
                 }
             } catch (IllegalStateException e) {
                 output.println("MESSAGE " + e.getMessage());
