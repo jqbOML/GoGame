@@ -8,9 +8,9 @@ public class MainSerwer {
             System.out.println("Serwer Go aktywny");
             ExecutorService pool = Executors.newFixedThreadPool(200);
             while (true) {
-                Game game = new Game();
-                pool.execute(game.new Player(listener.accept(), 'X'));
-                pool.execute(game.new Player(listener.accept(), 'O'));
+                Serwer serwer_go = new Serwer();
+                pool.execute(serwer_go.new Gracz(listener.accept(), 1)); //czarny
+                pool.execute(serwer_go.new Gracz(listener.accept(), 2)); //bialy
             }
         }
     }

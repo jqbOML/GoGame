@@ -2,99 +2,93 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-class Game {
+class Serwer {
 
-    // Board cells numbered 0-361, top to bottom, left to right; null if empty
-    private Player[][] board = new Player[19][19];
-    Player currentPlayer;
-    /*public static int[][] pozycje_kamienii;
-    pozycje_kamienii =
-    for (int a = 0; a < (rozmiarBoku_planszy+1)*(rozmiarBoku_planszy+1); a++) {
-        //for (int b = 0; b < rozmiarBoku_planszy; b++) {
-        pozycje_kamienii[a] = 0;
-    }*/
+    private Kamien[][] plansza_go = new Kamien[19][19];
+    private Gracz aktualny_gracz;
 
-    public synchronized void move(int x, int y, Player player) {
-        if (player != currentPlayer) {
+    public synchronized void ruch(int x, int y, Gracz gracz) {
+        if (gracz != aktualny_gracz) {
             throw new IllegalStateException("Nie Twój ruch");
-        } else if (player.opponent == null) {
+        } else if (gracz.przeciwnik == null) {
             throw new IllegalStateException("Nie masz jeszcze przeciwnika");
-        } else if (board[x][y] != null) {
+        } else if (plansza_go[x][y] != null) {
             throw new IllegalStateException("Pole jest już zajęte");
         }
-        board[x][y] = currentPlayer;
-        currentPlayer = currentPlayer.opponent;
+        plansza_go[x][y] = new Kamien(aktualny_gracz.kolor);
+        aktualny_gracz = aktualny_gracz.przeciwnik;
     }
 
     /**
-     * A Player is identified by a character mark which is either 'X' or 'O'.
-     * For communication with the client the player has a socket and associated
+     * A Gracz is identified by a character kolor which is either 'X' - czarny or 'O' - bialy.
+     * For communication with the client the gracz has a socket and associated
      * Scanner and PrintWriter.
      */
-    class Player implements Runnable {
-        char mark;
-        Player opponent;
+    class Gracz implements Runnable {
+        int kolor; //1 - czarny, 2 - bialy
+        Gracz przeciwnik;
         Socket socket;
         Scanner input;
         PrintWriter output;
 
-        public Player(Socket socket, char mark) {
+        public Gracz(Socket socket, int kolor) {
             this.socket = socket;
-            this.mark = mark;
+            this.kolor = kolor;
+            System.out.println("Nowy gracz: "+kolor);
         }
 
         @Override
         public void run() {
             try {
-                setup();
-                processCommands();
+                polaczenie_graczy();
+                interpretujKomendy();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (opponent != null && opponent.output != null) {
-                    opponent.output.println("OTHER_PLAYER_LEFT");
+                if (przeciwnik != null && przeciwnik.output != null) {
+                    przeciwnik.output.println("PRZECIWNIK_WYSZEDL");
                 }
-                try {socket.close();} catch (IOException e) {}
+                try {socket.close();} catch (IOException ignored) {}
             }
         }
 
-        private void setup() throws IOException {
+        private void polaczenie_graczy() throws IOException {
             input = new Scanner(socket.getInputStream());
             output = new PrintWriter(socket.getOutputStream(), true);
-            output.println("WELCOME " + mark);
-            if (mark == 'X') {
-                currentPlayer = this;
-                output.println("MESSAGE Waiting for opponent to connect");
+            output.println("WITAJ " + kolor);
+            if (kolor == 1) {
+                aktualny_gracz = this;
+                output.println("INFO Oczekuje na przeciwnika");
             } else {
-                opponent = currentPlayer;
-                opponent.opponent = this;
-                opponent.output.println("MESSAGE Your move");
-                this.output.println("MESSAGE Runda przeciwnika, proszę czekać");
+                przeciwnik = aktualny_gracz;
+                aktualny_gracz.przeciwnik = this;
+                przeciwnik.output.println("INFO Twoja kolej");
+                this.output.println("INFO Runda przeciwnika, proszę czekać");
             }
         }
 
-        private void processCommands() {
+        private void interpretujKomendy() {
             while (input.hasNext()) {
-                String command = input.next();
-                if (command.startsWith("QUIT")) {
+                String polecenie = input.next();
+                if (polecenie.startsWith("WYJSCIE")) {
                     return;
-                } else if (command.startsWith("MOVE")) {
-                    processMoveCommand(Integer.parseInt(input.next()), Integer.parseInt(input.next()));
+                } else if (polecenie.startsWith("RUCH")) {
+                    zweryfikujRuch(Integer.parseInt(input.next()), Integer.parseInt(input.next()));
                 }
             }
         }
 
-        private void processMoveCommand(int locX, int locY) {
+        private void zweryfikujRuch(int locX, int locY) {
             try {
-                move(locX, locY, this);
+                ruch(locX, locY, this);
                 output.println("POPRAWNY_RUCH");
-                opponent.output.println("OPPONENT_MOVED " + locX + " " + locY);
-                if (false) {
-                    output.println("VICTORY");
-                    opponent.output.println("DEFEAT");
-                }
+                przeciwnik.output.println("RUCH_PRZECIWNIKA " + locX + " " + locY);
+                /*if (false) {
+                    output.println("ZWYCIESTWO");
+                    przeciwnik.output.println("PORAZKA");
+                }*/
             } catch (IllegalStateException e) {
-                output.println("MESSAGE " + e.getMessage());
+                output.println("INFO " + e.getMessage());
             }
         }
     }

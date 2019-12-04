@@ -37,12 +37,11 @@ public class Klient{
 
         rozmiarBoku_planszy = bok_planszy - 1;
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize(); //pobranie parametrów rozdzielczości ekranu
-        rozmiar_pola = (int)(d.height / rozmiarBoku_planszy);
+        rozmiar_pola = (d.height / rozmiarBoku_planszy);
 
         ramka.setVisible(true);
         ramka.setLocation(0, 0);
         ramka.setSize(rozmiarBoku_planszy * rozmiar_pola, rozmiarBoku_planszy * rozmiar_pola);
-        //System.out.println("setSize: " + rozmiarBoku_planszy * rozmiar_pola + ", " + rozmiarBoku_planszy * rozmiar_pola);
         ramka.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pole = new JLabel[rozmiarBoku_planszy+1][rozmiarBoku_planszy+1];
         plansza_go = new GUI_Plansza();
@@ -84,10 +83,9 @@ public class Klient{
                     int finalB = b;
                     pole[a][b].addMouseListener(new MouseAdapter() {
                         public void mousePressed(MouseEvent e) {
-                            //pozycje_kamienii[finalA] = 1;
                             wybrane_pole = pole[finalA][finalB];
-                            out.println("MOVE " + finalA + " " + finalB);
-                            System.out.println("My move> locX: "+finalA+", locY: "+finalB);
+                            out.println("RUCH " + finalA + " " + finalB);
+                            System.out.println("Moj ruch> locX: "+finalA+", locY: "+finalB);
 
                         }
                     });
@@ -101,30 +99,6 @@ public class Klient{
             pole[rozmiarBoku_planszy][0].setIcon(tekstury.Im_puste80);
             repaint();
         }
-
-        /*public void paintBoard(){
-            for(int i = 0; i < (rozmiarBoku_planszy+1)*(rozmiarBoku_planszy+1); i++){
-                for(int j = 0; j < rozmiarBoku_planszy; j++) {
-                    pole[i][j].removeAll();
-                    if (i % (rozmiarBoku_planszy + 1) == 0) pole[i][j].setIcon(tekstury.Im_puste0x);
-                    else if (i <= rozmiarBoku_planszy) pole[i][j].setIcon(tekstury.Im_pustex0);
-                    else if ((i - rozmiarBoku_planszy) % (rozmiarBoku_planszy + 1) == 0) pole[i][j].setIcon(tekstury.Im_puste8x);
-                    else if (i >= ((rozmiarBoku_planszy + 1) * (rozmiarBoku_planszy + 1) - (rozmiarBoku_planszy + 1)))
-                        pole[i][j].setIcon(tekstury.Im_pustex8);
-                    else {
-                        if (pozycje_kamienii[i] == 0) pole[i][j].setIcon(tekstury.Im_pustexx);
-                        else pole[i][j].setIcon(tekstury.Im_czarnyxx);
-                    }
-                }
-            }
-            pole[0][0].setIcon(tekstury.Im_puste00);
-            pole[0][rozmiarBoku_planszy].setIcon(tekstury.Im_puste08);
-            pole[rozmiarBoku_planszy][rozmiarBoku_planszy].setIcon(tekstury.Im_puste88);
-            pole[rozmiarBoku_planszy][0].setIcon(tekstury.Im_puste80);
-
-            validate();
-            repaint();
-        }*/
 
         class Tekstury{
             ArrayList<ImageIcon> tekstury = new ArrayList<>();
@@ -190,49 +164,49 @@ public class Klient{
      * The first message will be a "WELCOME" message in which we receive our
      * mark. Then we go into a loop listening for any of the other messages,
      * and handling each message appropriately. The "VICTORY", "DEFEAT", "TIE",
-     *  and "OTHER_PLAYER_LEFT" messages will ask the user whether or not to
-     * play another game. If the answer is no, the loop is exited and the server
+     *  and "OTHER_PLAYER_LEFT" messages the loop is exited and the server
      * is sent a "QUIT" message.
      */
-    public void play() throws Exception {
+    public void graj() throws Exception {
         try {
-            String response = in.nextLine();
-            System.out.println("Wiadomosc z serwera: "+ response);
-            char mark = response.charAt(8);
-            ramka.setTitle("Gra Go: Gracz " + ((mark == 'X') ? "czarny" : "biały"));
+            String odpowiedz = in.nextLine();
+            System.out.println("Wiadomosc z serwera: "+ odpowiedz);
+            int kolor = Character.digit(odpowiedz.charAt(6), 10);
+            System.out.println("Kolor: "+kolor);
+            ramka.setTitle("Gra Go: Gracz " + ((kolor == 1) ? "czarny" : "biały"));
             while (in.hasNextLine()) {
-                response = in.next();
-                System.out.println("Respons in.next: "+response);
-                if (response.startsWith("POPRAWNY_RUCH")) {
+                odpowiedz = in.next();
+                System.out.println("Respons in.next: "+odpowiedz);
+                if (odpowiedz.startsWith("POPRAWNY_RUCH")) {
                     belkaStatusu.setText("Runda przeciwnika, proszę czekać");
-                    if(mark == 'X') wybrane_pole.setIcon(plansza_go.tekstury.Im_czarnyxx);
+                    if(kolor == 1) wybrane_pole.setIcon(plansza_go.tekstury.Im_czarnyxx);
                     else wybrane_pole.setIcon(plansza_go.tekstury.Im_bialyxx);
                     wybrane_pole.repaint();
-                } else if (response.startsWith("OPPONENT_MOVED")) {
+                } else if (odpowiedz.startsWith("RUCH_PRZECIWNIKA")) {
                     int locX = Integer.parseInt(in.next());
                     int locY = Integer.parseInt(in.next());
-                    System.out.println("Oponent> locX: "+locX+", locY: "+locY);
-                    if(mark == 'X') pole[locX][locY].setIcon(plansza_go.tekstury.Im_bialyxx);
+                    System.out.println("Przeciwnik> locX: "+locX+", locY: "+locY);
+                    if(kolor == 1) pole[locX][locY].setIcon(plansza_go.tekstury.Im_bialyxx);
                     else pole[locX][locY].setIcon(plansza_go.tekstury.Im_czarnyxx);
                     pole[locX][locY].repaint();
                     belkaStatusu.setText("Przeciwnik wykonał ruch, Twoja kolej");
-                } else if (response.startsWith("MESSAGE")) {
+                } else if (odpowiedz.startsWith("INFO")) {
                     belkaStatusu.setText(in.nextLine());
-                } else if (response.startsWith("VICTORY")) {
+                /*} else if (odpowiedz.startsWith("ZWYCIESTWO")) {
                     JOptionPane.showMessageDialog(ramka, "Wygrałeś, gratulacje!");
                     break;
-                } else if (response.startsWith("DEFEAT")) {
+                } else if (odpowiedz.startsWith("PORAZKA")) {
                     JOptionPane.showMessageDialog(ramka, "Przeciwnik wygrał gre :(");
                     break;
-                } else if (response.startsWith("TIE")) {
+                } else if (odpowiedz.startsWith("REMIS")) {
                     JOptionPane.showMessageDialog(ramka, "Remis!");
-                    break;
-                } else if (response.startsWith("OTHER_PLAYER_LEFT")) {
+                    break;*/
+                } else if (odpowiedz.startsWith("PRZECIWNIK_WYSZEDL")) {
                     JOptionPane.showMessageDialog(ramka, "Przeciwnik wyszedł z gry!");
                     break;
                 }
             }
-            out.println("QUIT");
+            out.println("WYJSCIE");
         } catch (Exception e) {
             e.printStackTrace();
         }
