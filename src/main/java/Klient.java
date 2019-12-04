@@ -13,12 +13,11 @@ import java.net.Socket;
 
 import javax.swing.*;
 
-
 public class Klient{
 
     public JFrame ramka = new JFrame("Gra Go");
     private JLabel belkaStatusu = new JLabel("...");
-    private static GUI_Plansza plansza_go;
+    GUI_Plansza plansza_go;
     private JLabel[][] pole;
     private JLabel wybrane_pole;
     private int rozmiar_pola;
@@ -38,34 +37,33 @@ public class Klient{
         rozmiarBoku_planszy = bok_planszy - 1;
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize(); //pobranie parametrów rozdzielczości ekranu
         rozmiar_pola = (d.height / rozmiarBoku_planszy);
-
-        ramka.setVisible(true);
-        ramka.setLocation(0, 0);
-        ramka.setSize(rozmiarBoku_planszy * rozmiar_pola, rozmiarBoku_planszy * rozmiar_pola);
-        ramka.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pole = new JLabel[rozmiarBoku_planszy+1][rozmiarBoku_planszy+1];
         plansza_go = new GUI_Plansza();
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.setSize(rozmiarBoku_planszy * rozmiar_pola, rozmiarBoku_planszy * rozmiar_pola);
-        mainPanel.setLocation(0,0);
-        mainPanel.setBackground(Color.ORANGE);
-        belkaStatusu.setBackground(Color.lightGray);
-        mainPanel.add(belkaStatusu,BorderLayout.PAGE_START);
-        mainPanel.add(plansza_go,BorderLayout.CENTER);
-        ramka.add(mainPanel);
-        ramka.setVisible(true);
 
     }
 
     public class GUI_Plansza extends JPanel {
-        Tekstury tekstury = new Tekstury();
+        Tekstury tekstury = new Tekstury(); //wczytanie grafik do GUI z folderu ~/tekstury/
 
         GUI_Plansza() throws IOException {
+            ramka.setVisible(true);
+            ramka.setLocation(0, 0);
+            ramka.setSize(rozmiarBoku_planszy * rozmiar_pola, rozmiarBoku_planszy * rozmiar_pola);
+            ramka.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            pole = new JLabel[rozmiarBoku_planszy+1][rozmiarBoku_planszy+1];
+            JPanel mainPanel = new JPanel();
+            mainPanel.setLayout(new BorderLayout());
+            mainPanel.setSize(rozmiarBoku_planszy * rozmiar_pola, rozmiarBoku_planszy * rozmiar_pola);
+            mainPanel.setLocation(0,0);
+            mainPanel.setBackground(Color.ORANGE);
+            belkaStatusu.setBackground(Color.lightGray);
+            mainPanel.add(belkaStatusu, BorderLayout.PAGE_START);
+            mainPanel.add(this, BorderLayout.CENTER);
+            ramka.add(mainPanel);
+            ramka.setVisible(true);
             setLayout(new GridLayout(rozmiarBoku_planszy+1, rozmiarBoku_planszy+1, 0, 0));
 
             /**
-             * Inicjalizacja planszy o podanych (NxM) wymiarach
+             * Inicjalizacja planszy o podanych (NxM) wymiarach, wgranie odpowiednich grafik
              */
             System.out.println("Plansza Width: "+rozmiarBoku_planszy+", Plansza height: "+rozmiarBoku_planszy);
             for(int b = 0; b < rozmiarBoku_planszy + 1; b++) {
