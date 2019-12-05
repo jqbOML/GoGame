@@ -15,7 +15,24 @@ class Kamien {
      * metoda czyOddech zwraca true jeśli pojedynczy kamień ma w swoim zasięgu puste pole (oddech) - nie bierze pod uwagę łańucha, do którego może należeć
      */
     boolean czyOddech(int x, int y, Kamien[][] kamienie){
-        return kamienie[x + 1][y] == null || kamienie[x - 1][y] == null || kamienie[x][y + 1] == null || kamienie[x][y - 1] == null;
+        if (x == 0 && y == 0)
+            return kamienie[x + 1][y] == null || kamienie[x][y + 1] == null; // róg
+        else if (x == 0 && y == 18)
+            return kamienie[x + 1][y] == null || kamienie[x][y - 1] == null; // róg
+        else if (x == 18 && y == 0)
+            return kamienie[x - 1][y] == null || kamienie[x][y + 1] == null; // róg
+        else if (x == 18 && y == 18)
+            return kamienie[x - 1][y] == null || kamienie[x][y - 1] == null; // róg
+        else if (x == 0 && y > 0 && y < 18)
+            return kamienie[x + 1][y] == null || kamienie[x][y - 1] == null || kamienie[x][y + 1] == null; // bok
+        else if (x == 18 && y > 0 && y < 18)
+            return kamienie[x - 1][y] == null || kamienie[x][y - 1] == null || kamienie[x][y + 1] == null; // bok
+        else if (x > 0 && x < 18 && y == 0)
+            return kamienie[x + 1][y] == null || kamienie[x -1][y] == null || kamienie[x][y + 1] == null; // bok
+        else if (x > 0 && x < 18 && y == 18)
+            return kamienie[x + 1][y] == null || kamienie[x -1][y] == null || kamienie[x][y - 1] == null; // bok
+        else
+        return kamienie[x + 1][y] == null || kamienie[x - 1][y] == null || kamienie[x][y + 1] == null || kamienie[x][y - 1] == null; //środek
     }
 
     /**
@@ -31,6 +48,7 @@ class Kamien {
                     czyOddechLancuch(a + 1, b, kamienie);
                 }
             } else return null;
+
         }
         if(a-1>=0) {
             if (kamienie[a - 1][b] != null) {

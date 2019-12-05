@@ -3,17 +3,102 @@
   <ID>JAVA</ID>
   <OriginalElement />
   <nodes>
-    <node x="0.0" y="0.0">MainKlient</node>
-    <node x="0.0" y="213.0">Serwer</node>
-    <node x="0.0" y="71.0">MainSerwer</node>
-    <node x="134.0" y="142.0">Klient</node>
-    <node x="0.0" y="142.0">Kamien</node>
+    <node x="423.8927083333333" y="299.0">MainKlient</node>
+    <node x="144.69270833333331" y="145.0">Serwer.Gracz</node>
+    <node x="75.12499999999999" y="334.0">Serwer</node>
+    <node x="451.33854166666663" y="0.0">Klient.GUI_Plansza.Tekstury</node>
+    <node x="127.45833333333331" y="456.0">MainSerwer</node>
+    <node x="418.7752083333333" y="76.0">Klient.GUI_Plansza</node>
+    <node x="427.8927083333333" y="176.0">Klient</node>
+    <node x="0.0" y="0.0">Kamien</node>
   </nodes>
   <notes />
-  <edges />
-  <settings layout="Hierarchic Group" zoom="1.0" x="376.5" y="114.5" />
+  <edges>
+    <edge source="MainKlient" target="Klient">
+      <point x="36.5" y="-25.0" />
+      <point x="533.3927083333333" y="274.0" />
+      <point x="531.3927083333333" y="274.0" />
+      <point x="34.5" y="36.5" />
+    </edge>
+    <edge source="Klient.GUI_Plansza" target="Klient">
+      <point x="15.625" y="25.0" />
+      <point x="0.0" y="-36.5" />
+    </edge>
+    <edge source="Serwer" target="Serwer.Gracz">
+      <point x="16.833333333333314" y="-36.0" />
+      <point x="192.95833333333331" y="309.0" />
+      <point x="173.06770833333331" y="309.0" />
+      <point x="-85.125" y="69.5" />
+    </edge>
+    <edge source="MainSerwer" target="Serwer">
+      <point x="-48.66666666666666" y="-25.0" />
+      <point x="151.79166666666666" y="431.0" />
+      <point x="125.62499999999999" y="431.0" />
+      <point x="-50.5" y="36.0" />
+    </edge>
+    <edge source="Serwer" target="Kamien">
+      <point x="-50.5" y="-36.0" />
+      <point x="125.62499999999999" y="309.0" />
+      <point x="123.19270833333331" y="309.0" />
+      <point x="123.19270833333331" y="115.0" />
+      <point x="115.875" y="115.0" />
+      <point x="-38.625" y="47.5" />
+    </edge>
+    <edge source="Serwer.Gracz" target="Serwer">
+      <point x="28.375" y="69.5" />
+      <point x="286.5677083333333" y="309.0" />
+      <point x="260.29166666666663" y="309.0" />
+      <point x="84.16666666666663" y="-36.0" />
+    </edge>
+    <edge source="Klient.GUI_Plansza" target="Klient.GUI_Plansza.Tekstury">
+      <point x="0.0" y="-25.0" />
+      <point x="481.2752083333333" y="51.0" />
+      <point x="489.96354166666663" y="51.0" />
+      <point x="-12.875" y="13.0" />
+    </edge>
+    <edge source="MainSerwer" target="Serwer.Gracz">
+      <point x="48.666666666666686" y="-25.0" />
+      <point x="249.125" y="431.0" />
+      <point x="324.6484375" y="431.0" />
+      <point x="324.6484375" y="309.0" />
+      <point x="343.3177083333333" y="309.0" />
+      <point x="85.125" y="69.5" />
+    </edge>
+    <edge source="Klient" target="Klient.GUI_Plansza">
+      <point x="-55.19999999999999" y="-36.5" />
+      <point x="441.6927083333333" y="151.0" />
+      <point x="434.4002083333333" y="151.0" />
+      <point x="-46.875" y="25.0" />
+    </edge>
+    <edge source="Serwer.Gracz" target="Kamien">
+      <point x="0.0" y="-69.5" />
+      <point x="258.1927083333333" y="125.0" />
+      <point x="270.375" y="125.0" />
+      <point x="115.875" y="47.5" />
+    </edge>
+    <edge source="Klient.GUI_Plansza.Tekstury" target="Klient.GUI_Plansza">
+      <point x="12.875" y="13.0" />
+      <point x="515.7135416666666" y="51.0" />
+      <point x="522.941875" y="51.0" />
+      <point x="41.666666666666686" y="-25.0" />
+    </edge>
+    <edge source="Klient.GUI_Plansza.Tekstury" target="Klient">
+      <point x="38.625" y="13.0" />
+      <point x="541.4635416666666" y="51.0" />
+      <point x="554.2752083333332" y="51.0" />
+      <point x="554.2752083333332" y="151.0" />
+      <point x="552.0927083333332" y="151.0" />
+      <point x="55.19999999999999" y="-36.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.5999999999999998" x="478.66666666666697" y="493.8333333333335" />
   <SelectedNodes />
-  <Categories />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
   <SCOPE>All</SCOPE>
   <VISIBILITY>private</VISIBILITY>
 </Diagram>
