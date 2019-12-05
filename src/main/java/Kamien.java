@@ -1,59 +1,68 @@
 import java.util.ArrayList;
-import java.util.List;
 
-public class Kamien {
-    private int kolor; //1 - czarny, 2 - bialy
+class Kamien {
+    private int x,y; //wspolrzedne kamienia na planszy
+    int kolor; //1 - czarny, 2 - bialy
+    private ArrayList<Kamien> uduszone_kamienie = new ArrayList<>(); //arraylista dla metody czyOddechLancuch()
 
-
-    Kamien (int nowy_kolor){
+    Kamien (int wsp_x, int wsp_y, int nowy_kolor){
+        this.x = wsp_x;
+        this.y = wsp_y;
         this.kolor = nowy_kolor;
-    };
-
-//czyOddech sprawdza czy kamień ma w swoim zasięgu puste pole (nie bierze pod uwagę kolegi)
-    public  boolean czyOddech(int x, int y, Kamien[][] kamien){
-        return kamien[x + 1][y].kolor == 0 || kamien[x - 1][y].kolor == 0 || kamien[x][y + 1].kolor == 0 || kamien[x][y - 1].kolor == 0;
-                //|| kamien[x + 1][y].kolor == kolor || kamien[x - 1][y].kolor == kolor || kamien[x][y + 1].kolor == kolor || kamien[x][y - 1].kolor == kolor;
     }
 
-    List<Kamien> lista = new ArrayList<>();
-
-    public ArrayList<Kamien> czyKolega (int a, int b, Kamien[][] kamien){
-
-        if (lista.contains(kamien[a + 1][b])==false && kamien[a + 1][b].kolor==kolor){
-
-          if (czyOddech(a+1, b, kamien)){
-              lista.clear();
-              return (ArrayList<Kamien>) lista;
-          }
-          lista.add(kamien[a+1][b]);
-          czyKolega(a+1, b, kamien);
+    /**
+     * metoda czyOddech zwraca true jeśli pojedynczy kamień ma w swoim zasięgu puste pole (oddech) - nie bierze pod uwagę łańucha, do którego może należeć
+     */
+    boolean czyOddech(int x, int y, Kamien[][] kamienie){
+        return kamienie[x + 1][y] == null || kamienie[x - 1][y] == null || kamienie[x][y + 1] == null || kamienie[x][y - 1] == null;
     }
-        if (lista.contains(kamien[a - 1][b]) == false && kamien[a - 1][b].kolor == kolor){
 
-            if (czyOddech(a-1,b,kamien)){
-                lista.clear();
-                return (ArrayList<Kamien>) lista;
+    /**
+     * metoda czyOddechLancuch() zwraca tablicę kamieni z usuniętym lancuchem kamieni z planszy jesli łańcuch, do którego należał dany kamień nie posiadał oddechów,
+     * a w przypadku posiadania co najmniej jednego oddechu zwraca niezmienioną tablicę
+     */
+    Kamien[][] czyOddechLancuch(int a, int b, Kamien[][] kamienie){
+        if (kamienie[a + 1][b] != null){
+            if (!uduszone_kamienie.contains(kamienie[a + 1][b]) && kamienie[a + 1][b].kolor == this.kolor){
+                if (czyOddech(a + 1, b, kamienie)) return null;
+                uduszone_kamienie.add(kamienie[a + 1][b]);
+                czyOddechLancuch(a + 1, b, kamienie);
             }
-            lista.add(kamien[a-1][b]);
-            czyKolega(a-1, b,kamien);
-        }
-        if (lista.contains(kamien[a][b+1]) == false && kamien[a][b+1].kolor==kolor){
+        } else return null;
 
-            if (czyOddech(a,b+1,kamien)){
-                lista.clear();
-                return (ArrayList<Kamien>) lista;
+        if (kamienie[a - 1][b] != null){
+            if (!uduszone_kamienie.contains(kamienie[a - 1][b]) && kamienie[a - 1][b].kolor == this.kolor){
+                if (czyOddech(a - 1, b, kamienie)) return null;
+                else{
+                    uduszone_kamienie.add(kamienie[a-1][b]);
+                    czyOddechLancuch(a - 1, b, kamienie);
+                }
             }
-            lista.add(kamien[a][b+1]);
-            czyKolega(a, b+1,kamien);
-        }
-        if (lista.contains(kamien[a][b-1]) == false && kamien[a][b-1].kolor==kolor){
+        } else return null;
 
-            if (czyOddech(a,b-1,kamien)){
-                lista.clear();
-                return (ArrayList<Kamien>) lista;
+        if (kamienie[a][b + 1] != null){
+            if (!uduszone_kamienie.contains(kamienie[a][b + 1]) && kamienie[a][b + 1].kolor == this.kolor){
+                if (czyOddech(a,b + 1, kamienie)) return null;
+                else{
+                    uduszone_kamienie.add(kamienie[a][b + 1]);
+                    czyOddechLancuch(a,b + 1, kamienie);
+                }
             }
-            lista.add(kamien[a][b-1]);
-            czyKolega(a, b-1,kamien);
+        } else return null;
+
+        if (kamienie[a][b - 1] != null){
+            if (!uduszone_kamienie.contains(kamienie[a][b - 1]) && kamienie[a][b - 1].kolor == this.kolor){
+                if (czyOddech(a,b - 1, kamienie)) return null;
+                else{
+                    uduszone_kamienie.add(kamienie[a][b - 1]);
+                    czyOddechLancuch(a,b - 1, kamienie);
+                }
+            }
+        } else return null;
+
+        for (Kamien uduszony_kamien : uduszone_kamienie){
+            kamienie[uduszony_kamien.x][uduszony_kamien.y] = null;
         }
-        return (ArrayList<Kamien>) lista;
+        return kamienie;
 }}

@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -7,29 +9,14 @@ class Serwer {
     private Kamien[][] plansza_go = new Kamien[19][19];
     private Gracz aktualny_gracz;
 
-    public synchronized void ruch(int x, int y, Gracz gracz) {
-        if (gracz != aktualny_gracz) {
-            throw new IllegalStateException("Nie Twój ruch");
-        } else if (gracz.przeciwnik == null) {
-            throw new IllegalStateException("Nie masz jeszcze przeciwnika");
-        } else if (plansza_go[x][y] != null) {
-            throw new IllegalStateException("Pole jest już zajęte");
-        }
-        plansza_go[x][y] = new Kamien(aktualny_gracz.kolor);
-        aktualny_gracz = aktualny_gracz.przeciwnik;
-    }
 
-    /**
-     * A Gracz is identified by a character kolor which is either 'X' - czarny or 'O' - bialy.
-     * For communication with the client the gracz has a socket and associated
-     * Scanner and PrintWriter.
-     */
     class Gracz implements Runnable {
         int kolor; //1 - czarny, 2 - bialy
         Gracz przeciwnik;
         Socket socket;
         Scanner input;
-        PrintWriter output;
+        PrintWriter outputString;
+        //OutputStream outputObject;
 
         public Gracz(Socket socket, int kolor) {
             this.socket = socket;
@@ -45,8 +32,8 @@ class Serwer {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (przeciwnik != null && przeciwnik.output != null) {
-                    przeciwnik.output.println("PRZECIWNIK_WYSZEDL");
+                if (przeciwnik != null && przeciwnik.outputString != null) {
+                    przeciwnik.outputString.println("PRZECIWNIK_WYSZEDL");
                 }
                 try {socket.close();} catch (IOException ignored) {}
             }
@@ -54,16 +41,17 @@ class Serwer {
 
         private void polaczenie_graczy() throws IOException {
             input = new Scanner(socket.getInputStream());
-            output = new PrintWriter(socket.getOutputStream(), true);
-            output.println("WITAJ " + kolor);
+            outputString = new PrintWriter(socket.getOutputStream(), true);
+            //outputObject = new ObjectOutputStream(socket.getOutputStream());
+            outputString.println("WITAJ " + kolor);
             if (kolor == 1) {
                 aktualny_gracz = this;
-                output.println("INFO Oczekuje na przeciwnika");
+                outputString.println("INFO Oczekuje na przeciwnika");
             } else {
                 przeciwnik = aktualny_gracz;
                 aktualny_gracz.przeciwnik = this;
-                przeciwnik.output.println("INFO Twoja kolej");
-                this.output.println("INFO Runda przeciwnika, proszę czekać");
+                przeciwnik.outputString.println("INFO Twoja kolej");
+                this.outputString.println("INFO Runda przeciwnika, proszę czekać");
             }
         }
 
@@ -73,24 +61,80 @@ class Serwer {
                 if (polecenie.startsWith("WYJSCIE")) {
                     return;
                 } else if (polecenie.startsWith("RUCH")) {
-                    zweryfikujRuch(Integer.parseInt(input.next()), Integer.parseInt(input.next()));
+                    try {
+                        int x = Integer.parseInt(input.next());
+                        int y = Integer.parseInt(input.next());
+                        zweryfikujRuch(x, y, this);
+                        //czy_uduszone(x, y);
+                        outputString.println("POPRAWNY_RUCH " + x + " " + y);
+                        //outputObject.flush(plansza_go);
+                        przeciwnik.outputString.println("RUCH_PRZECIWNIKA " + x + " " + y);
+
+
+                /*if (false) {
+                    outputString.println("ZWYCIESTWO");
+                    przeciwnik.outputString.println("PORAZKA");
+                }*/
+                    } catch (IllegalStateException e) {
+                        outputString.println("INFO " + e.getMessage());
+                    }
                 }
             }
         }
 
-        private void zweryfikujRuch(int locX, int locY) {
-            try {
-                ruch(locX, locY, this);
-                output.println("POPRAWNY_RUCH");
-                przeciwnik.output.println("RUCH_PRZECIWNIKA " + locX + " " + locY);
-                /*if (false) {
-                    output.println("ZWYCIESTWO");
-                    przeciwnik.output.println("PORAZKA");
-                }*/
-            } catch (IllegalStateException e) {
-                output.println("INFO " + e.getMessage());
+        synchronized void zweryfikujRuch(int x, int y, Gracz gracz) {
+            if (gracz != aktualny_gracz) {
+                throw new IllegalStateException("Nie Twój ruch!");
+            } else if (gracz.przeciwnik == null) {
+                throw new IllegalStateException("Nie masz jeszcze przeciwnika");
+            } else if (plansza_go[x][y] != null) {
+                throw new IllegalStateException("Pole jest już zajęte!");
+            } else if (czy_samoboj(x, y)) {
+                throw new IllegalStateException("Niedozwolony ruch samobojczy!");
+            } else if (czy_ko(x, y)) {
+                throw new IllegalStateException("Niedozwolony ruch KO!");
             }
+            plansza_go[x][y] = new Kamien(x, y, aktualny_gracz.kolor);
+            aktualny_gracz = aktualny_gracz.przeciwnik;
         }
+    }
+
+    /*private void czy_uduszone(int x, int y) {
+        System.out.println("Czy_uduszone dla x: "+x+", y: "+y);
+        if (plansza_go[x + 1][y] != null) {
+            if (plansza_go[x + 1][y].kolor == aktualny_gracz.przeciwnik.kolor)
+            plansza_go = plansza_go[x + 1][y].czyOddechLancuch(x + 1, y, plansza_go);
+        }
+        if (plansza_go[x - 1][y] != null) {
+            if (plansza_go[x - 1][y].kolor == aktualny_gracz.przeciwnik.kolor)
+            plansza_go = plansza_go[x - 1][y].czyOddechLancuch(x - 1, y, plansza_go);
+        }
+        System.out.println("Sprawdz x = "+x+", y-1 = "+(y-1));
+        if (plansza_go[x][y - 1] != null) {
+            if (plansza_go[x][y - 1].kolor == aktualny_gracz.przeciwnik.kolor)
+            plansza_go = plansza_go[x][y - 1].czyOddechLancuch(x, y - 1, plansza_go);
+        }
+        if (plansza_go[x][y + 1] != null) {
+            if (plansza_go[x][y + 1].kolor == aktualny_gracz.przeciwnik.kolor)
+            plansza_go = plansza_go[x][y + 1].czyOddechLancuch(x, y + 1, plansza_go);
+        }
+    }*/
+
+    private boolean czy_ko(int x, int y) {
+        //TODO: funkcja sprawdzająca czy podany ruch nie będzie powtórzeniem
+        return false;
+    }
+
+    private boolean czy_samoboj(int x, int y) {
+        plansza_go[x][y] = new Kamien(x, y, aktualny_gracz.kolor);
+        if(plansza_go[x][y].czyOddechLancuch(x, y, plansza_go) == null){
+            plansza_go[x][y] = null;
+            return false;
+        } else{
+            plansza_go[x][y] = null;
+            return true;
+        }
+
     }
 }
 
