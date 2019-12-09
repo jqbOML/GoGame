@@ -78,6 +78,10 @@ class Serwer {
                     } catch (IllegalStateException e) {
                         outputString.println("INFO " + e.getMessage());
                     }
+                } else if (polecenie.startsWith("PASS")) {
+                    przeciwnik.outputString.println("PRZECIWNIK_ZPASOWAL");
+                    outputString.println("ZPASOWALES");
+                    aktualny_gracz = aktualny_gracz.przeciwnik;
                 }
             }
         }

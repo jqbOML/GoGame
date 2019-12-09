@@ -23,6 +23,8 @@ public class Klient{
     private int[][] plansza_kamieni;
     private JLabel[][] pole;
     private JLabel wybrane_pole;
+    private JButton pass = new JButton("<html>P<br>A<br>S<br>S");
+    private JButton zakoncz_gre = new JButton("<html>K<br>O<br>N<br>I<br>E<br>C");
     private int rozmiar_pola;
     private int kolor_gracza;
 
@@ -65,9 +67,33 @@ public class Klient{
             belkaStatusu.setBackground(Color.lightGray);
             mainPanel.add(belkaStatusu, BorderLayout.PAGE_START);
             mainPanel.add(this, BorderLayout.CENTER);
+            //buttony
+            pass.setBackground(Color.YELLOW);
+            zakoncz_gre.setBackground(Color.YELLOW);
+            mainPanel.add(pass, BorderLayout.WEST);
+            mainPanel.add(zakoncz_gre, BorderLayout.EAST);
             ramka.add(mainPanel);
             ramka.setVisible(true);
             setLayout(new GridLayout(rozmiarBoku_planszy+1, rozmiarBoku_planszy+1, 0, 0));
+
+            zakoncz_gre.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e)
+                {
+                    out.println("WYJSCIE");
+                }
+            });
+
+            pass.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e)
+                {
+                    out.println("PASS");
+                }
+            });
+
+
+
+
+
 
             /**
              * Inicjalizacja planszy o podanych (NxM) wymiarach, wgranie odpowiednich grafik
@@ -360,7 +386,13 @@ public class Klient{
                 } else if (odpowiedz.startsWith("REMIS")) {
                     JOptionPane.showMessageDialog(ramka, "Remis!");
                     break;*/
-                } else if (odpowiedz.startsWith("PRZECIWNIK_WYSZEDL")) {
+                } else if (odpowiedz.startsWith("PRZECIWNIK_ZPASOWAL")){
+                    belkaStatusu.setText("Przeciwnik zpasował, twój ruch!");
+                } else if (odpowiedz.startsWith("ZPASOWALES")){
+                belkaStatusu.setText("Zpsaowałeś, ruch preciwnika!");
+                }
+
+                else if (odpowiedz.startsWith("PRZECIWNIK_WYSZEDL")) {
                     JOptionPane.showMessageDialog(ramka, "Przeciwnik wyszedł z gry!");
                     break;
                 }
