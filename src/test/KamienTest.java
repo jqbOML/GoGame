@@ -1,23 +1,22 @@
 
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
-import java.util.List;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class KamienTest {
 
-    private Kamien[][] kamienie = new Kamien[19][19];
+    Kamien[][] kamienie = new Kamien[19][19];
+
+
 
     @Test
     public void czyOddechTest() {
         kamienie[3][2] = new Kamien(3, 2, 1); //brak oddechow dla pojedynczego kamienia
-
         kamienie[3][1] = new Kamien(3, 1, 1);
         kamienie[3][3] = new Kamien(3, 3, 2);
         kamienie[2][2] = new Kamien(2, 2, 2);
         kamienie[4][2] = new Kamien(4, 2, 2);
-
         assertFalse(kamienie[3][2].czyOddech(3,2, kamienie)); //kamien nie ma oddechow
         assertTrue(kamienie[2][2].czyOddech(2,2, kamienie)); //kamien ma przynajmniej jeden oddech
     }
