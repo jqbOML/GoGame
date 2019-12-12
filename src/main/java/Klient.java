@@ -336,7 +336,7 @@ public class Klient{
      *  and "OTHER_PLAYER_LEFT" messages the loop is exited and the server
      * is sent a "QUIT" message.
      */
-    public void graj() throws Exception {
+    public void odbierajKomendy() throws Exception {
         try {
             String odpowiedz = inString.nextLine();
             System.out.println("Wiadomosc z serwera: "+ odpowiedz);

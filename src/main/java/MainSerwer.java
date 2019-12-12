@@ -6,11 +6,11 @@ public class MainSerwer {
     public static void main(String[] args) throws Exception {
         try (ServerSocket listener = new ServerSocket(58901)) {
             System.out.println("Serwer Go aktywny");
-            ExecutorService pool = Executors.newFixedThreadPool(200);
+            ExecutorService pool = Executors.newFixedThreadPool(100);
             while (true) {
                 Serwer serwer_go = new Serwer();
-                pool.execute(serwer_go.new Gracz(listener.accept(), 1)); //czarny
-                pool.execute(serwer_go.new Gracz(listener.accept(), 2)); //bialy
+                pool.execute(new Gracz(listener.accept(), 1, serwer_go)); //czarny
+                pool.execute(new Gracz(listener.accept(), 2, serwer_go)); //bialy
             }
         }
     }
