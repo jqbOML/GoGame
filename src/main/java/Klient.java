@@ -93,7 +93,8 @@ public class Klient{
             passButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e)
                 {
-                    out.println("passButton");
+                    out.println("PASS");
+
                 }
             });
 
@@ -388,6 +389,10 @@ public class Klient{
 
                 else if (odpowiedz.startsWith("PRZECIWNIK_WYSZEDL")) {
                     JOptionPane.showMessageDialog(ramka, "Przeciwnik wyszedł z gry!");
+                    break;
+                }
+                else if (odpowiedz.startsWith("KONIEC_GRY")) {
+                    JOptionPane.showMessageDialog(ramka, "Koniec gry!");
                     break;
                 }
             }
