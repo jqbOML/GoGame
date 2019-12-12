@@ -23,8 +23,8 @@ public class Klient{
     private int[][] planszaKamieni;
     private JLabel[][] pole;
     private JLabel wybranePole;
-    private JButton passButton = new JButton("<html>P<br>A<br>S<br>S");
-    private JButton zakonczGreButton = new JButton("<html>K<br>O<br>N<br>I<br>E<br>C");
+    private JButton passButton = new JButton("PASS");
+    private JButton zakonczGreButton = new JButton("KONIEC");
     private int rozmiarPola;
     private int kolorGracza;
 
@@ -68,10 +68,16 @@ public class Klient{
             mainPanel.add(belkaStatusu, BorderLayout.PAGE_START);
             mainPanel.add(this, BorderLayout.CENTER);
             //buttony
+            passButton.setForeground(Color.WHITE);
             passButton.setBackground(Color.DARK_GRAY);
             zakonczGreButton.setBackground(Color.DARK_GRAY);
-            mainPanel.add(passButton, BorderLayout.PAGE_END);
-            mainPanel.add(zakonczGreButton, BorderLayout.PAGE_END);
+            zakonczGreButton.setForeground(Color.WHITE);
+            JPanel basePanel = new JPanel(new GridLayout(1, 2, 10, 0));
+            basePanel.add(passButton);
+            basePanel.add(zakonczGreButton);
+            mainPanel.add(basePanel, BorderLayout.PAGE_END);
+           // mainPanel.add(passButton, BorderLayout.);
+           // mainPanel.add(zakonczGreButton, BorderLayout.PAGE_END);
             ramka.add(mainPanel);
             ramka.setVisible(true);
 
