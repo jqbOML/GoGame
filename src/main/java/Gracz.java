@@ -78,7 +78,17 @@ public class Gracz implements Runnable {
                 } catch (IllegalStateException e) {
                     outputString.println("INFO " + e.getMessage());
                 }
-            } else if (polecenie.startsWith("PASS")) {
+            }else if (polecenie.startsWith("ZWYCIESTWO")) {
+                outputString.println("ZWYCIESTWO");
+                przeciwnik.outputString.println("PORAZKA");
+            }else if (polecenie.startsWith("PORAZKA")) {
+                    outputString.println("PORAZKA");
+                    przeciwnik.outputString.println("ZWYCIESTWO");
+            }else if (polecenie.startsWith("REMIS")) {
+                outputString.println("REMIS");
+                przeciwnik.outputString.println("REMIS");
+            }
+            else if (polecenie.startsWith("PASS")) {
                 outputString.println("SPASOWALES");
                 przeciwnik.outputString.println("PRZECIWNIK_SPASOWAL");
                 this.pass = true;

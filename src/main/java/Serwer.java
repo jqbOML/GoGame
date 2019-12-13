@@ -22,19 +22,26 @@ class Serwer {
         ustawAktualnegoGracza(aktualnyGracz.przeciwnik);
     }
 
+
     ArrayList<Kamien[][]> przegladajPlansze() {
         ArrayList<Kamien[][]> kamienie_dowywalenia = new ArrayList<>();
         for (int w = 0; w < 19; w++) {
             for (int e = 0; e < 19; e++) {
                 if (plansza_go[w][e] != null) {
-                    kamienie_dowywalenia.add(plansza_go[w][e].czyOddechLancuch(w, e, plansza_go));
+                   // System.out.println ("usuwamy kamien:"+ plansza_go[w][e].czyOddechLancuch(w, e, plansza_go));
+                   kamienie_dowywalenia.add(plansza_go[w][e].czyOddechLancuch(w, e, plansza_go));
                 }
             }
         }
 
-        for (Kamien[][] i : kamienie_dowywalenia)
-            if(i != null)
-            System.out.println("usuwamy kamien: " + i);
+       /* for (Kamien[][] uduszony_kamien : kamienie_dowywalenia){
+            System.out.println ("usuwamy kamien:"+uduszony_kamien[uduszony_kamien.x][uduszony_kamien.y]);
+        }*/
+        for (Kamien[][] i : kamienie_dowywalenia) {
+            if (i != null) {
+                System.out.println("usuwamy kamien: " + i);
+            }
+        }
 
         return kamienie_dowywalenia;
     }

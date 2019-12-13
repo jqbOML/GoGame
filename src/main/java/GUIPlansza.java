@@ -274,4 +274,6 @@ class GUIPlansza extends JPanel {
         Image newimg27 = ImI_b08.getImage().getScaledInstance(ROZMIAR_POLA, ROZMIAR_POLA,  java.awt.Image.SCALE_SMOOTH);
         ImageIcon Im_bialy08 = new ImageIcon(newimg27);
     }
+
+
 }
