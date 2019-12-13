@@ -3,15 +3,62 @@
   <ID>JAVA</ID>
   <OriginalElement />
   <nodes>
-    <node x="221.0" y="300.0">MainKlient</node>
-    <node x="0.0" y="0.0">Serwer</node>
-    <node x="0.0" y="395.0">MainSerwer</node>
-    <node x="0.0" y="300.0">Klient</node>
-    <node x="0.0" y="183.0">Kamien</node>
+    <node x="15.0" y="657.0">MainKlient</node>
+    <node x="329.0" y="0.0">Gracz</node>
+    <node x="29.0" y="459.0">GUIPlansza</node>
+    <node x="237.24285714285713" y="176.0">Serwer</node>
+    <node x="348.00404761904764" y="364.0">MainSerwer</node>
+    <node x="0.0" y="535.0">Klient</node>
+    <node x="0.0" y="22.0">Kamien</node>
   </nodes>
   <notes />
-  <edges />
-  <settings layout="Hierarchic Group" zoom="0.9" x="685.8522727272726" y="193.97727272727278" />
+  <edges>
+    <edge source="MainKlient" target="Klient">
+      <point x="36.5" y="-25.0" />
+      <point x="124.5" y="632.0" />
+      <point x="132.0" y="632.0" />
+      <point x="44.0" y="36.0" />
+    </edge>
+    <edge source="Serwer" target="Gracz">
+      <point x="0.0" y="-69.0" />
+      <point x="355.74285714285713" y="156.0" />
+      <point x="349.2" y="156.0" />
+      <point x="-80.80000000000001" y="58.0" />
+    </edge>
+    <edge source="MainSerwer" target="Serwer">
+      <point x="-48.666666666666686" y="-25.0" />
+      <point x="372.33738095238095" y="339.0" />
+      <point x="296.49285714285713" y="339.0" />
+      <point x="-59.25" y="69.0" />
+    </edge>
+    <edge source="Gracz" target="Serwer">
+      <point x="0.0" y="58.0" />
+      <point x="430.0" y="156.0" />
+      <point x="423.45714285714286" y="156.0" />
+      <point x="67.71428571428572" y="-69.0" />
+    </edge>
+    <edge source="Serwer" target="Kamien">
+      <point x="-67.71428571428572" y="-69.0" />
+      <point x="288.0285714285714" y="146.0" />
+      <point x="154.5" y="146.0" />
+      <point x="0.0" y="36.0" />
+    </edge>
+    <edge source="Klient" target="GUIPlansza">
+      <point x="-58.66666666666666" y="-36.0" />
+      <point x="29.333333333333343" y="510.0" />
+      <point x="48.666666666666664" y="510.0" />
+      <point x="-39.333333333333336" y="13.0" />
+    </edge>
+    <edge source="MainSerwer" target="Gracz">
+      <point x="48.66666666666668" y="-25.0" />
+      <point x="469.6707142857143" y="339.0" />
+      <point x="484.74285714285713" y="339.0" />
+      <point x="484.74285714285713" y="156.0" />
+      <point x="510.80000000000007" y="156.0" />
+      <point x="80.80000000000007" y="58.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9" x="643.0" y="354.88888888888886" />
   <SelectedNodes>
     <node>MainKlient</node>
   </SelectedNodes>

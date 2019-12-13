@@ -1,4 +1,4 @@
-import javax.swing.*;
+package Klient;
 
 public class MainKlient {
     public static void main(String[] args) throws Exception {

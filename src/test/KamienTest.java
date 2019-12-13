@@ -1,4 +1,4 @@
-
+import Serwer.Kamien;
 import org.junit.jupiter.api.Test;
 
 
@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class KamienTest {
 
     Kamien[][] kamienie = new Kamien[19][19];
-
-
 
     @Test
     public void czyOddechTest() {

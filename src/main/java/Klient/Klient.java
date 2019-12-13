@@ -1,14 +1,9 @@
-import java.awt.*;
+package Klient;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -17,14 +12,14 @@ import javax.swing.*;
 
 public class Klient{
     private Socket socket;
-    private Scanner inString;
+    private Scanner in;
     private PrintWriter out;
     private GUIPlansza planszaGUI;
     private JLabel wybranePole;
 
     Klient(String adresSerwera) throws Exception {
         socket = new Socket(adresSerwera, 58901);
-        inString = new Scanner(socket.getInputStream());
+        in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
 
         planszaGUI = new GUIPlansza();
@@ -34,19 +29,18 @@ public class Klient{
 
     private void odbierajKomendy() throws Exception {
         try {
-            String odpowiedz = inString.nextLine();
+            String odpowiedz = in.nextLine();
                 System.out.println("Wiadomosc z serwera: "+ odpowiedz);
             int kolor = Character.digit(odpowiedz.charAt(6), 10);
             planszaGUI.kolorGracza = kolor;
-                System.out.println("Kolor: "+kolor);
-            planszaGUI.ramka.setTitle("Gra Go: Gracz " + ((kolor == 1) ? "czarny" : "biały"));
-            while (inString.hasNextLine()) {
-                odpowiedz = inString.next();
-                    System.out.println("Respons inString.next: "+odpowiedz);
+            planszaGUI.ramka.setTitle("Gra Go: Serwer.Gracz " + ((kolor == 1) ? "czarny" : "biały"));
+            while (in.hasNextLine()) {
+                odpowiedz = in.next();
+                    System.out.println("Respons in.next: "+odpowiedz);
                 if (odpowiedz.startsWith("POPRAWNY_RUCH")) {
                     planszaGUI.belkaStatusu.setText("Runda przeciwnika, proszę czekać");
-                    int locX = Integer.parseInt(inString.next());
-                    int locY = Integer.parseInt(inString.next());
+                    int locX = Integer.parseInt(in.next());
+                    int locY = Integer.parseInt(in.next());
                     System.out.println("Moje> locX: "+locX+", locY: "+locY);
                     if(kolor == 1) {
                         wybranePole.setIcon(planszaGUI.tekstury.Im_czarnyxx);
@@ -58,8 +52,8 @@ public class Klient{
                     }
                     wybranePole.repaint();
                 } else if (odpowiedz.startsWith("RUCH_PRZECIWNIKA")) {
-                    int locX = Integer.parseInt(inString.next());
-                    int locY = Integer.parseInt(inString.next());
+                    int locX = Integer.parseInt(in.next());
+                    int locY = Integer.parseInt(in.next());
                     System.out.println("Przeciwnik> locX: "+locX+", locY: "+locY);
                     if(kolor == 1) {
                         planszaGUI.pole[locX][locY].setIcon(planszaGUI.tekstury.Im_bialyxx);
@@ -72,7 +66,7 @@ public class Klient{
                     planszaGUI.pole[locX][locY].repaint();
                     planszaGUI.belkaStatusu.setText("Przeciwnik wykonał ruch, Twoja kolej");
                 } else if (odpowiedz.startsWith("INFO")) {
-                    planszaGUI.belkaStatusu.setText(inString.nextLine());
+                    planszaGUI.belkaStatusu.setText(in.nextLine());
                 /*} else if (odpowiedz.startsWith("ZWYCIESTWO")) {
                     JOptionPane.showMessageDialog(ramka, "Wygrałeś, gratulacje!");
                     break;

@@ -1,11 +1,13 @@
+package Serwer;
+
 import java.util.ArrayList;
 
-class Kamien {
+public class Kamien {
     private int x,y; //wspolrzedne kamienia na planszy
     int kolor; //1 - czarny, 2 - bialy
     private ArrayList<Kamien> uduszone_kamienie = new ArrayList<>(); //arraylista dla metody czyOddechLancuch()
 
-    Kamien (int wsp_x, int wsp_y, int nowy_kolor){
+    public Kamien(int wsp_x, int wsp_y, int nowy_kolor){
         this.x = wsp_x;
         this.y = wsp_y;
         this.kolor = nowy_kolor;
@@ -14,7 +16,7 @@ class Kamien {
     /**
      * metoda czyOddech zwraca true jeśli pojedynczy kamień ma w swoim zasięgu puste pole (oddech) - nie bierze pod uwagę łańucha, do którego może należeć
      */
-    boolean czyOddech(int x, int y, Kamien[][] kamienie){
+    public boolean czyOddech(int x, int y, Kamien[][] kamienie){
         if (x == 0 && y == 0)
             return kamienie[x + 1][y] == null || kamienie[x][y + 1] == null; // róg
         else if (x == 0 && y == 18)
@@ -39,7 +41,7 @@ class Kamien {
      * metoda czyOddechLancuch() zwraca tablicę kamieni z usuniętym lancuchem kamieni z planszy jesli łańcuch, do którego należał dany kamień nie posiadał oddechów,
      * a w przypadku posiadania co najmniej jednego oddechu zwraca niezmienioną tablicę
      */
-    Kamien[][] czyOddechLancuch(int a, int b, Kamien[][] kamienie){
+    public Kamien[][] czyOddechLancuch(int a, int b, Kamien[][] kamienie){
         if (a+1<=18) {
             if (kamienie[a + 1][b] != null) {
                 if (!uduszone_kamienie.contains(kamienie[a + 1][b]) && kamienie[a + 1][b].kolor == this.kolor) {
