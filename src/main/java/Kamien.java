@@ -43,48 +43,80 @@ class Kamien {
         if (a+1<=18) {
             if (kamienie[a + 1][b] != null) {
                 if (!uduszone_kamienie.contains(kamienie[a + 1][b]) && kamienie[a + 1][b].kolor == this.kolor) {
-                    if (czyOddech(a + 1, b, kamienie)) return null;
+                    if (czyOddech(a + 1, b, kamienie)){
+                        System.out.println("a="+a+", b="+b+": RETURN NULL");
+                        return null;
+                    }
                     uduszone_kamienie.add(kamienie[a + 1][b]);
                     czyOddechLancuch(a + 1, b, kamienie);
                 }
-            } else return null;
+            } else {
+                System.out.println("a="+a+", b="+b+": RETURN NULL");
+                return null;
+            }
 
         }
         if(a-1>=0) {
             if (kamienie[a - 1][b] != null) {
                 if (!uduszone_kamienie.contains(kamienie[a - 1][b]) && kamienie[a - 1][b].kolor == this.kolor) {
-                    if (czyOddech(a - 1, b, kamienie)) return null;
+                    if (czyOddech(a - 1, b, kamienie)) {
+                        System.out.println("a="+a+", b="+b+": RETURN NULL");
+                        return null;
+                    }
                     else {
                         uduszone_kamienie.add(kamienie[a - 1][b]);
                         czyOddechLancuch(a - 1, b, kamienie);
                     }
                 }
-            } else return null;
+            } else {
+                System.out.println("a="+a+", b="+b+": RETURN NULL");
+                return null;
+            }
         }
         if (b+1<=18) {
             if (kamienie[a][b + 1] != null) {
                 if (!uduszone_kamienie.contains(kamienie[a][b + 1]) && kamienie[a][b + 1].kolor == this.kolor) {
-                    if (czyOddech(a, b + 1, kamienie)) return null;
+                    if (czyOddech(a, b + 1, kamienie)) {
+                        System.out.println("a="+a+", b="+b+": RETURN NULL");
+                        return null;
+                    }
                     else {
                         uduszone_kamienie.add(kamienie[a][b + 1]);
                         czyOddechLancuch(a, b + 1, kamienie);
                     }
                 }
-            } else return null;
+            } else {
+                System.out.println("a="+a+", b="+b+": RETURN NULL");
+                return null;
+            }
         }
         if(b-1>=0) {
             if (kamienie[a][b - 1] != null) {
                 if (!uduszone_kamienie.contains(kamienie[a][b - 1]) && kamienie[a][b - 1].kolor == this.kolor) {
-                    if (czyOddech(a, b - 1, kamienie)) return null;
+                    if (czyOddech(a, b - 1, kamienie)) {
+                        System.out.println("a="+a+", b="+b+": RETURN NULL");
+                        return null;
+                    }
                     else {
                         uduszone_kamienie.add(kamienie[a][b - 1]);
                         czyOddechLancuch(a, b - 1, kamienie);
                     }
                 }
-            } else return null;
+            } else {
+                System.out.println("a="+a+", b="+b+": RETURN NULL");
+                return null;
+            }
         }
         for (Kamien uduszony_kamien : uduszone_kamienie){
             kamienie[uduszony_kamien.x][uduszony_kamien.y] = null;
+        }
+
+
+        for (int w = 0; w < 19; w++){
+            for (int e=0; e < 19; e++){
+                System.out.println("a="+a+", b="+b+":");
+                System.out.print("kamienie["+w+"]["+e+"] = "+(kamienie[w][e] == null ? "null" : kamienie[w][e].kolor+", "));
+            }
         }
         return kamienie;
 }}

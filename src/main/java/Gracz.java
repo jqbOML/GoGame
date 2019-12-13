@@ -10,7 +10,7 @@ public class Gracz implements Runnable {
     private Socket socket;
     private Scanner input;
     private PrintWriter outputString;
-    boolean passowanie;
+    boolean pass;
     //OutputStream outputObject;
 
     Gracz(Socket socket, int kolor, Serwer serwer) {
@@ -62,11 +62,11 @@ public class Gracz implements Runnable {
                     int x = Integer.parseInt(input.next());
                     int y = Integer.parseInt(input.next());
                     serwer.zweryfikujRuch(x, y, this);
-                    serwer.czy_uduszone(x, y);
+                    serwer.czyUduszone(x, y);
                     outputString.println("POPRAWNY_RUCH " + x + " " + y);
                     //outputObject.flush(plansza_go);
                     przeciwnik.outputString.println("RUCH_PRZECIWNIKA " + x + " " + y);
-                    this.passowanie = false;
+                    this.pass = false;
 
                 /*if (false) {
                     outputString.println("ZWYCIESTWO");
@@ -76,12 +76,12 @@ public class Gracz implements Runnable {
                     outputString.println("INFO " + e.getMessage());
                 }
             } else if (polecenie.startsWith("PASS")) {
-                outputString.println("ZPASOWALES");
-                przeciwnik.outputString.println("PRZECIWNIK_ZPASOWAL");
-                this.passowanie = true;
+                outputString.println("SPASOWALES");
+                przeciwnik.outputString.println("PRZECIWNIK_SPASOWAL");
+                this.pass = true;
                 serwer.ustawAktualnegoGracza(przeciwnik);
             }
-            if(this.passowanie && przeciwnik.passowanie)
+            if(this.pass && przeciwnik.pass)
             {
                 outputString.println("KONIEC_GRY");
                 przeciwnik.outputString.println("KONIEC_GRY");
