@@ -9,6 +9,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import javax.swing.*;
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
 
 public class Klient{
     private Socket socket;
@@ -16,6 +18,8 @@ public class Klient{
     private PrintWriter out;
     private GUIPlansza planszaGUI;
     private JLabel wybranePole;
+    int[] wynik = new int[2];
+
 
     Klient(String adresSerwera) throws Exception {
         socket = new Socket(adresSerwera, 58901);
@@ -69,13 +73,16 @@ public class Klient{
                     planszaGUI.belkaStatusu.setText(in.nextLine());
                 /*} else if (odpowiedz.startsWith("ZWYCIESTWO")) {
                     JOptionPane.showMessageDialog(ramka, "Wygrałeś, gratulacje!");
+                    planszaGUI.belkaStatusu.setText(inString.nextLine());
+                } else if (odpowiedz.startsWith("ZWYCIESTWO")) {
+                    JOptionPane.showMessageDialog(planszaGUI.ramka, "Wygrałeś, gratulacje!");
                     break;
                 } else if (odpowiedz.startsWith("PORAZKA")) {
-                    JOptionPane.showMessageDialog(ramka, "Przeciwnik wygrał gre :(");
+                    JOptionPane.showMessageDialog(planszaGUI.ramka, "Przeciwnik wygrał gre :(");
                     break;
                 } else if (odpowiedz.startsWith("REMIS")) {
-                    JOptionPane.showMessageDialog(ramka, "Remis!");
-                    break;*/
+                    JOptionPane.showMessageDialog(planszaGUI.ramka, "Remis!");
+                    break;
                 } else if (odpowiedz.startsWith("PRZECIWNIK_SPASOWAL")){
                     planszaGUI.belkaStatusu.setText("Przeciwnik spasował, twój ruch!");
                 } else if (odpowiedz.startsWith("SPASOWALES")){
@@ -87,9 +94,34 @@ public class Klient{
                     break;
                 }
                 else if (odpowiedz.startsWith("KONIEC_GRY")) {
-                    JOptionPane.showMessageDialog(planszaGUI.ramka, "Koniec gry!");
-                    break;
+                    JFrame zakonczenie = new JFrame("Second");
+                    JTextArea podajWynikTy = new JTextArea(1, 10);
+                    JTextArea podajWynikOn = new JTextArea(1, 10);
+                    JButton okButton = new JButton("OK");
+                    if (kolor == 1) {
+                        zakonczenie.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        zakonczenie.setSize(400, 100);
+                        zakonczenie.setLocationRelativeTo(null);
+                        zakonczenie.setVisible(true);
+                        zakonczenie.setTitle("Podsumowanie: Gracz biały");
+                        zakonczenie.add(podajWynikTy, BorderLayout.WEST);
+                        zakonczenie.add(okButton, BorderLayout.CENTER);
+                        podajWynikTy.setBorder(new TitledBorder("TWÓJ WYNIK"));
+                        zakonczenie.add(podajWynikOn, BorderLayout.EAST);
+                        podajWynikOn.setBorder(new TitledBorder("WYNIK PZECIWNIKA"));
+                        okButton.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                                    wynik[0] = Integer.parseInt(podajWynikTy.getText());
+                                    wynik[1] = Integer.parseInt(podajWynikOn.getText());
+                                if(wynik[0] > wynik[1] && wynik[0] != 0 && wynik[1] != 0 ) out.println("PORAZKA");
+                                else if(wynik[0] < wynik[1] && wynik[0] != 0 && wynik[1] != 0) out.println("ZWYCIESTWO");
+                                else if(wynik[0] == wynik[1] && wynik[0] != 0 && wynik[1] != 0) out.println("REMIS");
+                                zakonczenie.dispose();
+                            }
+                        });
+                    }
                 }
+
             }
             out.println("WYJSCIE");
         } catch (Exception e) {
