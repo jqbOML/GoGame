@@ -1,8 +1,8 @@
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Scanner;
+import java.util.ArrayList;
+
 class Serwer {
 
+    private Kamien kamien;
     private Kamien[][] plansza_go = new Kamien[19][19];
     Gracz aktualnyGracz;
 
@@ -22,26 +22,21 @@ class Serwer {
         ustawAktualnegoGracza(aktualnyGracz.przeciwnik);
     }
 
-    void czyUduszone(int x, int y) {
-        System.out.println("czyUduszone dla x: "+x+", y: "+y);
-        if (plansza_go[x + 1][y] != null) {
-            if (plansza_go[x + 1][y].kolor == aktualnyGracz.przeciwnik.kolor)
-            plansza_go = plansza_go[x + 1][y].czyOddechLancuch(x + 1, y, plansza_go);
-        }
-        if (plansza_go[x - 1][y] != null) {
-            if (plansza_go[x - 1][y].kolor == aktualnyGracz.przeciwnik.kolor)
-            plansza_go = plansza_go[x - 1][y].czyOddechLancuch(x - 1, y, plansza_go);
-        }
-
-        if (plansza_go[x][y - 1] != null) {
-            if (plansza_go[x][y - 1].kolor == aktualnyGracz.przeciwnik.kolor)
-            plansza_go = plansza_go[x][y - 1].czyOddechLancuch(x, y - 1, plansza_go);
+    ArrayList<Kamien[][]> przegladajPlansze() {
+        ArrayList<Kamien[][]> kamienie_dowywalenia = new ArrayList<>();
+        for (int w = 0; w < 19; w++) {
+            for (int e = 0; e < 19; e++) {
+                if (plansza_go[w][e] != null) {
+                    kamienie_dowywalenia.add(plansza_go[w][e].czyOddechLancuch(w, e, plansza_go));
+                }
+            }
         }
 
-        if (plansza_go[x][y + 1] != null) {
-            if (plansza_go[x][y + 1].kolor == aktualnyGracz.przeciwnik.kolor)
-            plansza_go = plansza_go[x][y + 1].czyOddechLancuch(x, y + 1, plansza_go);
-        }
+        for (Kamien[][] i : kamienie_dowywalenia)
+            if(i != null)
+            System.out.println("usuwamy kamien: " + i);
+
+        return kamienie_dowywalenia;
     }
 
     private boolean czyKO(int x, int y) {

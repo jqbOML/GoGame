@@ -107,7 +107,7 @@ class Kamien {
                 return null;
             }
         }
-        for (Kamien uduszony_kamien : uduszone_kamienie){
+        /*for (Kamien uduszony_kamien : uduszone_kamienie){
             kamienie[uduszony_kamien.x][uduszony_kamien.y] = null;
         }
 
@@ -117,6 +117,6 @@ class Kamien {
                 System.out.println("a="+a+", b="+b+":");
                 System.out.print("kamienie["+w+"]["+e+"] = "+(kamienie[w][e] == null ? "null" : kamienie[w][e].kolor+", "));
             }
-        }
+        }*/
         return kamienie;
 }}

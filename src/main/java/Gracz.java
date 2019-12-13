@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Gracz implements Runnable {
@@ -62,9 +64,10 @@ public class Gracz implements Runnable {
                     int x = Integer.parseInt(input.next());
                     int y = Integer.parseInt(input.next());
                     serwer.zweryfikujRuch(x, y, this);
-                    serwer.czyUduszone(x, y);
                     outputString.println("POPRAWNY_RUCH " + x + " " + y);
+                    serwer.przegladajPlansze();
                     //outputObject.flush(plansza_go);
+                    //System.out.println("kamienie do usunięcia:" + Arrays.deepToString(new ArrayList[]{serwer.przegladajPlansze()}));
                     przeciwnik.outputString.println("RUCH_PRZECIWNIKA " + x + " " + y);
                     this.pass = false;
 
