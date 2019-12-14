@@ -1,4 +1,4 @@
-package Klient;
+package GraGo.Klient;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
-class GUIPlansza extends JPanel {
+class GUIPlansza extends AbstractPlansza {
     static int ROZMIAR_PLANSZY = 19;
     int kolorGracza; //1 - czarny, 2 - biały
     JFrame ramka = new JFrame("Gra Go");
@@ -15,8 +15,8 @@ class GUIPlansza extends JPanel {
     JButton passButton = new JButton("PASS");
     JButton zakonczGreButton = new JButton("KONIEC");
     JLabel[][] pole;
-    private Dimension d = Toolkit.getDefaultToolkit().getScreenSize(); //pobranie parametrów rozdzielczości ekranu
-    private int ROZMIAR_POLA = (d.height / ROZMIAR_PLANSZY);
+    private static Dimension d = Toolkit.getDefaultToolkit().getScreenSize(); //pobranie parametrów rozdzielczości ekranu
+    private static int ROZMIAR_POLA = (d.height / ROZMIAR_PLANSZY);
     int[][] planszaKamieni;
     Tekstury tekstury = new Tekstury(); //wczytanie grafik do GUI z folderu ~/tekstury/
 
@@ -139,7 +139,7 @@ class GUIPlansza extends JPanel {
         repaint();
     }
 
-    class Tekstury{
+    static class Tekstury{
         ArrayList<ImageIcon> tekstury = new ArrayList<>();
         ImageIcon ImI_p00 = new ImageIcon("tekstury/00polePuste.jpg");
         //dostosuj rozmiare ikony

@@ -1,37 +1,33 @@
-package Klient;
+package GraGo.Klient;
+
+import GraGo.KomunikatyKlienta;
+import GraGo.KomunikatySerwera;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.net.Socket;
 
 import javax.swing.*;
-import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
-public class Klient{
+public class Klient implements KlientInterface{
     private Socket socket;
-    private Scanner inString;
+    private Scanner in;
     private PrintWriter out;
     private GUIPlansza planszaGUI;
     private JLabel wybranePole;
-    int[] wynik = new int[2];
+    private int[] wynik = new int[2];
 
 
 
     Klient(String adresSerwera) throws Exception {
         socket = new Socket(adresSerwera, 58901);
-        inString = new Scanner(socket.getInputStream());
+        in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
 
         planszaGUI = new GUIPlansza();
@@ -39,21 +35,20 @@ public class Klient{
         odbierajKomendy();
     }
 
-    private void odbierajKomendy() throws Exception {
+    public void odbierajKomendy() throws Exception {
         try {
-            String odpowiedz = inString.nextLine();
+            String odpowiedz = in.nextLine();
                 System.out.println("Wiadomosc z serwera: "+ odpowiedz);
             int kolor = Character.digit(odpowiedz.charAt(6), 10);
             planszaGUI.kolorGracza = kolor;
-                System.out.println("Kolor: "+kolor);
             planszaGUI.ramka.setTitle("Gra Go: Gracz " + ((kolor == 1) ? "czarny" : "biały"));
-            while (inString.hasNextLine()) {
-                odpowiedz = inString.next();
-                System.out.println("Respons inString.next: " + odpowiedz);
-                if (odpowiedz.startsWith("POPRAWNY_RUCH")) {
+            while (in.hasNextLine()) {
+                odpowiedz = in.next();
+                System.out.println("Respons in.next: " + odpowiedz);
+                if (odpowiedz.startsWith(KomunikatySerwera.POPRAWNY_RUCH.toString())) {
                     planszaGUI.belkaStatusu.setText("Runda przeciwnika, proszę czekać");
-                    int locX = Integer.parseInt(inString.next());
-                    int locY = Integer.parseInt(inString.next());
+                    int locX = Integer.parseInt(in.next());
+                    int locY = Integer.parseInt(in.next());
                     System.out.println("Moje> locX: " + locX + ", locY: " + locY);
                     if (kolor == 1) {
                         wybranePole.setIcon(planszaGUI.tekstury.Im_czarnyxx);
@@ -63,9 +58,9 @@ public class Klient{
                         planszaGUI.planszaKamieni[locX][locY] = 2;
                     }
                     wybranePole.repaint();
-                } else if (odpowiedz.startsWith("RUCH_PRZECIWNIKA")) {
-                    int locX = Integer.parseInt(inString.next());
-                    int locY = Integer.parseInt(inString.next());
+                } else if (odpowiedz.startsWith(KomunikatySerwera.RUCH_PRZECIWNIKA.toString())) {
+                    int locX = Integer.parseInt(in.next());
+                    int locY = Integer.parseInt(in.next());
                     System.out.println("Przeciwnik> locX: " + locX + ", locY: " + locY);
                     if (kolor == 1) {
                         planszaGUI.pole[locX][locY].setIcon(planszaGUI.tekstury.Im_bialyxx);
@@ -76,36 +71,34 @@ public class Klient{
                     }
                     planszaGUI.pole[locX][locY].repaint();
                     planszaGUI.belkaStatusu.setText("Przeciwnik wykonał ruch, Twoja kolej");
-                } else if (odpowiedz.startsWith("INFO")) {
-                    planszaGUI.belkaStatusu.setText(inString.nextLine());
-                } else if (odpowiedz.startsWith("ZWYCIESTWO")) {
+                } else if (odpowiedz.startsWith(KomunikatySerwera.INFO.toString())) {
+                    planszaGUI.belkaStatusu.setText(in.nextLine());
+                } else if (odpowiedz.startsWith(KomunikatySerwera.ZWYCIESTWO.toString())) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Wygrałeś, gratulacje!");
                     break;
-                } else if (odpowiedz.startsWith("PORAZKA")) {
+                } else if (odpowiedz.startsWith(KomunikatySerwera.PORAZKA.toString())) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Przeciwnik wygrał gre :(");
                     break;
-                } else if (odpowiedz.startsWith("REMIS")) {
+                } else if (odpowiedz.startsWith(KomunikatySerwera.REMIS.toString())) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Remis!");
                     break;
-                } else if (odpowiedz.startsWith("PRZECIWNIK_SPASOWAL")) {
+                } else if (odpowiedz.startsWith(KomunikatySerwera.PASS.toString())) {
                     planszaGUI.belkaStatusu.setText("Przeciwnik spasował, twój ruch!");
-                } else if (odpowiedz.startsWith("SPASOWALES")) {
-                    planszaGUI.belkaStatusu.setText("Spasowałeś, ruch przeciwnika!");
-                } else if (odpowiedz.startsWith("PRZECIWNIK_WYSZEDL")) {
+                }  else if (odpowiedz.startsWith(KomunikatySerwera.PRZECIWNIK_WYSZEDL.toString())) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Przeciwnik wyszedł z gry!");
                     break;
-                }else if (odpowiedz.startsWith("WYNIK")) {
-                        int a = Integer.parseInt(inString.next());
-                        int b = Integer.parseInt(inString.next());
+                }else if (odpowiedz.startsWith(KomunikatySerwera.WYNIK.toString())) {
+                        int a = Integer.parseInt(in.next());
+                        int b = Integer.parseInt(in.next());
                         int z = JOptionPane.showConfirmDialog(planszaGUI, "Twój wynik to: " + b + " Wynik przeciwnika to: " + a
                                 , "Czy zgadzasz się z wynikiem?", JOptionPane.YES_NO_OPTION);
                         if (z == JOptionPane.YES_OPTION)
                         {
-                            if(a > b  ) out.println("PORAZKA");
-                            else if(a < b ) out.println("ZWYCIESTWO");
-                            else out.println("REMIS");
+                            if(a > b  ) out.println(KomunikatySerwera.PORAZKA);
+                            else if(a < b ) out.println(KomunikatySerwera.ZWYCIESTWO);
+                            else out.println(KomunikatySerwera.REMIS);
                         }
-                } else if (odpowiedz.startsWith("KONIEC_GRY")) {
+                } else if (odpowiedz.startsWith(KomunikatySerwera.KONIEC_GRY.toString())) {
                     JTextArea podajWynikTy = new JTextArea(1, 10);
                     JTextArea podajWynikOn = new JTextArea(1, 10);
                     JButton okButton = new JButton("OK");
@@ -133,7 +126,7 @@ public class Klient{
                 }
             }
 
-            out.println("WYJSCIE");
+            out.println(KomunikatyKlienta.WYJSCIE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -143,18 +136,19 @@ public class Klient{
         }
     }
 
-    private void wysylajKomendy(){
+    public void wysylajKomendy(){
         planszaGUI.zakonczGreButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-                out.println("WYJSCIE");
+                out.println(KomunikatyKlienta.WYJSCIE);
             }
         });
 
         planszaGUI.passButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-                out.println("PASS");
+                out.println(KomunikatySerwera.PASS);
+                planszaGUI.belkaStatusu.setText("Spasowałeś, ruch przeciwnika!");
             }
         });
 
@@ -165,7 +159,7 @@ public class Klient{
                 planszaGUI.pole[a][b].addMouseListener(new MouseAdapter() {
                     public void mousePressed(MouseEvent e) {
                         wybranePole = planszaGUI.pole[finalA][finalB];
-                        out.println("RUCH " + finalA + " " + finalB);
+                        out.println(KomunikatyKlienta.RUCH + " " + finalA + " " + finalB);
                         System.out.println("Moj ruch> locX: " + finalA + ", locY: " + finalB);
                     }
                 });

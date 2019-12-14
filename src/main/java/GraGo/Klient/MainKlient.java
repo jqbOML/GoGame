@@ -1,4 +1,4 @@
-package Klient;
+package GraGo.Klient;
 
 public class MainKlient {
     public static void main(String[] args) throws Exception {
