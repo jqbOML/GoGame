@@ -3,6 +3,8 @@ package GraGo.Klient;
 import GraGo.KomunikatyKlienta;
 import GraGo.KomunikatySerwera;
 
+import GraGo.Klient.GUIPlansza;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,13 +17,16 @@ import java.net.Socket;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
-public class Klient implements KlientInterface{
+public class Klient{
     private Socket socket;
     private Scanner in;
     private PrintWriter out;
+    private GUIStart startGUI;
     private GUIPlansza planszaGUI;
+    private GUIWynik wynikGUI;
     private JLabel wybranePole;
     private int[] wynik = new int[2];
+    boolean drugiGracz;
 
 
 
@@ -30,10 +35,24 @@ public class Klient implements KlientInterface{
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
 
-        planszaGUI = new GUIPlansza();
-        wysylajKomendy();
-        odbierajKomendy();
-    }
+        startGUI = new GUIStart();
+
+            startGUI.przeciwnikButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    drugigracz = true;
+                }
+            });
+
+       Thread.sleep(7000); //// to nie działą jakoś super :(
+        if (drugigracz) {
+            socket = new Socket(adresSerwera, 58901);
+            in = new Scanner(socket.getInputStream());
+            out = new PrintWriter(socket.getOutputStream(), true);
+
+            planszaGUI = new GUIPlansza();
+            wysylajKomendy();
+            odbierajKomendy();
+        }
 
     public void odbierajKomendy() throws Exception {
         try {
@@ -103,22 +122,14 @@ public class Klient implements KlientInterface{
                     JTextArea podajWynikOn = new JTextArea(1, 10);
                     JButton okButton = new JButton("OK");
                     JFrame zakonczenie = new JFrame("Podaj wyniki");
+                } else if (odpowiedz.startsWith(KomunikatySerwera.KONIEC_GRY.toString())) {
                     if (kolor == 1) {
-                        zakonczenie.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                        zakonczenie.setSize(400, 100);
-                        zakonczenie.setLocationRelativeTo(null);
-                        zakonczenie.setVisible(true);
-                        zakonczenie.setTitle("Podsumowanie: Gracz biały");
-                        zakonczenie.add(podajWynikTy, BorderLayout.WEST);
-                        zakonczenie.add(okButton, BorderLayout.CENTER);
-                        podajWynikTy.setBorder(new TitledBorder("TWÓJ WYNIK"));
-                        zakonczenie.add(podajWynikOn, BorderLayout.EAST);
-                        podajWynikOn.setBorder(new TitledBorder("WYNIK PZECIWNIKA"));
-                        okButton.addActionListener(new ActionListener() {
+                        wynikGUI = new GUIWynik();
+                        wynikGUI.okButton.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                                wynik[0] = Integer.parseInt(podajWynikTy.getText());
-                                wynik[1] = Integer.parseInt(podajWynikOn.getText());
-                                zakonczenie.dispose();
+                                wynik[0] = Integer.parseInt(wynikGUI.podajWynikTy.getText());
+                                wynik[1] = Integer.parseInt(wynikGUI.podajWynikOn.getText());
+                                wynikGUI.zakonczenie.dispose();
                                 out.println("WYNIK " + wynik[0] + " " + wynik[1]);
                             }
                         });
