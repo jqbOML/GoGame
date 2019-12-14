@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-class Serwer {
+public class Serwer {
     private Kamien[][] plansza_go = new Kamien[19][19];
     private Gracz aktualnyGracz;
 
@@ -66,11 +66,24 @@ class Serwer {
                 } catch (IllegalStateException e) {
                     gracz.output.println("INFO " + e.getMessage());
                 }
-            } else if (polecenie.startsWith("PASS")) {
+            }else if (polecenie.startsWith("ZWYCIESTWO")) {
+                gracz.output.println("ZWYCIESTWO");
+                gracz.przeciwnik.output.println("PORAZKA");
+            }else if (polecenie.startsWith("PORAZKA")) {
+                gracz.output.println("PORAZKA");
+                gracz.przeciwnik.output.println("ZWYCIESTWO");
+            }else if (polecenie.startsWith("REMIS")) {
+                gracz.output.println("REMIS");
+                gracz.przeciwnik.output.println("REMIS");
+            }else if (polecenie.startsWith("PASS")) {
                 gracz.output.println("SPASOWALES");
                 gracz.przeciwnik.output.println("PRZECIWNIK_SPASOWAL");
                 gracz.pass = true;
                 ustawAktualnegoGracza(gracz.przeciwnik);
+            }else if (polecenie.startsWith("WYNIK")) {
+                int a = Integer.parseInt(gracz.input.next());
+                int b = Integer.parseInt(gracz.input.next());
+                gracz.output.println("WYNIK " + a + " " + b);
             }
             if(gracz.pass && gracz.przeciwnik.pass)
             {

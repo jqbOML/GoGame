@@ -1,28 +1,37 @@
 package Klient;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.net.Socket;
 
 import javax.swing.*;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 public class Klient{
     private Socket socket;
-    private Scanner in;
+    private Scanner inString;
     private PrintWriter out;
     private GUIPlansza planszaGUI;
     private JLabel wybranePole;
-    private int[] wynik = new int[2];
+    int[] wynik = new int[2];
+
 
 
     Klient(String adresSerwera) throws Exception {
         socket = new Socket(adresSerwera, 58901);
-        in = new Scanner(socket.getInputStream());
+        inString = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
 
         planszaGUI = new GUIPlansza();
@@ -32,68 +41,75 @@ public class Klient{
 
     private void odbierajKomendy() throws Exception {
         try {
-            String odpowiedz = in.nextLine();
+            String odpowiedz = inString.nextLine();
                 System.out.println("Wiadomosc z serwera: "+ odpowiedz);
             int kolor = Character.digit(odpowiedz.charAt(6), 10);
             planszaGUI.kolorGracza = kolor;
-            planszaGUI.ramka.setTitle("Gra Go: Serwer.Gracz " + ((kolor == 1) ? "czarny" : "biały"));
-            while (in.hasNextLine()) {
-                odpowiedz = in.next();
-                    System.out.println("Respons in.next: "+odpowiedz);
+                System.out.println("Kolor: "+kolor);
+            planszaGUI.ramka.setTitle("Gra Go: Gracz " + ((kolor == 1) ? "czarny" : "biały"));
+            while (inString.hasNextLine()) {
+                odpowiedz = inString.next();
+                System.out.println("Respons inString.next: " + odpowiedz);
                 if (odpowiedz.startsWith("POPRAWNY_RUCH")) {
                     planszaGUI.belkaStatusu.setText("Runda przeciwnika, proszę czekać");
-                    int locX = Integer.parseInt(in.next());
-                    int locY = Integer.parseInt(in.next());
-                    System.out.println("Moje> locX: "+locX+", locY: "+locY);
-                    if(kolor == 1) {
+                    int locX = Integer.parseInt(inString.next());
+                    int locY = Integer.parseInt(inString.next());
+                    System.out.println("Moje> locX: " + locX + ", locY: " + locY);
+                    if (kolor == 1) {
                         wybranePole.setIcon(planszaGUI.tekstury.Im_czarnyxx);
                         planszaGUI.planszaKamieni[locX][locY] = 1;
-                    }
-                    else {
+                    } else {
                         wybranePole.setIcon(planszaGUI.tekstury.Im_bialyxx);
                         planszaGUI.planszaKamieni[locX][locY] = 2;
                     }
                     wybranePole.repaint();
                 } else if (odpowiedz.startsWith("RUCH_PRZECIWNIKA")) {
-                    int locX = Integer.parseInt(in.next());
-                    int locY = Integer.parseInt(in.next());
-                    System.out.println("Przeciwnik> locX: "+locX+", locY: "+locY);
-                    if(kolor == 1) {
+                    int locX = Integer.parseInt(inString.next());
+                    int locY = Integer.parseInt(inString.next());
+                    System.out.println("Przeciwnik> locX: " + locX + ", locY: " + locY);
+                    if (kolor == 1) {
                         planszaGUI.pole[locX][locY].setIcon(planszaGUI.tekstury.Im_bialyxx);
                         planszaGUI.planszaKamieni[locX][locY] = 2;
-                    }
-                    else {
+                    } else {
                         planszaGUI.pole[locX][locY].setIcon(planszaGUI.tekstury.Im_czarnyxx);
                         planszaGUI.planszaKamieni[locX][locY] = 1;
                     }
                     planszaGUI.pole[locX][locY].repaint();
                     planszaGUI.belkaStatusu.setText("Przeciwnik wykonał ruch, Twoja kolej");
                 } else if (odpowiedz.startsWith("INFO")) {
-                    planszaGUI.belkaStatusu.setText(in.nextLine());
+                    planszaGUI.belkaStatusu.setText(inString.nextLine());
                 } else if (odpowiedz.startsWith("ZWYCIESTWO")) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Wygrałeś, gratulacje!");
+                    break;
                 } else if (odpowiedz.startsWith("PORAZKA")) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Przeciwnik wygrał gre :(");
+                    break;
                 } else if (odpowiedz.startsWith("REMIS")) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Remis!");
-                } else if (odpowiedz.startsWith("PRZECIWNIK_SPASOWAL")){
+                    break;
+                } else if (odpowiedz.startsWith("PRZECIWNIK_SPASOWAL")) {
                     planszaGUI.belkaStatusu.setText("Przeciwnik spasował, twój ruch!");
-                } else if (odpowiedz.startsWith("SPASOWALES")){
+                } else if (odpowiedz.startsWith("SPASOWALES")) {
                     planszaGUI.belkaStatusu.setText("Spasowałeś, ruch przeciwnika!");
-                }
-
-                else if (odpowiedz.startsWith("PRZECIWNIK_WYSZEDL")) {
+                } else if (odpowiedz.startsWith("PRZECIWNIK_WYSZEDL")) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Przeciwnik wyszedł z gry!");
                     break;
-                }
-                else if (odpowiedz.startsWith("KONIEC_GRY")) {
-                    /*
-                        TODO: stworzyć nową osobną klasę dla okna końcowego, która tutaj będzie wywoływana
-                     */
-                    JFrame zakonczenie = new JFrame("Second");
+                }else if (odpowiedz.startsWith("WYNIK")) {
+                        int a = Integer.parseInt(inString.next());
+                        int b = Integer.parseInt(inString.next());
+                        int z = JOptionPane.showConfirmDialog(planszaGUI, "Twój wynik to: " + b + " Wynik przeciwnika to: " + a
+                                , "Czy zgadzasz się z wynikiem?", JOptionPane.YES_NO_OPTION);
+                        if (z == JOptionPane.YES_OPTION)
+                        {
+                            if(a > b  ) out.println("PORAZKA");
+                            else if(a < b ) out.println("ZWYCIESTWO");
+                            else out.println("REMIS");
+                        }
+                } else if (odpowiedz.startsWith("KONIEC_GRY")) {
                     JTextArea podajWynikTy = new JTextArea(1, 10);
                     JTextArea podajWynikOn = new JTextArea(1, 10);
                     JButton okButton = new JButton("OK");
+                    JFrame zakonczenie = new JFrame("Podaj wyniki");
                     if (kolor == 1) {
                         zakonczenie.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         zakonczenie.setSize(400, 100);
@@ -107,18 +123,16 @@ public class Klient{
                         podajWynikOn.setBorder(new TitledBorder("WYNIK PZECIWNIKA"));
                         okButton.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                                    wynik[0] = Integer.parseInt(podajWynikTy.getText());
-                                    wynik[1] = Integer.parseInt(podajWynikOn.getText());
-                                if(wynik[0] > wynik[1] && wynik[0] != 0 && wynik[1] != 0 ) out.println("PORAZKA");
-                                else if(wynik[0] < wynik[1] && wynik[0] != 0 && wynik[1] != 0) out.println("ZWYCIESTWO");
-                                else if(wynik[0] == wynik[1] && wynik[0] != 0 && wynik[1] != 0) out.println("REMIS");
+                                wynik[0] = Integer.parseInt(podajWynikTy.getText());
+                                wynik[1] = Integer.parseInt(podajWynikOn.getText());
                                 zakonczenie.dispose();
+                                out.println("WYNIK " + wynik[0] + " " + wynik[1]);
                             }
                         });
                     }
                 }
-
             }
+
             out.println("WYJSCIE");
         } catch (Exception e) {
             e.printStackTrace();
