@@ -80,7 +80,7 @@ class Serwer {
         }
     }
 
-    synchronized void zweryfikujRuch(int x, int y, Gracz gracz) {
+    private synchronized void zweryfikujRuch(int x, int y, Gracz gracz) {
         if (gracz != aktualnyGracz) {
             throw new IllegalStateException("Nie Twój ruch!");
         } else if (gracz.przeciwnik == null) {
@@ -92,11 +92,11 @@ class Serwer {
         } else if (czyKO(x, y)) {
             throw new IllegalStateException("Niedozwolony ruch KO!");
         }
-        plansza_go[x][y] = new Kamien(x, y, aktualnyGracz.kolor);
+        plansza_go[x][y] = new Kamien(aktualnyGracz.kolor);
         ustawAktualnegoGracza(aktualnyGracz.przeciwnik);
     }
 
-    void czyUduszone(int x, int y) {
+    private void czyUduszone(int x, int y) {
         System.out.println("czyUduszone dla x: "+x+", y: "+y);
         if (plansza_go[x + 1][y] != null) {
             if (plansza_go[x + 1][y].kolor == aktualnyGracz.przeciwnik.kolor)
@@ -124,7 +124,7 @@ class Serwer {
     }
 
     private boolean czySamoboj(int x, int y) {
-        plansza_go[x][y] = new Kamien(x, y, aktualnyGracz.kolor);
+        plansza_go[x][y] = new Kamien(aktualnyGracz.kolor);
         if(plansza_go[x][y].czyOddechLancuch(x, y, plansza_go) == null){
             plansza_go[x][y] = null;
             return false;
@@ -135,7 +135,7 @@ class Serwer {
 
     }
 
-    public void ustawAktualnegoGracza(Gracz gracz){
+    private void ustawAktualnegoGracza(Gracz gracz){
         this.aktualnyGracz = gracz;
         System.out.println("Aktualny gracz: "+gracz.kolor);
     }

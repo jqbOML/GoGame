@@ -3,13 +3,9 @@ package Serwer;
 import java.util.ArrayList;
 
 public class Kamien {
-    private int x,y; //wspolrzedne kamienia na planszy
     int kolor; //1 - czarny, 2 - bialy
-    private ArrayList<Kamien> uduszone_kamienie = new ArrayList<>(); //arraylista dla metody czyOddechLancuch()
 
-    public Kamien(int wsp_x, int wsp_y, int nowy_kolor){
-        this.x = wsp_x;
-        this.y = wsp_y;
+    public Kamien(int nowy_kolor){
         this.kolor = nowy_kolor;
     }
 
@@ -42,23 +38,25 @@ public class Kamien {
      * a w przypadku posiadania co najmniej jednego oddechu zwraca niezmienioną tablicę
      */
     public Kamien[][] czyOddechLancuch(int a, int b, Kamien[][] kamienie){
-        if (a+1<=18) {
+        ArrayList<Kamien> uduszone_kamienie = new ArrayList<>(); //arraylista z kamieniami, które zostały uduszone
+        if (a < 18) {
             if (kamienie[a + 1][b] != null) {
                 if (!uduszone_kamienie.contains(kamienie[a + 1][b]) && kamienie[a + 1][b].kolor == this.kolor) {
                     if (czyOddech(a + 1, b, kamienie)){
                         System.out.println("a="+a+", b="+b+": RETURN NULL");
                         return null;
+                    } else{
+                        uduszone_kamienie.add(kamienie[a + 1][b]);
                     }
-                    uduszone_kamienie.add(kamienie[a + 1][b]);
                     czyOddechLancuch(a + 1, b, kamienie);
                 }
             } else {
                 System.out.println("a="+a+", b="+b+": RETURN NULL");
                 return null;
             }
-
         }
-        if(a-1>=0) {
+
+        if (a > 0) {
             if (kamienie[a - 1][b] != null) {
                 if (!uduszone_kamienie.contains(kamienie[a - 1][b]) && kamienie[a - 1][b].kolor == this.kolor) {
                     if (czyOddech(a - 1, b, kamienie)) {
@@ -75,7 +73,8 @@ public class Kamien {
                 return null;
             }
         }
-        if (b+1<=18) {
+
+        if (b < 18) {
             if (kamienie[a][b + 1] != null) {
                 if (!uduszone_kamienie.contains(kamienie[a][b + 1]) && kamienie[a][b + 1].kolor == this.kolor) {
                     if (czyOddech(a, b + 1, kamienie)) {
@@ -92,7 +91,8 @@ public class Kamien {
                 return null;
             }
         }
-        if(b-1>=0) {
+
+        if (b > 0) {
             if (kamienie[a][b - 1] != null) {
                 if (!uduszone_kamienie.contains(kamienie[a][b - 1]) && kamienie[a][b - 1].kolor == this.kolor) {
                     if (czyOddech(a, b - 1, kamienie)) {

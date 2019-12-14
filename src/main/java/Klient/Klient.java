@@ -1,5 +1,5 @@
 package Klient;
-
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import javax.swing.*;
-import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 public class Klient{
@@ -18,7 +17,7 @@ public class Klient{
     private PrintWriter out;
     private GUIPlansza planszaGUI;
     private JLabel wybranePole;
-    int[] wynik = new int[2];
+    private int[] wynik = new int[2];
 
 
     Klient(String adresSerwera) throws Exception {
@@ -71,18 +70,12 @@ public class Klient{
                     planszaGUI.belkaStatusu.setText("Przeciwnik wykonał ruch, Twoja kolej");
                 } else if (odpowiedz.startsWith("INFO")) {
                     planszaGUI.belkaStatusu.setText(in.nextLine());
-                /*} else if (odpowiedz.startsWith("ZWYCIESTWO")) {
-                    JOptionPane.showMessageDialog(ramka, "Wygrałeś, gratulacje!");
-                    planszaGUI.belkaStatusu.setText(inString.nextLine());
                 } else if (odpowiedz.startsWith("ZWYCIESTWO")) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Wygrałeś, gratulacje!");
-                    break;
                 } else if (odpowiedz.startsWith("PORAZKA")) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Przeciwnik wygrał gre :(");
-                    break;
                 } else if (odpowiedz.startsWith("REMIS")) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Remis!");
-                    break;
                 } else if (odpowiedz.startsWith("PRZECIWNIK_SPASOWAL")){
                     planszaGUI.belkaStatusu.setText("Przeciwnik spasował, twój ruch!");
                 } else if (odpowiedz.startsWith("SPASOWALES")){
@@ -94,6 +87,9 @@ public class Klient{
                     break;
                 }
                 else if (odpowiedz.startsWith("KONIEC_GRY")) {
+                    /*
+                        TODO: stworzyć nową osobną klasę dla okna końcowego, która tutaj będzie wywoływana
+                     */
                     JFrame zakonczenie = new JFrame("Second");
                     JTextArea podajWynikTy = new JTextArea(1, 10);
                     JTextArea podajWynikOn = new JTextArea(1, 10);
