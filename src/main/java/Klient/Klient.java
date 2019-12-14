@@ -23,21 +23,40 @@ public class Klient{
     private Socket socket;
     private Scanner inString;
     private PrintWriter out;
+    private GUIStart startGUI;
     private GUIPlansza planszaGUI;
+    private GUIWynik wynikGUI;
     private JLabel wybranePole;
     int[] wynik = new int[2];
+    boolean drugigracz;
 
 
 
     Klient(String adresSerwera) throws Exception {
-        socket = new Socket(adresSerwera, 58901);
-        inString = new Scanner(socket.getInputStream());
-        out = new PrintWriter(socket.getOutputStream(), true);
 
-        planszaGUI = new GUIPlansza();
-        wysylajKomendy();
-        odbierajKomendy();
+        startGUI = new GUIStart();
+
+            startGUI.przeciwnikButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    drugigracz = true;
+                }
+            });
+
+       Thread.sleep(7000); //// to nie działą jakoś super :(
+        if (drugigracz) {
+            socket = new Socket(adresSerwera, 58901);
+            inString = new Scanner(socket.getInputStream());
+            out = new PrintWriter(socket.getOutputStream(), true);
+
+            planszaGUI = new GUIPlansza();
+            wysylajKomendy();
+            odbierajKomendy();
+        }
+
     }
+
+
+
 
     private void odbierajKomendy() throws Exception {
         try {
@@ -106,32 +125,20 @@ public class Klient{
                             else out.println("REMIS");
                         }
                 } else if (odpowiedz.startsWith("KONIEC_GRY")) {
-                    JTextArea podajWynikTy = new JTextArea(1, 10);
-                    JTextArea podajWynikOn = new JTextArea(1, 10);
-                    JButton okButton = new JButton("OK");
-                    JFrame zakonczenie = new JFrame("Podaj wyniki");
                     if (kolor == 1) {
-                        zakonczenie.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                        zakonczenie.setSize(400, 100);
-                        zakonczenie.setLocationRelativeTo(null);
-                        zakonczenie.setVisible(true);
-                        zakonczenie.setTitle("Podsumowanie: Gracz biały");
-                        zakonczenie.add(podajWynikTy, BorderLayout.WEST);
-                        zakonczenie.add(okButton, BorderLayout.CENTER);
-                        podajWynikTy.setBorder(new TitledBorder("TWÓJ WYNIK"));
-                        zakonczenie.add(podajWynikOn, BorderLayout.EAST);
-                        podajWynikOn.setBorder(new TitledBorder("WYNIK PZECIWNIKA"));
-                        okButton.addActionListener(new ActionListener() {
+                        wynikGUI = new GUIWynik();
+                        wynikGUI.okButton.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                                wynik[0] = Integer.parseInt(podajWynikTy.getText());
-                                wynik[1] = Integer.parseInt(podajWynikOn.getText());
-                                zakonczenie.dispose();
+                                wynik[0] = Integer.parseInt(wynikGUI.podajWynikTy.getText());
+                                wynik[1] = Integer.parseInt(wynikGUI.podajWynikOn.getText());
+                                wynikGUI.zakonczenie.dispose();
                                 out.println("WYNIK " + wynik[0] + " " + wynik[1]);
                             }
                         });
                     }
                 }
             }
+
 
             out.println("WYJSCIE");
         } catch (Exception e) {
