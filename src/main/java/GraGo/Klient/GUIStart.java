@@ -1,4 +1,4 @@
-package Klient;
+package GraGo.Klient;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

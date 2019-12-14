@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
-class GUIPlansza extends AbstractPlansza {
+public class GUIPlansza extends AbstractPlansza {
     static int ROZMIAR_PLANSZY = 19;
     int kolorGracza; //1 - czarny, 2 - biały
     JFrame ramka = new JFrame("Gra Go");

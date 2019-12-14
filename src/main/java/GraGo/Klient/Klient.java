@@ -2,10 +2,6 @@ package GraGo.Klient;
 
 import GraGo.KomunikatyKlienta;
 import GraGo.KomunikatySerwera;
-
-import GraGo.Klient.GUIPlansza;
-
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -15,7 +11,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 
 public class Klient{
     private Socket socket;
@@ -37,14 +32,14 @@ public class Klient{
 
         startGUI = new GUIStart();
 
-            startGUI.przeciwnikButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    drugigracz = true;
-                }
-            });
+        startGUI.przeciwnikButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                drugiGracz = true;
+            }
+        });
 
-       Thread.sleep(7000); //// to nie działą jakoś super :(
-        if (drugigracz) {
+        Thread.sleep(7000); //// to nie działą jakoś super :(
+        if (drugiGracz) {
             socket = new Socket(adresSerwera, 58901);
             in = new Scanner(socket.getInputStream());
             out = new PrintWriter(socket.getOutputStream(), true);
@@ -53,6 +48,7 @@ public class Klient{
             wysylajKomendy();
             odbierajKomendy();
         }
+    }
 
     public void odbierajKomendy() throws Exception {
         try {
