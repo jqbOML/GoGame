@@ -1,9 +1,11 @@
-package Serwer;
+package GraGo.Serwer;
+
+import GraGo.KomunikatyKlienta;
+import GraGo.KomunikatySerwera;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,61 +34,57 @@ public class Serwer {
     void polaczenieZGraczem(Gracz gracz) throws IOException {
         gracz.input = new Scanner(gracz.socket.getInputStream());
         gracz.output = new PrintWriter(gracz.socket.getOutputStream(), true);
-        gracz.output.println("WITAJ " + gracz.kolor);
+        gracz.output.println(KomunikatySerwera.WITAJ+ " " + gracz.kolor);
         if (gracz.kolor == 1) {
-            gracz.output.println("INFO Oczekuje na przeciwnika");
+            gracz.output.println(KomunikatySerwera.INFO + " Oczekuje na przeciwnika");
             ustawAktualnegoGracza(gracz);
         } else {
             gracz.ustawPrzeciwnika(aktualnyGracz);
             aktualnyGracz.ustawPrzeciwnika(gracz);
-            aktualnyGracz.output.println("INFO Twoja kolej");
-            gracz.output.println("INFO Runda przeciwnika, proszę czekać");
+            aktualnyGracz.output.println(KomunikatySerwera.INFO + " Twoja kolej");
+            gracz.output.println(KomunikatySerwera.INFO + " Runda przeciwnika, proszę czekać");
         }
     }
 
     void interpretujKomendy(Gracz gracz) {
         while (gracz.input.hasNext()) {
             String polecenie = gracz.input.next();
-            if (polecenie.startsWith("WYJSCIE")) {
+            if (polecenie.startsWith(KomunikatyKlienta.WYJSCIE.toString())) {
                 return;
-            } else if (polecenie.startsWith("RUCH")) {
+            } else if (polecenie.startsWith(KomunikatyKlienta.RUCH.toString())) {
                 try {
                     int x = Integer.parseInt(gracz.input.next());
                     int y = Integer.parseInt(gracz.input.next());
                     zweryfikujRuch(x, y, gracz);
-                    gracz.output.println("POPRAWNY_RUCH " + x + " " + y);
-                    gracz.przeciwnik.output.println("RUCH_PRZECIWNIKA " + x + " " + y);
+                    gracz.output.println(KomunikatySerwera.POPRAWNY_RUCH + " " + x + " " + y);
+                    gracz.przeciwnik.output.println(KomunikatySerwera.RUCH_PRZECIWNIKA + " " + x + " " + y);
                     gracz.pass = false;
 
-                /*if () {
-                    output.println("ZWYCIESTWO");
-                    przeciwnik.output.println("PORAZKA");
-                }*/
                 } catch (IllegalStateException e) {
-                    gracz.output.println("INFO " + e.getMessage());
+                    gracz.output.println(KomunikatySerwera.INFO + " " + e.getMessage());
                 }
-            }else if (polecenie.startsWith("ZWYCIESTWO")) {
-                gracz.output.println("ZWYCIESTWO");
-                gracz.przeciwnik.output.println("PORAZKA");
-            }else if (polecenie.startsWith("PORAZKA")) {
-                gracz.output.println("PORAZKA");
-                gracz.przeciwnik.output.println("ZWYCIESTWO");
-            }else if (polecenie.startsWith("REMIS")) {
-                gracz.output.println("REMIS");
-                gracz.przeciwnik.output.println("REMIS");
-            }else if (polecenie.startsWith("PASS")) {
-                gracz.przeciwnik.output.println("PASS");
+            }else if (polecenie.startsWith(KomunikatySerwera.ZWYCIESTWO.toString())) {
+                gracz.output.println(KomunikatySerwera.ZWYCIESTWO.toString());
+                gracz.przeciwnik.output.println(KomunikatySerwera.PORAZKA);
+            }else if (polecenie.startsWith(KomunikatySerwera.PORAZKA.toString())) {
+                gracz.output.println(KomunikatySerwera.PORAZKA);
+                gracz.przeciwnik.output.println(KomunikatySerwera.ZWYCIESTWO);
+            }else if (polecenie.startsWith(KomunikatySerwera.REMIS.toString())) {
+                gracz.output.println(KomunikatySerwera.REMIS);
+                gracz.przeciwnik.output.println(KomunikatySerwera.REMIS);
+            }else if (polecenie.startsWith(KomunikatySerwera.PASS.toString())) {
+                gracz.przeciwnik.output.println(KomunikatySerwera.PASS);
                 gracz.pass = true;
                 ustawAktualnegoGracza(gracz.przeciwnik);
-            }else if (polecenie.startsWith("WYNIK")) {
+            }else if (polecenie.startsWith(KomunikatySerwera.WYNIK.toString())) {
                 int a = Integer.parseInt(gracz.input.next());
                 int b = Integer.parseInt(gracz.input.next());
-                gracz.output.println("WYNIK " + a + " " + b);
+                gracz.output.println(KomunikatySerwera.WYNIK + " " + a + " " + b);
             }
             if(gracz.pass && gracz.przeciwnik.pass)
             {
-                gracz.output.println("KONIEC_GRY");
-                gracz.przeciwnik.output.println("KONIEC_GRY");
+                gracz.output.println(KomunikatySerwera.KONIEC_GRY);
+                gracz.przeciwnik.output.println(KomunikatySerwera.KONIEC_GRY);
             }
         }
     }
@@ -131,7 +129,7 @@ public class Serwer {
 
     void wyjscieZGry(Gracz gracz){
         if (gracz.przeciwnik != null && gracz.przeciwnik.output != null) {
-            gracz.przeciwnik.output.println("PRZECIWNIK_WYSZEDL");
+            gracz.przeciwnik.output.println(KomunikatySerwera.PRZECIWNIK_WYSZEDL);
         }
         try {gracz.socket.close();} catch (IOException ignored) {}
     }

@@ -1,4 +1,4 @@
-import Serwer.Kamien;
+import GraGo.Serwer.Kamien;
 import org.junit.jupiter.api.Test;
 
 

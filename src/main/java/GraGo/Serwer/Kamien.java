@@ -1,9 +1,9 @@
-package Serwer;
+package GraGo.Serwer;
 
 import java.util.ArrayList;
 
 public class Kamien {
-    int kolor; //1 - czarny, 2 - bialy
+    private int kolor; //1 - czarny, 2 - bialy
 
     public Kamien(int nowy_kolor){
         this.kolor = nowy_kolor;

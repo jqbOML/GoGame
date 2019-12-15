@@ -1,4 +1,4 @@
-package Klient;
+package GraGo.Klient;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -24,5 +24,5 @@ public class GUIWynik extends JPanel {
             podajWynikTy.setBorder(new TitledBorder("TWÓJ WYNIK"));
             zakonczenie.add(podajWynikOn, BorderLayout.EAST);
             podajWynikOn.setBorder(new TitledBorder("WYNIK PZECIWNIKA"));
-}
+    }
 }

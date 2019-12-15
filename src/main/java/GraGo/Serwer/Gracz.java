@@ -1,10 +1,10 @@
-package Serwer;
+package GraGo.Serwer;
 
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Gracz implements Runnable {
+public class Gracz implements Runnable  {
     int kolor; //1 - czarny, 2 - bialy
     private Serwer serwer;
     Socket socket;
@@ -14,10 +14,9 @@ public class Gracz implements Runnable {
     boolean pass;
 
     Gracz(Socket socket, int kolor, Serwer serwer) {
+        this.serwer = serwer;
         this.socket = socket;
         this.kolor = kolor;
-        this.serwer = serwer;
-        System.out.println("Nowy gracz: "+kolor);
     }
 
     @Override
