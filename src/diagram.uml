@@ -3,17 +3,64 @@
   <ID>JAVA</ID>
   <OriginalElement />
   <nodes>
-    <node x="230.0" y="0.0">GraGo.KomunikatySerwera</node>
-    <node x="443.0" y="0.0">GraGo.Serwer.Serwer</node>
-    <node x="247.0" y="315.0">GraGo.Klient.Klient</node>
-    <node x="0.0" y="0.0">GraGo.Klient.GUIPlansza</node>
-    <node x="0.0" y="315.0">GraGo.Serwer.Gracz</node>
-    <node x="0.0" y="587.0">GraGo.Serwer.Kamien</node>
-    <node x="354.0" y="587.0">GraGo.KomunikatyKlienta</node>
+    <node x="139.0" y="352.0">GraGo.Serwer.Serwer</node>
+    <node x="329.0" y="0.0">GraGo.KomunikatySerwera</node>
+    <node x="629.6476190476191" y="330.0">GraGo.Klient.Klient</node>
+    <node x="705.0" y="0.0">GraGo.Klient.GUIPlansza</node>
+    <node x="156.5" y="651.0">GraGo.Serwer.Gracz</node>
+    <node x="517.0" y="99.0">GraGo.KomunikatyKlienta</node>
+    <node x="0.0" y="87.5">GraGo.Serwer.Kamien</node>
   </nodes>
   <notes />
-  <edges />
-  <settings layout="Hierarchic Group" zoom="0.9" x="657.2222222222222" y="508.88888888888886" />
+  <edges>
+    <edge source="GraGo.Klient.Klient" target="GraGo.KomunikatyKlienta">
+      <point x="-35.200000000000045" y="-135.5" />
+      <point x="682.447619047619" y="290.0" />
+      <point x="643.0" y="290.0" />
+      <point x="42.0" y="36.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Serwer" target="GraGo.Serwer.Gracz">
+      <point x="0.0" y="113.5" />
+      <point x="0.0" y="-113.5" />
+    </edge>
+    <edge source="GraGo.Serwer.Gracz" target="GraGo.Serwer.Serwer">
+      <point x="-80.80000000000004" y="-113.5" />
+      <point x="176.7" y="626.0" />
+      <point x="162.7" y="626.0" />
+      <point x="-94.80000000000001" y="113.5" />
+    </edge>
+    <edge source="GraGo.Klient.Klient" target="GraGo.Klient.GUIPlansza">
+      <point x="35.200000000000045" y="-135.5" />
+      <point x="752.8476190476191" y="300.0" />
+      <point x="797.5" y="300.0" />
+      <point x="0.0" y="135.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Serwer" target="GraGo.KomunikatySerwera">
+      <point x="47.39999999999998" y="-113.5" />
+      <point x="304.9" y="300.0" />
+      <point x="371.0" y="300.0" />
+      <point x="-42.0" y="135.0" />
+    </edge>
+    <edge source="GraGo.Klient.Klient" target="GraGo.KomunikatySerwera">
+      <point x="-70.39999999999998" y="-135.5" />
+      <point x="647.2476190476191" y="300.0" />
+      <point x="455.0" y="300.0" />
+      <point x="42.0" y="135.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Serwer" target="GraGo.KomunikatyKlienta">
+      <point x="94.80000000000001" y="-113.5" />
+      <point x="352.3" y="310.0" />
+      <point x="559.0" y="310.0" />
+      <point x="-42.0" y="36.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Serwer" target="GraGo.Serwer.Kamien">
+      <point x="-47.400000000000034" y="-113.5" />
+      <point x="210.09999999999997" y="300.0" />
+      <point x="154.5" y="300.0" />
+      <point x="0.0" y="47.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.6000000000000001" x="692.7142857142856" y="209.49206349206344" />
   <SelectedNodes />
   <Categories>
     <Category>Fields</Category>

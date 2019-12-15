@@ -23,8 +23,6 @@ public class Klient{
     private int[] wynik = new int[2];
     boolean drugiGracz;
 
-
-
     Klient(String adresSerwera) throws Exception {
 
         startGUI = new GUIStart();
@@ -37,21 +35,19 @@ public class Klient{
 
         Thread.sleep(7000); //// to nie działą jakoś super :(
         if (drugiGracz) {
-       Thread.sleep(7000); //// to nie działą jakoś super :(
-        startGUI.oknoStartowe.dispose();
-        if (drugiGracz) {
-            socket = new Socket(adresSerwera, 58901);
-            in = new Scanner(socket.getInputStream());
-            out = new PrintWriter(socket.getOutputStream(), true);
+            Thread.sleep(7000); //// to nie działą jakoś super :(
+            startGUI.oknoStartowe.dispose();
+            if (drugiGracz) {
+                socket = new Socket(adresSerwera, 58901);
+                in = new Scanner(socket.getInputStream());
+                out = new PrintWriter(socket.getOutputStream(), true);
 
-            planszaGUI = new GUIPlansza();
-            wysylajKomendy();
-            odbierajKomendy();
+                planszaGUI = new GUIPlansza();
+                wysylajKomendy();
+                odbierajKomendy();
+            }
         }
     }
-
-
-
 
     private void odbierajKomendy() throws Exception {
         try {
@@ -116,14 +112,14 @@ public class Klient{
                             else if(a < b ) out.println(KomunikatySerwera.ZWYCIESTWO);
                             else out.println(KomunikatySerwera.REMIS);
                         }
-                } else if (odpowiedz.startsWith("KONIEC_GRY")) {
+                } else if (odpowiedz.startsWith(KomunikatySerwera.KONIEC_GRY.toString())) {
                     if (kolor == 1) {
                         wynikGUI = new GUIWynik();
                         wynikGUI.okButton.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
                                 wynik[0] = Integer.parseInt(wynikGUI.podajWynikTy.getText());
                                 wynik[1] = Integer.parseInt(wynikGUI.podajWynikOn.getText());
-                                out.println("WYNIK " + wynik[0] + " " + wynik[1]);
+                                out.println(KomunikatySerwera.WYNIK.toString() + wynik[0] + " " + wynik[1]);
                             }
                         });
                     }
