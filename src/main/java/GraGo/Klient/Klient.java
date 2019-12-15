@@ -119,7 +119,7 @@ public class Klient{
                             public void actionPerformed(ActionEvent e) {
                                 wynik[0] = Integer.parseInt(wynikGUI.podajWynikTy.getText());
                                 wynik[1] = Integer.parseInt(wynikGUI.podajWynikOn.getText());
-                                out.println(KomunikatySerwera.WYNIK.toString() + wynik[0] + " " + wynik[1]);
+                                out.println(KomunikatySerwera.WYNIK.toString() + " " + wynik[0] + " " + wynik[1]);
                             }
                         });
                     }
