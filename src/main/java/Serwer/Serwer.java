@@ -54,7 +54,6 @@ public class Serwer {
                     int x = Integer.parseInt(gracz.input.next());
                     int y = Integer.parseInt(gracz.input.next());
                     zweryfikujRuch(x, y, gracz);
-                    czyUduszone(x, y);
                     gracz.output.println("POPRAWNY_RUCH " + x + " " + y);
                     gracz.przeciwnik.output.println("RUCH_PRZECIWNIKA " + x + " " + y);
                     gracz.pass = false;
@@ -76,8 +75,7 @@ public class Serwer {
                 gracz.output.println("REMIS");
                 gracz.przeciwnik.output.println("REMIS");
             }else if (polecenie.startsWith("PASS")) {
-                gracz.output.println("SPASOWALES");
-                gracz.przeciwnik.output.println("PRZECIWNIK_SPASOWAL");
+                gracz.przeciwnik.output.println("PASS");
                 gracz.pass = true;
                 ustawAktualnegoGracza(gracz.przeciwnik);
             }else if (polecenie.startsWith("WYNIK")) {
@@ -107,28 +105,6 @@ public class Serwer {
         }
         plansza_go[x][y] = new Kamien(aktualnyGracz.kolor);
         ustawAktualnegoGracza(aktualnyGracz.przeciwnik);
-    }
-
-    private void czyUduszone(int x, int y) {
-        System.out.println("czyUduszone dla x: "+x+", y: "+y);
-        if (plansza_go[x + 1][y] != null) {
-            if (plansza_go[x + 1][y].kolor == aktualnyGracz.przeciwnik.kolor)
-            plansza_go = plansza_go[x + 1][y].czyOddechLancuch(x + 1, y, plansza_go);
-        }
-        if (plansza_go[x - 1][y] != null) {
-            if (plansza_go[x - 1][y].kolor == aktualnyGracz.przeciwnik.kolor)
-            plansza_go = plansza_go[x - 1][y].czyOddechLancuch(x - 1, y, plansza_go);
-        }
-
-        if (plansza_go[x][y - 1] != null) {
-            if (plansza_go[x][y - 1].kolor == aktualnyGracz.przeciwnik.kolor)
-            plansza_go = plansza_go[x][y - 1].czyOddechLancuch(x, y - 1, plansza_go);
-        }
-
-        if (plansza_go[x][y + 1] != null) {
-            if (plansza_go[x][y + 1].kolor == aktualnyGracz.przeciwnik.kolor)
-            plansza_go = plansza_go[x][y + 1].czyOddechLancuch(x, y + 1, plansza_go);
-        }
     }
 
     private boolean czyKO(int x, int y) {

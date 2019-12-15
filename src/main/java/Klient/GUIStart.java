@@ -12,12 +12,13 @@ public class GUIStart extends JPanel {
     GUIStart()
     {
         oknoStartowe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        oknoStartowe.setSize(400, 400);
-        oknoStartowe.setBackground(Color.GREEN);
+        oknoStartowe.setSize(300, 100);
         oknoStartowe.setLocationRelativeTo(null);
         oknoStartowe.setVisible(true);
-        oknoStartowe.add(przeciwnikButton, BorderLayout.NORTH);
-        oknoStartowe.add(botButton, BorderLayout.SOUTH);
+        oknoStartowe.add(przeciwnikButton);
+        oknoStartowe.add(botButton);
+        oknoStartowe.setLayout(new FlowLayout());
+
 
     }
 

@@ -43,6 +43,7 @@ public class Klient{
             });
 
        Thread.sleep(7000); //// to nie działą jakoś super :(
+        startGUI.oknoStartowe.dispose();
         if (drugigracz) {
             socket = new Socket(adresSerwera, 58901);
             inString = new Scanner(socket.getInputStream());
@@ -106,10 +107,8 @@ public class Klient{
                 } else if (odpowiedz.startsWith("REMIS")) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Remis!");
                     break;
-                } else if (odpowiedz.startsWith("PRZECIWNIK_SPASOWAL")) {
+                } else if (odpowiedz.startsWith("PASS")) {
                     planszaGUI.belkaStatusu.setText("Przeciwnik spasował, twój ruch!");
-                } else if (odpowiedz.startsWith("SPASOWALES")) {
-                    planszaGUI.belkaStatusu.setText("Spasowałeś, ruch przeciwnika!");
                 } else if (odpowiedz.startsWith("PRZECIWNIK_WYSZEDL")) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Przeciwnik wyszedł z gry!");
                     break;
@@ -131,8 +130,8 @@ public class Klient{
                             public void actionPerformed(ActionEvent e) {
                                 wynik[0] = Integer.parseInt(wynikGUI.podajWynikTy.getText());
                                 wynik[1] = Integer.parseInt(wynikGUI.podajWynikOn.getText());
-                                wynikGUI.zakonczenie.dispose();
                                 out.println("WYNIK " + wynik[0] + " " + wynik[1]);
+                                wynikGUI.zakonczenie.dispose();
                             }
                         });
                     }
@@ -162,6 +161,7 @@ public class Klient{
             public void actionPerformed(ActionEvent e)
             {
                 out.println("PASS");
+                planszaGUI.belkaStatusu.setText("Spasowałeś, ruch przeciwnika!");
             }
         });
 
