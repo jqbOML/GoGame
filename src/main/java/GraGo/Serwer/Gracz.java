@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Gracz implements Runnable  {
-    int kolor; //1 - czarny, 2 - bialy
+    private int kolor; //1 - czarny, 2 - bialy
     private Serwer serwer;
     Socket socket;
     Scanner input;
@@ -33,5 +33,9 @@ public class Gracz implements Runnable  {
 
     public void ustawPrzeciwnika(Gracz przeciwnik){
         this.przeciwnik = przeciwnik;
+    }
+
+    public int wezKolor(){
+        return kolor;
     }
 }

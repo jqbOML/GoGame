@@ -26,6 +26,12 @@ public enum KomunikatySerwera {
     RUCH_PRZECIWNIKA,
 
     /**
+     * Komunikat przekazujący współrzędne uduszonego kamienia (kamienia do uduszenia)
+     * USUN <x y>
+     */
+    USUN,
+
+    /**
      * Komunikat o spasowaniu ruchu przez przeciwnika
      */
     PASS,

@@ -21,7 +21,7 @@ public class Klient{
     private GUIWynik wynikGUI;
     private JLabel wybranePole;
     private int[] wynik = new int[2];
-    boolean drugiGracz;
+    private String przeciwnik; //Gracz lub Bot
 
     Klient(String adresSerwera) throws Exception {
 
@@ -29,25 +29,42 @@ public class Klient{
 
         startGUI.przeciwnikButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                drugiGracz = true;
+                przeciwnik = "Gracz";
             }
         });
 
-        Thread.sleep(7000); //// to nie działą jakoś super :(
-        if (drugiGracz) {
+        startGUI.botButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                przeciwnik = "Bot";
+            }
+        });
+
             Thread.sleep(7000); //// to nie działą jakoś super :(
             startGUI.oknoStartowe.dispose();
-            if (drugiGracz) {
+            if (przeciwnik.equals("Gracz")) {
                 socket = new Socket(adresSerwera, 58901);
                 in = new Scanner(socket.getInputStream());
                 out = new PrintWriter(socket.getOutputStream(), true);
+                out.println("Gracz");
 
                 planszaGUI = new GUIPlansza();
                 wysylajKomendy();
                 odbierajKomendy();
             }
-        }
+            if (przeciwnik.equals("Bot")){
+                socket = new Socket(adresSerwera, 58901);
+                in = new Scanner(socket.getInputStream());
+                out = new PrintWriter(socket.getOutputStream(), true);
+                out.println("Bot");
+
+                System.out.println("Odpalam Plansze z botem");
+                planszaGUI = new GUIPlansza();
+                wysylajKomendy();
+                odbierajKomendy();
+            }
     }
+
 
     private void odbierajKomendy() throws Exception {
         try {
@@ -85,6 +102,11 @@ public class Klient{
                     }
                     planszaGUI.pole[locX][locY].repaint();
                     planszaGUI.belkaStatusu.setText("Przeciwnik wykonał ruch, Twoja kolej");
+                } else if (odpowiedz.startsWith(KomunikatySerwera.USUN.toString())){
+                    int locX = Integer.parseInt(in.next());
+                    int locY = Integer.parseInt(in.next());
+                    planszaGUI.pole[locX][locY].setIcon(planszaGUI.tekstury.Im_pustexx); //wczytanie tekstury bez uwzględnienia granic
+                    planszaGUI.pole[locX][locY].repaint();
                 } else if (odpowiedz.startsWith(KomunikatySerwera.INFO.toString())) {
                     planszaGUI.belkaStatusu.setText(in.nextLine());
                 } else if (odpowiedz.startsWith(KomunikatySerwera.ZWYCIESTWO.toString())) {

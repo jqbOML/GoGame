@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 public class Kamien {
     private int kolor; //1 - czarny, 2 - bialy
+    private int x, y; //współrzędne kamienia
 
-    public Kamien(int nowy_kolor){
+    public Kamien(int nowy_kolor, int x, int y){
         this.kolor = nowy_kolor;
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -38,15 +41,16 @@ public class Kamien {
      * a w przypadku posiadania co najmniej jednego oddechu zwraca niezmienioną tablicę
      */
     public Kamien[][] czyOddechLancuch(int a, int b, Kamien[][] kamienie){
-        ArrayList<Kamien> uduszone_kamienie = new ArrayList<>(); //arraylista z kamieniami, które zostały uduszone
+        ArrayList<Kamien> uduszoneKamienie = new ArrayList<>(); //arraylista z kamieniami, które zostały uduszone
+        if (!uduszoneKamienie.contains(kamienie[a][b])){uduszoneKamienie.add(kamienie[a][b]);}
         if (a < 18) {
             if (kamienie[a + 1][b] != null) {
-                if (!uduszone_kamienie.contains(kamienie[a + 1][b]) && kamienie[a + 1][b].kolor == this.kolor) {
+                if (!uduszoneKamienie.contains(kamienie[a + 1][b]) && kamienie[a + 1][b].kolor == this.kolor) {
                     if (czyOddech(a + 1, b, kamienie)){
                         System.out.println("a="+a+", b="+b+": RETURN NULL");
                         return null;
                     } else{
-                        uduszone_kamienie.add(kamienie[a + 1][b]);
+                        uduszoneKamienie.add(kamienie[a + 1][b]);
                     }
                     czyOddechLancuch(a + 1, b, kamienie);
                 }
@@ -58,13 +62,13 @@ public class Kamien {
 
         if (a > 0) {
             if (kamienie[a - 1][b] != null) {
-                if (!uduszone_kamienie.contains(kamienie[a - 1][b]) && kamienie[a - 1][b].kolor == this.kolor) {
+                if (!uduszoneKamienie.contains(kamienie[a - 1][b]) && kamienie[a - 1][b].kolor == this.kolor) {
                     if (czyOddech(a - 1, b, kamienie)) {
                         System.out.println("a="+a+", b="+b+": RETURN NULL");
                         return null;
                     }
                     else {
-                        uduszone_kamienie.add(kamienie[a - 1][b]);
+                        uduszoneKamienie.add(kamienie[a - 1][b]);
                         czyOddechLancuch(a - 1, b, kamienie);
                     }
                 }
@@ -76,13 +80,13 @@ public class Kamien {
 
         if (b < 18) {
             if (kamienie[a][b + 1] != null) {
-                if (!uduszone_kamienie.contains(kamienie[a][b + 1]) && kamienie[a][b + 1].kolor == this.kolor) {
+                if (!uduszoneKamienie.contains(kamienie[a][b + 1]) && kamienie[a][b + 1].kolor == this.kolor) {
                     if (czyOddech(a, b + 1, kamienie)) {
                         System.out.println("a="+a+", b="+b+": RETURN NULL");
                         return null;
                     }
                     else {
-                        uduszone_kamienie.add(kamienie[a][b + 1]);
+                        uduszoneKamienie.add(kamienie[a][b + 1]);
                         czyOddechLancuch(a, b + 1, kamienie);
                     }
                 }
@@ -94,13 +98,13 @@ public class Kamien {
 
         if (b > 0) {
             if (kamienie[a][b - 1] != null) {
-                if (!uduszone_kamienie.contains(kamienie[a][b - 1]) && kamienie[a][b - 1].kolor == this.kolor) {
+                if (!uduszoneKamienie.contains(kamienie[a][b - 1]) && kamienie[a][b - 1].kolor == this.kolor) {
                     if (czyOddech(a, b - 1, kamienie)) {
                         System.out.println("a="+a+", b="+b+": RETURN NULL");
                         return null;
                     }
                     else {
-                        uduszone_kamienie.add(kamienie[a][b - 1]);
+                        uduszoneKamienie.add(kamienie[a][b - 1]);
                         czyOddechLancuch(a, b - 1, kamienie);
                     }
                 }
@@ -119,4 +123,18 @@ public class Kamien {
             }
         }*/
         return kamienie;
-}}
+}
+
+    public int wezKolor(){
+        return kolor;
+    }
+
+    public int wezX(){
+        return x;
+    }
+    public int wezY(){
+        return y;
+    }
+
+}
+
