@@ -26,7 +26,6 @@ class KamienTest {
         kamienie[3][3] = new Kamien(1,3,3);
         kamienie[2][2] = new Kamien(1,2,2);
         kamienie[4][2] = new Kamien(1,4,2); //5 bialych kamienii do uduszenia
-        assertNotNull(kamienie[3][2]);
 
         kamienie[3][0] = new Kamien(2,3,0);
         kamienie[4][1] = new Kamien(2,4,1);
@@ -36,21 +35,14 @@ class KamienTest {
         kamienie[2][3] = new Kamien(2,2,3);
         kamienie[1][2] = new Kamien(2,1,2);
         kamienie[2][1] = new Kamien(2,2,1); //czarne kamienie otaczające
-        kamienie[3][2].czyOddechLancuch(3,2, kamienie); //sprawdz oddechy dla lanucha, do ktorego nalezy kamien [3][2]
+        assertEquals(5, kamienie[3][2].czyOddechLancuch(3, 2, kamienie).size()); // sprawdza, czy testowana metoda zwróci listę 5 kamieni do usunięcia
 
-        kamienie[5][3] = new Kamien(2,5,3);
-        kamienie[4][4] = new Kamien(2,4,4);
-        kamienie[4][3].czyOddechLancuch(4,3, kamienie); //sprawdz oddechy dla lancucha, do ktorego nalezy kamien [4][3]
 
-        //sprawdz czy uduszone kamienie zostaly usuniete z tablicy
-        /*
-        assertNull(kamienie[3][2]);
-        assertNull(kamienie[3][1]);
-        assertNull(kamienie[3][3]);
-        assertNull(kamienie[2][2]);
-        assertNull(kamienie[4][2]);
-        //sprawdz czy kamien ktory posiada oddech w lancuchu nadal istnieje*/
-        assertNotNull(kamienie[4][3]);
+        kamienie[4][10] = new Kamien(2,4,10);
+        kamienie[5][1] = new Kamien(2,5,3);
+        kamienie[4][12] = new Kamien(2,4,4);
+        assertEquals(0, kamienie[4][10].czyOddechLancuch(4, 10, kamienie).size()); // sprawdza czy testowana metoda zwróci pustą listę (testowany kamień ma oddechy)
+
     }
 
 }
