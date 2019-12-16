@@ -42,7 +42,10 @@ public class Kamien {
      * a w przypadku posiadania co najmniej jednego oddechu zwraca niezmienioną tablicę
      */
     public ArrayList<Kamien> czyOddechLancuch(int a, int b, Kamien[][] kamienie){
-
+        if(!czyOddech(a, b, kamienie))
+        {
+            if(!uduszoneKamienie.contains(kamienie[a][b])) uduszoneKamienie.add(kamienie[a][b]);
+        }
         if (a < 18) {
             if (kamienie[a + 1][b] != null) {
                 if (!uduszoneKamienie.contains(kamienie[a + 1][b]) && kamienie[a + 1][b].kolor == this.kolor) {
@@ -50,12 +53,11 @@ public class Kamien {
                         System.out.println("a="+a+", b="+b+": RETURN NULL");
                         uduszoneKamienie.clear();
                         return (ArrayList<Kamien>) uduszoneKamienie;
-                    }
+                    }else {
                         uduszoneKamienie.add(kamienie[a + 1][b]);
                         czyOddechLancuch(a + 1, b, kamienie);
+                    }
                 }
-            } else {
-                System.out.println("a="+a+", b="+b+": RETURN NULL");
             }
         }
 
@@ -66,12 +68,11 @@ public class Kamien {
                         System.out.println("a="+a+", b="+b+": RETURN NULL");
                         uduszoneKamienie.clear();
                         return (ArrayList<Kamien>) uduszoneKamienie;
-                    }
+                    } else{
                         uduszoneKamienie.add(kamienie[a - 1][b]);
                         czyOddechLancuch(a - 1, b, kamienie);
+                    }
                 }
-            } else {
-                System.out.println("a="+a+", b="+b+": RETURN NULL");
             }
         }
 
@@ -82,12 +83,11 @@ public class Kamien {
                         System.out.println("a="+a+", b="+b+": RETURN NULL");
                         uduszoneKamienie.clear();
                         return (ArrayList<Kamien>) uduszoneKamienie;
-                    }
+                    } else {
                         uduszoneKamienie.add(kamienie[a][b + 1]);
                         czyOddechLancuch(a, b + 1, kamienie);
+                    }
                 }
-            } else {
-                System.out.println("a="+a+", b="+b+": RETURN NULL");
             }
         }
 
@@ -98,23 +98,16 @@ public class Kamien {
                         System.out.println("a="+a+", b="+b+": RETURN NULL");
                         uduszoneKamienie.clear();
                         return (ArrayList<Kamien>) uduszoneKamienie;
-                    }
+                    } else {
                         uduszoneKamienie.add(kamienie[a][b - 1]);
                         czyOddechLancuch(a, b - 1, kamienie);
+                    }
                 }
-            } else {
-                System.out.println("a="+a+", b="+b+": RETURN NULL");
             }
         }
 
 
 
-       /* for (int w = 0; w < 19; w++){
-            for (int e=0; e < 19; e++){
-                System.out.println("a="+a+", b="+b+":");
-                System.out.print("kamienie["+w+"]["+e+"] = "+(kamienie[w][e] == null ? "null" : kamienie[w][e].kolor+", "));
-            }
-        }*/
         return uduszoneKamienie;
 }
 

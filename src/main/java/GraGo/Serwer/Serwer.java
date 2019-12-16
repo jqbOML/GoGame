@@ -72,9 +72,9 @@ public class Serwer {
                     //sprawdzUduszone(x, y, gracz);
                     if (czyBot){
                         Thread.sleep(200);
-                        String parametry = bot.wykonajRuch(planszaGo);
-                        int botX = Character.digit(parametry.charAt(0), 10);
-                        int botY = Character.digit(parametry.charAt(2), 10);
+                        String[] parametry = bot.wykonajRuch(planszaGo).split(" ");
+                        int botX = Integer.parseInt(parametry[0]);
+                        int botY = Integer.parseInt(parametry[1]);
                         gracz.output.println(KomunikatySerwera.RUCH_PRZECIWNIKA + " " + botX + " " + botY);
                         planszaGo[botX][botY] = new Kamien(aktualnyGracz.wezKolor(), botX, botY);
                         //sprawdzUduszone(botX, botY, gracz);
@@ -137,7 +137,7 @@ public class Serwer {
 
     private boolean czySamoboj(int x, int y) {
         planszaGo[x][y] = new Kamien(aktualnyGracz.wezKolor(), x, y);
-        if(planszaGo[x][y].czyOddechLancuch(x, y, planszaGo) == null){
+        if(planszaGo[x][y].czyOddechLancuch(x, y, planszaGo).size() == 0){
             planszaGo[x][y] = null;
             return false;
         } else{

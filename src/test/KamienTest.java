@@ -39,10 +39,35 @@ class KamienTest {
 
 
         kamienie[4][10] = new Kamien(2,4,10);
-        kamienie[5][1] = new Kamien(2,5,3);
-        kamienie[4][12] = new Kamien(2,4,4);
+        kamienie[4][11] = new Kamien(1,5,3);
+        kamienie[5][10] = new Kamien(1,4,4);
         assertEquals(0, kamienie[4][10].czyOddechLancuch(4, 10, kamienie).size()); // sprawdza czy testowana metoda zwróci pustą listę (testowany kamień ma oddechy)
 
+        kamienie[10][10] = new Kamien(1,10,10);
+        kamienie[9][10] = new Kamien(2,9,10);
+        kamienie[11][10] = new Kamien(2,11,10);
+        kamienie[10][9] = new Kamien(2,10,9);
+        kamienie[10][11] = new Kamien(2,10,11);
+        assertEquals(1, kamienie[10][10].czyOddechLancuch(10, 10, kamienie).size()); //koszyczek
+
+        kamienie[0][0] = new Kamien(1,0,0);
+        kamienie[0][1] = new Kamien(2,0,1);
+        kamienie[1][0] = new Kamien(2,1,0);
+        assertEquals(1, kamienie[0][0].czyOddechLancuch(1, 1, kamienie).size()); // sprawdza kamienie w rogu (jeden jest uduszony)
+
+        kamienie[0][0] = new Kamien(1,0,0);
+        kamienie[0][1] = new Kamien(1,0,1);
+        kamienie[1][0] = new Kamien(1,1,0);
+        assertEquals(0, kamienie[0][0].czyOddechLancuch(1, 1, kamienie).size()); // sprawdza kamienie w rogu (zero uduszonych bo wszystkie tego samego koloru)
+
+        kamienie[10][10] = new Kamien(1,10,10);
+        kamienie[9][10] = new Kamien(1,9,10);
+        kamienie[11][10] = new Kamien(1,11,10);
+        kamienie[10][9] = new Kamien(2,10,9);
+        kamienie[10][11] = new Kamien(2,10,11);
+        assertEquals(0, kamienie[10][10].czyOddechLancuch(10, 10, kamienie).size());
+
     }
+
 
 }
