@@ -1,13 +1,13 @@
 package GraGo.Serwer;
 
-public class Bot implements BotInterface {
-    Serwer serwer;
-    private int kolor;
+public class Bot extends AbstractGracz implements BotInterface
+{
     private int licznikRuchow = 0;
 
     public Bot(Serwer serwer, int kolor){
         this.serwer = serwer;
         this.kolor = kolor;
+        System.out.println("Kolor bota: "+wezKolor());
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Bot implements BotInterface {
 
 
                 if (planszaGo[i][j] == null && !czySamoboj(i, j, planszaGo)) {
-                    System.out.println((j - 1) + " " + (i + 1));
+                    System.out.println("Ruch bota: " + (j - 1) + " " + (i + 1));
                     parametryRuchu = i + " " + j;
                     zrobionyRuch = true;
                     licznikRuchow++;
@@ -33,25 +33,25 @@ public class Bot implements BotInterface {
 
                         if (planszaGo[j][i] != null) {
                             if (licznikRuchow % 4 == 0 && planszaGo[j - 1][i] == null && !czySamoboj(j - 1, i, planszaGo)) {
-                                System.out.println((j - 1) + " " + (i) + "zaawansowany1");
+                                System.out.println("Ruch bota: " + (j - 1) + " " + (i) + "zaawansowany1");
                                 parametryRuchu = (j - 1) + " " + (i);
                                 zrobionyRuch = true;
                                 licznikRuchow++;
                                 break;
                             } else if (licznikRuchow % 3 == 0 && planszaGo[j + 1][i] == null && !czySamoboj(j + 1, i, planszaGo)) {
-                                System.out.println((j + 1) + " " + (i) + "zaawansowany2");
+                                System.out.println("Ruch bota: " + (j + 1) + " " + (i) + "zaawansowany2");
                                 parametryRuchu = (j + 1) + " " + (i);
                                 zrobionyRuch = true;
                                 licznikRuchow++;
                                 break;
                             } else if (licznikRuchow % 2 == 0 && planszaGo[j][i + 1] == null && !czySamoboj(j, i + 1, planszaGo)) {
-                                System.out.println((j) + " " + (i + 1) + "zaawansowany3");
+                                System.out.println("Ruch bota: " + (j) + " " + (i + 1) + "zaawansowany3");
                                 parametryRuchu = (j) + " " + (i + 1);
                                 zrobionyRuch = true;
                                 licznikRuchow++;
                                 break;
                             } else if (licznikRuchow % 1 == 0 && planszaGo[j][i - 1] == null && !czySamoboj(j, i - 1, planszaGo)) {
-                                System.out.println((j) + " " + (i - 1) + "zaawansowany4");
+                                System.out.println("Ruch bota: " + (j) + " " + (i - 1) + "zaawansowany4");
                                 parametryRuchu = (j) + " " + (i - 1);
                                 zrobionyRuch = true;
                                 licznikRuchow=3;

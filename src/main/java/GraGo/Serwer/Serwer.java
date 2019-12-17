@@ -45,6 +45,8 @@ public class Serwer extends AbstractSerwer {
             czyBot = true;
             bot = new Bot(this, gracz.wezKolor() == 1 ? 2 : 1);
             gracz.output.println(KomunikatySerwera.INFO + " Grasz z botem");
+            gracz.ustawPrzeciwnika(bot);
+            bot.ustawPrzeciwnika(gracz);
             ustawAktualnegoGracza(gracz);
         } else {
             if (gracz.wezKolor() == 1) {
@@ -71,17 +73,18 @@ public class Serwer extends AbstractSerwer {
                     int y = Integer.parseInt(gracz.input.next());
                     zweryfikujRuch(x, y, gracz);
                     gracz.output.println(KomunikatySerwera.POPRAWNY_RUCH + " " + x + " " + y);
-                    //sprawdzUduszone(planszaGo[x][y], aktualnyGracz);
+                    sprawdzUduszone(planszaGo[x][y], aktualnyGracz);
+                    ustawAktualnegoGracza(aktualnyGracz.przeciwnik);
                     if (czyBot){
-                        Thread.sleep(200);
+                        Thread.sleep(727);
                         String[] parametry = bot.wykonajRuch(planszaGo).split(" ");
                         int botX = Integer.parseInt(parametry[0]);
                         int botY = Integer.parseInt(parametry[1]);
                         gracz.output.println(KomunikatySerwera.RUCH_PRZECIWNIKA + " " + botX + " " + botY);
                         planszaGo[botX][botY] = new Kamien(aktualnyGracz.wezKolor(), botX, botY);
-                        //sprawdzUduszone(planszaGo[botX][botY], aktualnyGracz);
-                    } else{
+                        sprawdzUduszone(planszaGo[botX][botY], aktualnyGracz);
                         ustawAktualnegoGracza(aktualnyGracz.przeciwnik);
+                    } else{
                         gracz.przeciwnik.output.println(KomunikatySerwera.RUCH_PRZECIWNIKA + " " + x + " " + y);
                     }
                     gracz.pass = false;
@@ -254,46 +257,70 @@ public class Serwer extends AbstractSerwer {
         //TODO: sprawdzUduszone
     }
 
-    /*private void sprawdzUduszone(Kamien kamien, Gracz gracz){
+    private void sprawdzUduszone(Kamien kamien, AbstractGracz gracz){
+        System.out.println("czyUduszony Kamien.x: "+kamien.wezX()+", y: "+kamien.wezY()+", kolor: "+kamien.wezKolor());
         int x = kamien.wezX();
         int y = kamien.wezY();
 
-        if (planszaGo[x+1][y] != null && planszaGo[x+1][y].wezKolor() == gracz.przeciwnik.wezKolor()){
-            if (czyOddech(planszaGo[x+1][y]) != null){
-                ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x+1][y]);
-                wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+        if (x < 18) {
+            if (planszaGo[x+1][y] != null){
+                if (planszaGo[x+1][y].wezKolor() == gracz.przeciwnik.wezKolor()){
+                    if (czyOddech(planszaGo[x+1][y]) != null){
+                        ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x+1][y]);
+                        wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+                    }
+                }
             }
         }
-        if (planszaGo[x-1][y] != null && planszaGo[x-1][y].wezKolor() == gracz.przeciwnik.wezKolor()){
-            if (czyOddech(planszaGo[x-1][y]) != null){
-                ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x-1][y]);
-                wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+
+        if (x > 0) {
+            if (planszaGo[x-1][y] != null){
+                if (planszaGo[x-1][y].wezKolor() == gracz.przeciwnik.wezKolor()){
+                    if (czyOddech(planszaGo[x-1][y]) != null){
+                        ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x-1][y]);
+                        wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+                    }
+                }
             }
         }
-        if (planszaGo[x][y+1] != null && planszaGo[x][y+1].wezKolor() == gracz.przeciwnik.wezKolor()){
-            if (czyOddech(planszaGo[x][y+1]) != null){
-                ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x][y+1]);
-                wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+
+        if (y < 18) {
+            if (planszaGo[x][y+1] != null){
+                if (planszaGo[x][y+1].wezKolor() == gracz.przeciwnik.wezKolor()){
+                    if (czyOddech(planszaGo[x][y+1]) != null){
+                        ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x][y+1]);
+                        wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+                    }
+                }
             }
         }
-        if (planszaGo[x][y-1] != null && planszaGo[x][y-1].wezKolor() == gracz.przeciwnik.wezKolor()){
-            if (czyOddech(planszaGo[x][y-1]) != null){
-                ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x][y-1]);
-                wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+
+        if (y > 0) {
+            if(planszaGo[x][y-1] != null){
+                if (planszaGo[x][y-1].wezKolor() == gracz.przeciwnik.wezKolor()){
+                    if (czyOddech(planszaGo[x][y-1]) != null){
+                        ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x][y-1]);
+                        wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void wyslijUduszoneKamienie(ArrayList<Kamien> uduszoneKamienie, AbstractGracz gracz){
+        System.out.println("Wysylam uduszone kamienie");
+        for (Kamien uduszonyKamien : uduszoneKamienie){
+            gracz.output.println(KomunikatySerwera.USUN + " " + uduszonyKamien.wezX() + " " + uduszonyKamien.wezY());
+            if(!czyBot){
+                gracz.przeciwnik.output.println(KomunikatySerwera.USUN + " " + uduszonyKamien.wezX() + " " + uduszonyKamien.wezY());
             }
         }
     }
 
-    private void wyslijUduszoneKamienie(ArrayList<Kamien> uduszoneKamienie, Gracz gracz){
-        for (Kamien uduszonyKamien : uduszoneKamienie){
-            gracz.output.println(KomunikatySerwera.USUN + " " + uduszonyKamien.wezX() + " " + uduszonyKamien.wezY());
-            gracz.przeciwnik.output.println(KomunikatySerwera.USUN + " " + uduszonyKamien.wezX() + " " + uduszonyKamien.wezY());
-        }
-    }*/
-
-    private void ustawAktualnegoGracza(Gracz gracz){
+    private void ustawAktualnegoGracza(AbstractGracz gracz){
         this.aktualnyGracz = gracz;
-        System.out.println("Aktualny gracz: "+gracz.wezKolor());
+        System.out.println("Aktualny gracz: "+aktualnyGracz.kolor);
     }
 
     void wyjscieZGry(Gracz gracz){

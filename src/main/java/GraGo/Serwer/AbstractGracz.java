@@ -1,19 +1,18 @@
 package GraGo.Serwer;
-
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
 abstract class AbstractGracz {
-    int kolor; //1 - czarny, 2 - bialy
     Serwer serwer;
     Socket socket;
     Scanner input;
     PrintWriter output;
-    Gracz przeciwnik;
+    int kolor; //1 - czarny, 2 - bialy
+    AbstractGracz przeciwnik;
     boolean pass;
 
-    void ustawPrzeciwnika(Gracz przeciwnik){
+    void ustawPrzeciwnika(AbstractGracz przeciwnik){
         this.przeciwnik = przeciwnik;
     };
     int wezKolor(){

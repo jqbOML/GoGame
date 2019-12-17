@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 abstract class AbstractSerwer {
     public Kamien[][] planszaGo = new Kamien[19][19];
-    Gracz aktualnyGracz;
+    AbstractGracz aktualnyGracz;
     Boolean czyBot = false;
     Bot bot;
 

@@ -28,7 +28,7 @@ class Klient extends AbstractKlient{
             }
         });
 
-        Thread.sleep(7000); //// to nie działą jakoś super :(
+        Thread.sleep(4000); //// to nie działą jakoś super :(
         startGUI.oknoStartowe.dispose();
         if (przeciwnik.equals("Gracz")) {
             socket = new Socket(adresSerwera, 58901);
@@ -91,7 +91,10 @@ class Klient extends AbstractKlient{
                     planszaGUI.belkaStatusu.setText("Przeciwnik wykonał ruch, Twoja kolej");
                 } else if (odpowiedz.startsWith(KomunikatySerwera.USUN.toString())){
                     int locX = Integer.parseInt(in.next());
+                    System.out.println("Usun x: " + locX);
                     int locY = Integer.parseInt(in.next());
+                    System.out.println("Usun y: "+ locY);
+                    planszaGUI.planszaKamieni[locX][locY] = 0;
                     planszaGUI.pole[locX][locY].setIcon(planszaGUI.tekstury.Im_pustexx); //wczytanie tekstury bez uwzględnienia granic
                     planszaGUI.pole[locX][locY].repaint();
                 } else if (odpowiedz.startsWith(KomunikatySerwera.INFO.toString())) {
