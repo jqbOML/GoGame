@@ -1,6 +1,6 @@
 package GraGo.Serwer;
 
-public class Kamien implements KamienInterface {
+public class Kamien {
     private int kolor; //1 - czarny, 2 - bialy
     private int x, y; //współrzędne kamienia
 
@@ -10,15 +10,15 @@ public class Kamien implements KamienInterface {
         this.y = y;
     }
 
-    @Override
+
     public int wezKolor() {
         return kolor;
     }
-    @Override
+
     public int wezX() {
         return x;
     }
-    @Override
+
     public int wezY() {
         return y;
     }
