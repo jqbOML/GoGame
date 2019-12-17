@@ -29,7 +29,6 @@ abstract class AbstractGra extends JPanel {
     JButton zakonczGreButton;
 
     static int obliczRozmiarPola(){
-        System.out.println("pole: " + ROZMIAR_POLA);
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize(); //pobranie parametrów rozdzielczości ekranu
         return (d.height / ROZMIAR_PLANSZY);
     }

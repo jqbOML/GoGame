@@ -14,7 +14,7 @@ abstract class AbstractKlient {
     AbstractWynik wynikGUI;
     JLabel wybranePole;
     int[] wynik = new int[2];
-    String przeciwnik; //Gracz lub Bot
+    volatile String przeciwnik = null; //Gracz lub Bot
 
     abstract void odbierajKomendy() throws Exception;
     abstract void wysylajKomendy();

@@ -1,8 +1,6 @@
 package GraGo.Serwer;
 
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Gracz extends AbstractGracz implements Runnable  {
     Gracz(Socket socket, int kolor, Serwer serwer) {

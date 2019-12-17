@@ -71,12 +71,15 @@ public class Serwer extends AbstractSerwer {
                 try {
                     int x = Integer.parseInt(gracz.input.next());
                     int y = Integer.parseInt(gracz.input.next());
+                    System.out.println("<!> Otrzymano ruch od gracza "+aktualnyGracz.kolor+": x: "+x+", y: "+y);
                     zweryfikujRuch(x, y, gracz);
                     gracz.output.println(KomunikatySerwera.POPRAWNY_RUCH + " " + x + " " + y);
+                    System.out.println("Zatwierdzono ruch od gracza "+aktualnyGracz.kolor+": x: "+x+", y: "+y);
                     sprawdzUduszone(planszaGo[x][y], aktualnyGracz);
+                    System.out.println("Sprawdzono uduszenie dla x:"+x+", y: "+y);
                     ustawAktualnegoGracza(aktualnyGracz.przeciwnik);
                     if (czyBot){
-                        Thread.sleep(727);
+                        Thread.sleep(207);
                         String[] parametry = bot.wykonajRuch(planszaGo).split(" ");
                         int botX = Integer.parseInt(parametry[0]);
                         int botY = Integer.parseInt(parametry[1]);
@@ -309,7 +312,7 @@ public class Serwer extends AbstractSerwer {
 
     private void ustawAktualnegoGracza(AbstractGracz gracz){
         this.aktualnyGracz = gracz;
-        System.out.println("Aktualny gracz: "+aktualnyGracz.kolor);
+        System.out.println(">>      Aktualny gracz: "+aktualnyGracz.kolor);
     }
 
     void wyjscieZGry(Gracz gracz){

@@ -7,8 +7,10 @@ import java.awt.event.MouseEvent;
 
 class GUIPlansza extends AbstractGra {
     GUIPlansza() {
+        System.out.println("Wywołano konstruktor GUIPlansza");
         ROZMIAR_PLANSZY = 19;
         ROZMIAR_POLA = obliczRozmiarPola();
+        System.out.println("pole: " + ROZMIAR_POLA);
         ramka = new JFrame("Gra Go");
         belkaStatusu = new JLabel("...");
         passButton = new JButton("PASS");
@@ -47,6 +49,7 @@ class GUIPlansza extends AbstractGra {
          * Inicjalizacja planszy 19x19, wgranie odpowiednich grafik
          */
         tekstury = new GUIPlansza.Tekstury();
+        System.out.println("Wczytuje tekstury");
         for(int b = 0; b < ROZMIAR_PLANSZY; b++) {
             for (int a = 0; a < ROZMIAR_PLANSZY; a++) {
                 planszaKamieni[a][b] = 0;
@@ -130,6 +133,7 @@ class GUIPlansza extends AbstractGra {
         pole[ROZMIAR_PLANSZY - 1][ROZMIAR_PLANSZY - 1].setIcon(tekstury.Im_puste88);
         pole[ROZMIAR_PLANSZY - 1][0].setIcon(tekstury.Im_puste80);
         repaint();
+        System.out.println("Zakonczono wczytywanie tekstur");
     }
 
     @Override

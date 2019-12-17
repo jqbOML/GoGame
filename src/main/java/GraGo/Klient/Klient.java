@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -28,7 +29,10 @@ class Klient extends AbstractKlient{
             }
         });
 
-        Thread.sleep(4000); //// to nie działą jakoś super :(
+        while(przeciwnik==null){
+            //czekaj
+        }
+
         startGUI.oknoStartowe.dispose();
         if (przeciwnik.equals("Gracz")) {
             socket = new Socket(adresSerwera, 58901);
@@ -98,7 +102,9 @@ class Klient extends AbstractKlient{
                     planszaGUI.pole[locX][locY].setIcon(planszaGUI.tekstury.Im_pustexx); //wczytanie tekstury bez uwzględnienia granic
                     planszaGUI.pole[locX][locY].repaint();
                 } else if (odpowiedz.startsWith(KomunikatySerwera.INFO.toString())) {
-                    planszaGUI.belkaStatusu.setText(in.nextLine());
+                    String pomocniczy = in.nextLine();
+                    System.out.println("INFO: "+pomocniczy);
+                    planszaGUI.belkaStatusu.setText(pomocniczy);
                 } else if (odpowiedz.startsWith(KomunikatySerwera.ZWYCIESTWO.toString())) {
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Wygrałeś, gratulacje!");
                     break;
