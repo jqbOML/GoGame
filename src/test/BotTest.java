@@ -1,12 +1,14 @@
 
 import GraGo.Serwer.Bot;
 import GraGo.Serwer.Kamien;
+import GraGo.Serwer.Serwer;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BotTest {
+    private Serwer serwer = new Serwer();
     private Kamien[][] kamienie = new Kamien[19][19];
-    Bot testowyBot = new Bot(2);
+    Bot testowyBot = new Bot(serwer, 2);
 
     @Test
     void czyNieSamobojTest(){

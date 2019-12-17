@@ -6,23 +6,22 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GUIWynik extends JPanel {
-    JTextArea podajWynikTy = new JTextArea(1, 10);
-    JTextArea podajWynikOn = new JTextArea(1, 10);
-    JButton okButton = new JButton("OK");
-    JFrame zakonczenie = new JFrame("Podaj wyniki");
-
+public class GUIWynik extends AbstractWynik {
     GUIWynik(){
+        JFrame zakonczenie = new JFrame("Gracz biały: Podaj wyniki");
+        WynikGracza = new JTextArea(1, 10);
+        WynikPrzeciwnika = new JTextArea(1, 10);
+        okButton = new JButton("OK");
 
-            zakonczenie.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            zakonczenie.setSize(400, 100);
-            zakonczenie.setLocationRelativeTo(null);
-            zakonczenie.setVisible(true);
-            zakonczenie.setTitle("Podsumowanie: Gracz biały");
-            zakonczenie.add(podajWynikTy, BorderLayout.WEST);
-            zakonczenie.add(okButton, BorderLayout.CENTER);
-            podajWynikTy.setBorder(new TitledBorder("TWÓJ WYNIK"));
-            zakonczenie.add(podajWynikOn, BorderLayout.EAST);
-            podajWynikOn.setBorder(new TitledBorder("WYNIK PZECIWNIKA"));
+        zakonczenie.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        zakonczenie.setSize(400, 100);
+        zakonczenie.setLocationRelativeTo(null);
+        zakonczenie.setVisible(true);
+        zakonczenie.setTitle("Podsumowanie: Gracz biały");
+        zakonczenie.add(WynikGracza, BorderLayout.WEST);
+        zakonczenie.add(okButton, BorderLayout.CENTER);
+        WynikGracza.setBorder(new TitledBorder("TWÓJ WYNIK"));
+        zakonczenie.add(WynikPrzeciwnika, BorderLayout.EAST);
+        WynikPrzeciwnika.setBorder(new TitledBorder("WYNIK PZECIWNIKA"));
     }
 }

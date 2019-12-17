@@ -3,69 +3,221 @@
   <ID>JAVA</ID>
   <OriginalElement />
   <nodes>
-    <node x="139.0" y="352.0">GraGo.Serwer.Serwer</node>
-    <node x="329.0" y="0.0">GraGo.KomunikatySerwera</node>
-    <node x="629.6476190476191" y="330.0">GraGo.Klient.Klient</node>
-    <node x="705.0" y="0.0">GraGo.Klient.GUIPlansza</node>
-    <node x="156.5" y="651.0">GraGo.Serwer.Gracz</node>
-    <node x="517.0" y="99.0">GraGo.KomunikatyKlienta</node>
-    <node x="0.0" y="87.5">GraGo.Serwer.Kamien</node>
+    <node x="123.0" y="324.0">GraGo.Klient.AbstractKlient</node>
+    <node x="966.3782877694516" y="620.8971690258118">GraGo.Serwer.Serwer</node>
+    <node x="564.9583333333335" y="324.0">GraGo.KomunikatySerwera</node>
+    <node x="0.0" y="324.0">GraGo.Klient.GUIStart</node>
+    <node x="1069.8959349593497" y="324.0">GraGo.Serwer.AbstractSerwer</node>
+    <node x="991.0128387533874" y="76.0">GraGo.Serwer.Kamien</node>
+    <node x="752.9583333333335" y="324.0">GraGo.KomunikatyKlienta</node>
+    <node x="228.72147696476964" y="248.0">GraGo.Klient.AbstractGra</node>
+    <node x="5.166666666666629" y="248.0">GraGo.Klient.AbstractStart</node>
+    <node x="969.6472222222224" y="172.0">GraGo.Serwer.BotInterface</node>
+    <node x="441.9583333333334" y="324.0">GraGo.Klient.GUIWynik</node>
+    <node x="303.5" y="440.0">GraGo.Klient.Klient</node>
+    <node x="933.7402777777779" y="592.0">GraGo.Serwer.AbstractGracz</node>
+    <node x="289.0" y="324.0">GraGo.Klient.GUIPlansza</node>
+    <node x="972.4902777777779" y="516.0">GraGo.Serwer.Gracz</node>
+    <node x="1002.1472222222224" y="248.0">GraGo.Serwer.Bot</node>
+    <node x="400.79166666666674" y="248.0">GraGo.Klient.AbstractWynik</node>
+    <node x="959.0128387533874" y="0.0">GraGo.Serwer.KamienInterface</node>
   </nodes>
   <notes />
   <edges>
-    <edge source="GraGo.Klient.Klient" target="GraGo.KomunikatyKlienta">
-      <point x="-35.200000000000045" y="-135.5" />
-      <point x="682.447619047619" y="290.0" />
-      <point x="643.0" y="290.0" />
-      <point x="42.0" y="36.0" />
+    <edge source="GraGo.Klient.Klient" target="GraGo.Klient.AbstractKlient">
+      <point x="-16.6875" y="-13.0" />
+      <point x="331.3125" y="400.0" />
+      <point x="232.5" y="400.0" />
+      <point x="36.5" y="13.0" />
     </edge>
-    <edge source="GraGo.Serwer.Serwer" target="GraGo.Serwer.Gracz">
-      <point x="0.0" y="113.5" />
-      <point x="0.0" y="-113.5" />
-    </edge>
-    <edge source="GraGo.Serwer.Gracz" target="GraGo.Serwer.Serwer">
-      <point x="-80.80000000000004" y="-113.5" />
-      <point x="176.7" y="626.0" />
-      <point x="162.7" y="626.0" />
-      <point x="-94.80000000000001" y="113.5" />
-    </edge>
-    <edge source="GraGo.Klient.Klient" target="GraGo.Klient.GUIPlansza">
-      <point x="35.200000000000045" y="-135.5" />
-      <point x="752.8476190476191" y="300.0" />
-      <point x="797.5" y="300.0" />
-      <point x="0.0" y="135.0" />
+    <edge source="GraGo.Serwer.Gracz" target="GraGo.Serwer.AbstractGracz">
+      <point x="10.25" y="13.0" />
+      <point x="1023.7402777777779" y="567.0" />
+      <point x="1031.0402777777779" y="567.0" />
+      <point x="27.80000000000001" y="-13.0" />
     </edge>
     <edge source="GraGo.Serwer.Serwer" target="GraGo.KomunikatySerwera">
-      <point x="47.39999999999998" y="-113.5" />
-      <point x="304.9" y="300.0" />
-      <point x="371.0" y="300.0" />
-      <point x="-42.0" y="135.0" />
+      <point x="-40.05000000000001" y="-13.0" />
+      <point x="947.6902777777779" y="410.0" />
+      <point x="690.9583333333335" y="410.0" />
+      <point x="42.0" y="13.0" />
+    </edge>
+    <edge source="GraGo.Klient.GUIWynik" target="GraGo.Klient.AbstractWynik">
+      <point x="-25.75" y="-13.0" />
+      <point x="467.7083333333334" y="304.0" />
+      <point x="470.29166666666674" y="304.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Bot" target="GraGo.Serwer.Serwer">
+      <point x="-25.125" y="13.0" />
+      <point x="1010.5222222222224" y="304.0" />
+      <point x="1018.3722222222223" y="304.0" />
+      <point x="1018.3722222222223" y="380.0" />
+      <point x="992.1902777777779" y="380.0" />
+      <point x="4.449999999999989" y="-13.0" />
+    </edge>
+    <edge source="GraGo.Klient.GUIPlansza" target="GraGo.Klient.AbstractGra">
+      <point x="29.5" y="-13.0" />
+      <point x="377.5" y="294.0" />
+      <point x="332.88814363143626" y="294.0" />
+      <point x="41.66666666666663" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Bot" target="GraGo.Serwer.Kamien">
+      <point x="-22.333333333333314" y="-13.0" />
+      <point x="1013.313888888889" y="223.0" />
+      <point x="959.1472222222224" y="223.0" />
+      <point x="959.1472222222224" y="152.0" />
+      <point x="1025.6239498644986" y="152.0" />
+      <point x="-9.888888888888886" y="13.0" />
     </edge>
     <edge source="GraGo.Klient.Klient" target="GraGo.KomunikatySerwera">
-      <point x="-70.39999999999998" y="-135.5" />
-      <point x="647.2476190476191" y="300.0" />
-      <point x="455.0" y="300.0" />
-      <point x="42.0" y="135.0" />
+      <point x="27.8125" y="-13.0" />
+      <point x="375.8125" y="410.0" />
+      <point x="606.9583333333335" y="410.0" />
+      <point x="-42.0" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Bot" target="GraGo.Serwer.BotInterface">
+      <point x="0.0" y="-13.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Serwer" target="GraGo.Serwer.AbstractSerwer">
+      <point x="40.05000000000001" y="-13.0" />
+      <point x="1027.7902777777779" y="420.0" />
+      <point x="1124.6459349593497" y="420.0" />
+      <point x="-18.25" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.BotInterface" target="GraGo.Serwer.Kamien">
+      <point x="0.0" y="-13.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="GraGo.Klient.AbstractKlient" target="GraGo.Klient.AbstractWynik">
+      <point x="48.66666666666663" y="-13.0" />
+      <point x="244.66666666666663" y="304.0" />
+      <point x="423.95833333333337" y="304.0" />
+      <point x="-46.33333333333337" y="13.0" />
+    </edge>
+    <edge source="GraGo.Klient.Klient" target="GraGo.KomunikatyKlienta">
+      <point x="38.9375" y="-13.0" />
+      <point x="386.9375" y="420.0" />
+      <point x="794.9583333333335" y="420.0" />
+      <point x="-42.0" y="13.0" />
+    </edge>
+    <edge source="GraGo.Klient.AbstractKlient" target="GraGo.Klient.AbstractGra">
+      <point x="0.0" y="-13.0" />
+      <point x="196.0" y="294.0" />
+      <point x="249.554810298103" y="294.0" />
+      <point x="-41.66666666666663" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Serwer" target="GraGo.Serwer.Gracz">
+      <point x="11.125" y="13.0" />
+      <point x="998.8652777777779" y="496.0" />
+      <point x="997.0902777777778" y="496.0" />
+      <point x="-16.400000000000006" y="-13.0" />
+    </edge>
+    <edge source="GraGo.Klient.GUIStart" target="GraGo.Klient.AbstractStart">
+      <point x="25.75" y="-13.0" />
+      <point x="77.25" y="304.0" />
+      <point x="74.66666666666663" y="304.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="GraGo.Klient.Klient" target="GraGo.Klient.GUIStart">
+      <point x="-38.9375" y="-13.0" />
+      <point x="309.0625" y="420.0" />
+      <point x="51.5" y="420.0" />
+      <point x="0.0" y="13.0" />
     </edge>
     <edge source="GraGo.Serwer.Serwer" target="GraGo.KomunikatyKlienta">
-      <point x="94.80000000000001" y="-113.5" />
-      <point x="352.3" y="310.0" />
-      <point x="559.0" y="310.0" />
-      <point x="-42.0" y="36.0" />
+      <point x="-31.150000000000034" y="-13.0" />
+      <point x="956.5902777777778" y="400.0" />
+      <point x="878.9583333333335" y="400.0" />
+      <point x="42.0" y="13.0" />
     </edge>
     <edge source="GraGo.Serwer.Serwer" target="GraGo.Serwer.Kamien">
-      <point x="-47.400000000000034" y="-113.5" />
-      <point x="210.09999999999997" y="300.0" />
-      <point x="154.5" y="300.0" />
-      <point x="0.0" y="47.5" />
+      <point x="-13.350000000000023" y="-13.0" />
+      <point x="974.3902777777778" y="380.0" />
+      <point x="940.3583333333333" y="380.0" />
+      <point x="940.3583333333333" y="132.0" />
+      <point x="1005.8461720867208" y="132.0" />
+      <point x="-29.666666666666657" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.AbstractSerwer" target="GraGo.Serwer.Bot">
+      <point x="-54.75" y="-13.0" />
+      <point x="1088.1459349593497" y="304.0" />
+      <point x="1060.7722222222224" y="304.0" />
+      <point x="25.125" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.AbstractSerwer" target="GraGo.Serwer.Kamien">
+      <point x="54.75" y="-13.0" />
+      <point x="1197.6459349593497" y="304.0" />
+      <point x="1170.9719173441736" y="304.0" />
+      <point x="1170.9719173441736" y="122.0" />
+      <point x="1075.068394308943" y="122.0" />
+      <point x="39.55555555555554" y="13.0" />
+    </edge>
+    <edge source="GraGo.Klient.AbstractKlient" target="GraGo.Klient.AbstractStart">
+      <point x="-48.66666666666663" y="-13.0" />
+      <point x="147.33333333333337" y="304.0" />
+      <point x="120.99999999999989" y="304.0" />
+      <point x="46.33333333333326" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Kamien" target="GraGo.Serwer.KamienInterface">
+      <point x="0.0" y="-13.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="GraGo.Klient.Klient" target="GraGo.Klient.GUIWynik">
+      <point x="16.6875" y="-13.0" />
+      <point x="364.6875" y="400.0" />
+      <point x="493.4583333333334" y="400.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.AbstractGracz" target="GraGo.Serwer.Serwer">
+      <point x="-55.599999999999994" y="-13.0" />
+      <point x="947.6402777777779" y="567.0" />
+      <point x="961.9902777777779" y="567.0" />
+      <point x="961.9902777777779" y="496.0" />
+      <point x="954.3652777777779" y="496.0" />
+      <point x="-33.375" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Gracz" target="GraGo.Serwer.Serwer">
+      <point x="-32.80000000000001" y="-13.0" />
+      <point x="980.6902777777779" y="496.0" />
+      <point x="976.6152777777779" y="496.0" />
+      <point x="-11.125" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.AbstractSerwer" target="GraGo.Serwer.Gracz">
+      <point x="18.25" y="13.0" />
+      <point x="1161.1459349593497" y="420.0" />
+      <point x="1164.9041666666667" y="420.0" />
+      <point x="1164.9041666666667" y="486.0" />
+      <point x="1029.8902777777778" y="486.0" />
+      <point x="16.399999999999977" y="-13.0" />
+    </edge>
+    <edge source="GraGo.Klient.Klient" target="GraGo.Klient.GUIPlansza">
+      <point x="-5.5625" y="-13.0" />
+      <point x="342.4375" y="390.0" />
+      <point x="318.5" y="390.0" />
+      <point x="-29.5" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.Serwer" target="GraGo.Serwer.Bot">
+      <point x="22.25" y="-13.0" />
+      <point x="1009.9902777777779" y="400.0" />
+      <point x="1036.1722222222224" y="400.0" />
+      <point x="1036.1722222222224" y="304.0" />
+      <point x="1044.0222222222224" y="304.0" />
+      <point x="8.375" y="13.0" />
+    </edge>
+    <edge source="GraGo.Serwer.AbstractGracz" target="GraGo.Serwer.Gracz">
+      <point x="-27.80000000000001" y="-13.0" />
+      <point x="975.4402777777779" y="567.0" />
+      <point x="982.7402777777779" y="567.0" />
+      <point x="-30.75" y="13.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.6000000000000001" x="692.7142857142856" y="209.49206349206344" />
-  <SelectedNodes />
-  <Categories>
-    <Category>Fields</Category>
-    <Category>Methods</Category>
-  </Categories>
+  <settings layout="Hierarchic Group" zoom="0.9508164275111332" x="749.3388322231473" y="352.8374791840133" />
+  <SelectedNodes>
+    <node>GraGo.Serwer.Serwer</node>
+  </SelectedNodes>
+  <Categories />
   <SCOPE>All</SCOPE>
   <VISIBILITY>private</VISIBILITY>
 </Diagram>

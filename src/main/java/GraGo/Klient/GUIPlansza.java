@@ -4,23 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.util.ArrayList;
 
-public class GUIPlansza extends AbstractPlansza {
-    static int ROZMIAR_PLANSZY = 19;
-    int kolorGracza; //1 - czarny, 2 - biały
-    JFrame ramka = new JFrame("Gra Go");
-    JLabel belkaStatusu = new JLabel("...");
-    JButton passButton = new JButton("PASS");
-    JButton zakonczGreButton = new JButton("KONIEC");
-    JLabel[][] pole;
-    private static Dimension d = Toolkit.getDefaultToolkit().getScreenSize(); //pobranie parametrów rozdzielczości ekranu
-    private static int ROZMIAR_POLA = (d.height / ROZMIAR_PLANSZY);
-    int[][] planszaKamieni;
-    Tekstury tekstury = new Tekstury(); //wczytanie grafik do GUI z folderu ~/tekstury/
-
-    GUIPlansza() throws IOException {
+class GUIPlansza extends AbstractGra {
+    GUIPlansza() {
+        ROZMIAR_PLANSZY = 19;
+        ROZMIAR_POLA = obliczRozmiarPola();
+        ramka = new JFrame("Gra Go");
+        belkaStatusu = new JLabel("...");
+        passButton = new JButton("PASS");
+        zakonczGreButton = new JButton("KONIEC");
         ramka.setVisible(true);
         ramka.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ramka.setLocation(0, 0);
@@ -54,6 +46,7 @@ public class GUIPlansza extends AbstractPlansza {
         /**
          * Inicjalizacja planszy 19x19, wgranie odpowiednich grafik
          */
+        tekstury = new GUIPlansza.Tekstury();
         for(int b = 0; b < ROZMIAR_PLANSZY; b++) {
             for (int a = 0; a < ROZMIAR_PLANSZY; a++) {
                 planszaKamieni[a][b] = 0;
@@ -139,8 +132,12 @@ public class GUIPlansza extends AbstractPlansza {
         repaint();
     }
 
+    @Override
+    public void ustawKolorGracza(int kolor) {
+        kolorGracza = kolor;
+    }
+
     static class Tekstury{
-        ArrayList<ImageIcon> tekstury = new ArrayList<>();
         ImageIcon ImI_p00 = new ImageIcon("tekstury/00polePuste.jpg");
         //dostosuj rozmiare ikony
         Image newimg1 = ImI_p00.getImage().getScaledInstance(ROZMIAR_POLA, ROZMIAR_POLA,  java.awt.Image.SCALE_SMOOTH);
@@ -276,6 +273,4 @@ public class GUIPlansza extends AbstractPlansza {
         Image newimg27 = ImI_b08.getImage().getScaledInstance(ROZMIAR_POLA, ROZMIAR_POLA,  java.awt.Image.SCALE_SMOOTH);
         ImageIcon Im_bialy08 = new ImageIcon(newimg27);
     }
-
-
 }

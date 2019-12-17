@@ -1,6 +1,6 @@
 package GraGo.Serwer;
 
-public class MainSerwer {
+public class Main{
     public static void main(String[] args) throws Exception {
 
         Serwer serwerGo = new Serwer();

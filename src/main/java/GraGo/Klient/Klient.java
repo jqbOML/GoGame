@@ -12,27 +12,15 @@ import java.net.Socket;
 
 import javax.swing.*;
 
-public class Klient{
-    private Socket socket;
-    private Scanner in;
-    private PrintWriter out;
-    private GUIStart startGUI;
-    private GUIPlansza planszaGUI;
-    private GUIWynik wynikGUI;
-    private JLabel wybranePole;
-    private int[] wynik = new int[2];
-    private String przeciwnik; //Gracz lub Bot
+class Klient extends AbstractKlient{
 
     Klient(String adresSerwera) throws Exception {
-
         startGUI = new GUIStart();
-
         startGUI.przeciwnikButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 przeciwnik = "Gracz";
             }
         });
-
         startGUI.botButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -40,38 +28,37 @@ public class Klient{
             }
         });
 
-            Thread.sleep(7000); //// to nie działą jakoś super :(
-            startGUI.oknoStartowe.dispose();
-            if (przeciwnik.equals("Gracz")) {
-                socket = new Socket(adresSerwera, 58901);
-                in = new Scanner(socket.getInputStream());
-                out = new PrintWriter(socket.getOutputStream(), true);
-                out.println("Gracz");
+        Thread.sleep(7000); //// to nie działą jakoś super :(
+        startGUI.oknoStartowe.dispose();
+        if (przeciwnik.equals("Gracz")) {
+            socket = new Socket(adresSerwera, 58901);
+            in = new Scanner(socket.getInputStream());
+            out = new PrintWriter(socket.getOutputStream(), true);
+            out.println(KomunikatyKlienta.GRACZ);
 
-                planszaGUI = new GUIPlansza();
-                wysylajKomendy();
-                odbierajKomendy();
-            }
-            if (przeciwnik.equals("Bot")){
-                socket = new Socket(adresSerwera, 58901);
-                in = new Scanner(socket.getInputStream());
-                out = new PrintWriter(socket.getOutputStream(), true);
-                out.println("Bot");
+            planszaGUI = new GUIPlansza();
+            wysylajKomendy();
+            odbierajKomendy();
+        }
+        if (przeciwnik.equals("Bot")){
+            socket = new Socket(adresSerwera, 58901);
+            in = new Scanner(socket.getInputStream());
+            out = new PrintWriter(socket.getOutputStream(), true);
+            out.println(KomunikatyKlienta.BOT);
 
-                System.out.println("Odpalam Plansze z botem");
-                planszaGUI = new GUIPlansza();
-                wysylajKomendy();
-                odbierajKomendy();
-            }
+            planszaGUI = new GUIPlansza();
+            wysylajKomendy();
+            odbierajKomendy();
+        }
     }
 
-
-    private void odbierajKomendy() throws Exception {
+    @Override
+    public void odbierajKomendy() throws Exception {
         try {
             String odpowiedz = in.nextLine();
                 System.out.println("Wiadomosc z serwera: "+ odpowiedz);
             int kolor = Character.digit(odpowiedz.charAt(6), 10);
-            planszaGUI.kolorGracza = kolor;
+            planszaGUI.ustawKolorGracza(kolor);
             planszaGUI.ramka.setTitle("Gra Go: Gracz " + ((kolor == 1) ? "czarny" : "biały"));
             while (in.hasNextLine()) {
                 odpowiedz = in.next();
@@ -139,8 +126,8 @@ public class Klient{
                         wynikGUI = new GUIWynik();
                         wynikGUI.okButton.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                                wynik[0] = Integer.parseInt(wynikGUI.podajWynikTy.getText());
-                                wynik[1] = Integer.parseInt(wynikGUI.podajWynikOn.getText());
+                                wynik[0] = Integer.parseInt(wynikGUI.WynikGracza.getText());
+                                wynik[1] = Integer.parseInt(wynikGUI.WynikPrzeciwnika.getText());
                                 out.println(KomunikatySerwera.WYNIK.toString() + " " + wynik[0] + " " + wynik[1]);
                             }
                         });
@@ -158,7 +145,8 @@ public class Klient{
         }
     }
 
-    private void wysylajKomendy(){
+    @Override
+    public void wysylajKomendy(){
         planszaGUI.zakonczGreButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {

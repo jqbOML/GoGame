@@ -11,13 +11,12 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Serwer {
-    private Kamien[][] planszaGo = new Kamien[19][19];
-    private Gracz aktualnyGracz;
-    private Boolean czyBot = false;
-    private Bot bot;
+public class Serwer extends AbstractSerwer {
+    private ArrayList<Kamien> uduszoneKamienie = new ArrayList<>();
 
-    Serwer(){
+    public Serwer(){
+        planszaGo = new Kamien[19][19];
+        czyBot = false;
         try (ServerSocket listener = new ServerSocket(58901)) {
             System.out.println("Serwer Go aktywny...");
             ExecutorService pool = Executors.newFixedThreadPool(100);
@@ -34,15 +33,17 @@ public class Serwer {
         }
     }
 
-    void polaczenieZGraczem(Gracz gracz) throws IOException {
+
+    @Override
+    void polaczenieZGraczami(Gracz gracz) throws IOException {
         gracz.input = new Scanner(gracz.socket.getInputStream());
         gracz.output = new PrintWriter(gracz.socket.getOutputStream(), true);
         gracz.output.println(KomunikatySerwera.WITAJ+ " " + gracz.wezKolor());
         String przeciwnik = gracz.input.next();
-        System.out.println("Typ przeciwnika: "+przeciwnik);
-        if (przeciwnik.equals("Bot")){
+
+        if (przeciwnik.startsWith(KomunikatyKlienta.BOT.toString())){
             czyBot = true;
-            bot = new Bot(gracz.wezKolor() == 1 ? 2 : 1);
+            bot = new Bot(this, gracz.wezKolor() == 1 ? 2 : 1);
             gracz.output.println(KomunikatySerwera.INFO + " Grasz z botem");
             ustawAktualnegoGracza(gracz);
         } else {
@@ -58,7 +59,8 @@ public class Serwer {
         }
     }
 
-    void interpretujKomendy(Gracz gracz) throws InterruptedException {
+    @Override
+    void interpretujKomendy(Gracz gracz) {
         while (gracz.input.hasNext()) {
             String polecenie = gracz.input.next();
             if (polecenie.startsWith(KomunikatyKlienta.WYJSCIE.toString())) {
@@ -69,7 +71,7 @@ public class Serwer {
                     int y = Integer.parseInt(gracz.input.next());
                     zweryfikujRuch(x, y, gracz);
                     gracz.output.println(KomunikatySerwera.POPRAWNY_RUCH + " " + x + " " + y);
-                    //sprawdzUduszone(x, y, gracz);
+                    //czyUduszone(planszaGo[x][y]);
                     if (czyBot){
                         Thread.sleep(200);
                         String[] parametry = bot.wykonajRuch(planszaGo).split(" ");
@@ -77,7 +79,7 @@ public class Serwer {
                         int botY = Integer.parseInt(parametry[1]);
                         gracz.output.println(KomunikatySerwera.RUCH_PRZECIWNIKA + " " + botX + " " + botY);
                         planszaGo[botX][botY] = new Kamien(aktualnyGracz.wezKolor(), botX, botY);
-                        //sprawdzUduszone(botX, botY, gracz);
+                        //czyUduszone(planszaGo[botX][botY]);
                     } else{
                         ustawAktualnegoGracza(aktualnyGracz.przeciwnik);
                         gracz.przeciwnik.output.println(KomunikatySerwera.RUCH_PRZECIWNIKA + " " + x + " " + y);
@@ -106,6 +108,7 @@ public class Serwer {
                 int b = Integer.parseInt(gracz.input.next());
                 gracz.output.println(KomunikatySerwera.WYNIK + " " + a + " " + b);
             }
+
             if(czyBot && gracz.pass){
                 gracz.output.println(KomunikatySerwera.KONIEC_GRY);
             } else if (gracz.pass && gracz.przeciwnik.pass) {
@@ -122,53 +125,152 @@ public class Serwer {
             throw new IllegalStateException("Nie masz jeszcze przeciwnika");
         } else if (planszaGo[x][y] != null) {
             throw new IllegalStateException("Pole jest już zajęte!");
-        } else if (czySamoboj(x, y)) {
-            throw new IllegalStateException("Niedozwolony ruch samobojczy!");
-        } else if (czyKO(x, y)) {
-            throw new IllegalStateException("Niedozwolony ruch KO!");
+        } else {
+            planszaGo[x][y] = new Kamien(aktualnyGracz.wezKolor(), x, y);
+            if (czySamoboj(planszaGo[x][y])) {
+                planszaGo[x][y] = null;
+                throw new IllegalStateException("Niedozwolony ruch samobojczy!");
+            }
+            if (czyKO(planszaGo[x][y])) {
+                planszaGo[x][y] = null;
+                throw new IllegalStateException("Niedozwolony ruch KO!");
+            }
         }
-        planszaGo[x][y] = new Kamien(aktualnyGracz.wezKolor(), x, y);
+
     }
 
-    private boolean czyKO(int x, int y) {
+    @Override
+    public boolean czyKO(Kamien kamien) {
         //TODO: funkcja sprawdzająca czy podany ruch nie będzie powtórzeniem
         return false;
     }
+    @Override
+    public boolean czySamoboj(Kamien kamien) {
+        uduszoneKamienie.clear();
+        return czyOddech(kamien).size() != 0;
+    }
 
-    private boolean czySamoboj(int x, int y) {
-        planszaGo[x][y] = new Kamien(aktualnyGracz.wezKolor(), x, y);
-        if(planszaGo[x][y].czyOddechLancuch(x, y, planszaGo).size() == 0){
-            planszaGo[x][y] = null;
-            return false;
-        } else{
-            planszaGo[x][y] = null;
-            return true;
+    /**
+     * metoda czyOddech() zwraca ...
+     */
+    @Override
+    public ArrayList<Kamien> czyOddech(Kamien kamien){
+        if(!czySasiedniePoleWolne(kamien))
+        {
+            if(!uduszoneKamienie.contains(planszaGo[kamien.wezX()][kamien.wezY()])) {
+                uduszoneKamienie.add(planszaGo[kamien.wezX()][kamien.wezY()]);
+            }
+        }
+        if (kamien.wezX() < 18) {
+            if (planszaGo[kamien.wezX() + 1][kamien.wezY()] != null) {
+                if (!uduszoneKamienie.contains(planszaGo[kamien.wezX() + 1][kamien.wezY()]) && planszaGo[kamien.wezX() + 1][kamien.wezY()].wezKolor() == kamien.wezKolor()) {
+                    if (czySasiedniePoleWolne(kamien)){
+                        uduszoneKamienie.clear();
+                        return (ArrayList<Kamien>) uduszoneKamienie;
+                    }else {
+                        uduszoneKamienie.add(planszaGo[kamien.wezX() + 1][kamien.wezY()]);
+                        czyOddech(kamien);
+                    }
+                }
+            }
         }
 
+        if (kamien.wezX() > 0) {
+            if (planszaGo[kamien.wezX() - 1][kamien.wezY()] != null) {
+                if (!uduszoneKamienie.contains(planszaGo[kamien.wezX() - 1][kamien.wezY()]) && planszaGo[kamien.wezX() - 1][kamien.wezY()].wezKolor() == kamien.wezKolor()) {
+                    if (czySasiedniePoleWolne(kamien)) {
+                        uduszoneKamienie.clear();
+                        return (ArrayList<Kamien>) uduszoneKamienie;
+                    } else{
+                        uduszoneKamienie.add(planszaGo[kamien.wezX() - 1][kamien.wezY()]);
+                        czyOddech(kamien);
+                    }
+                }
+            }
+        }
+
+        if (kamien.wezY() < 18) {
+            if (planszaGo[kamien.wezX()][kamien.wezY() + 1] != null) {
+                if (!uduszoneKamienie.contains(planszaGo[kamien.wezX()][kamien.wezY() + 1]) && planszaGo[kamien.wezX()][kamien.wezY() + 1].wezKolor() == kamien.wezKolor()) {
+                    if (czySasiedniePoleWolne(kamien)) {
+                        uduszoneKamienie.clear();
+                        return (ArrayList<Kamien>) uduszoneKamienie;
+                    } else {
+                        uduszoneKamienie.add(planszaGo[kamien.wezX()][kamien.wezY() + 1]);
+                        czyOddech(kamien);
+                    }
+                }
+            }
+        }
+
+        if (kamien.wezY() > 0) {
+            if (planszaGo[kamien.wezX()][kamien.wezY() - 1] != null) {
+                if (!uduszoneKamienie.contains(planszaGo[kamien.wezX()][kamien.wezY() - 1]) && planszaGo[kamien.wezX()][kamien.wezY() - 1].wezKolor() == kamien.wezKolor()) {
+                    if (czySasiedniePoleWolne(kamien)) {
+                        uduszoneKamienie.clear();
+                        return (ArrayList<Kamien>) uduszoneKamienie;
+                    } else {
+                        uduszoneKamienie.add(planszaGo[kamien.wezX()][kamien.wezY() - 1]);
+                        czyOddech(kamien);
+                    }
+                }
+            }
+        }
+
+        return uduszoneKamienie;
+    }
+
+    /**
+     * metoda czySasiedniePoleWolne zwraca true jeśli pojedynczy kamień ma w swoim zasięgu puste pole (oddech) - nie bierze pod uwagę łańucha, do którego może należeć
+     */
+    public boolean czySasiedniePoleWolne(Kamien kamien){
+        if (kamien.wezX() == 0 && kamien.wezY() == 0)
+            return planszaGo[kamien.wezX() + 1][kamien.wezY()] == null || planszaGo[kamien.wezX()][kamien.wezY() + 1] == null; // róg
+        else if (kamien.wezX() == 0 && kamien.wezY() == 18)
+            return planszaGo[kamien.wezX() + 1][kamien.wezY()] == null || planszaGo[kamien.wezX()][kamien.wezY() - 1] == null; // róg
+        else if (kamien.wezX() == 18 && kamien.wezY() == 0)
+            return planszaGo[kamien.wezX() - 1][kamien.wezY()] == null || planszaGo[kamien.wezX()][kamien.wezY() + 1] == null; // róg
+        else if (kamien.wezX() == 18 && kamien.wezY() == 18)
+            return planszaGo[kamien.wezX() - 1][kamien.wezY()] == null || planszaGo[kamien.wezX()][kamien.wezY() - 1] == null; // róg
+        else if (kamien.wezX() == 0 && kamien.wezY() > 0 && kamien.wezY() < 18)
+            return planszaGo[kamien.wezX() + 1][kamien.wezY()] == null || planszaGo[kamien.wezX()][kamien.wezY() - 1] == null || planszaGo[kamien.wezX()][kamien.wezY() + 1] == null; // bok
+        else if (kamien.wezX() == 18 && kamien.wezY() > 0 && kamien.wezY() < 18)
+            return planszaGo[kamien.wezX() - 1][kamien.wezY()] == null || planszaGo[kamien.wezX()][kamien.wezY() - 1] == null || planszaGo[kamien.wezX()][kamien.wezY() + 1] == null; // bok
+        else if (kamien.wezX() > 0 && kamien.wezX() < 18 && kamien.wezY() == 0)
+            return planszaGo[kamien.wezX() + 1][kamien.wezY()] == null || planszaGo[kamien.wezX() -1][kamien.wezY()] == null || planszaGo[kamien.wezX()][kamien.wezY() + 1] == null; // bok
+        else if (kamien.wezX() > 0 && kamien.wezX() < 18 && kamien.wezY() == 18)
+            return planszaGo[kamien.wezX() + 1][kamien.wezY()] == null || planszaGo[kamien.wezX() -1][kamien.wezY()] == null || planszaGo[kamien.wezX()][kamien.wezY() - 1] == null; // bok
+        else
+            return planszaGo[kamien.wezX() + 1][kamien.wezY()] == null || planszaGo[kamien.wezX() - 1][kamien.wezY()] == null || planszaGo[kamien.wezX()][kamien.wezY() + 1] == null || planszaGo[kamien.wezX()][kamien.wezY() - 1] == null; //środek
+    }
+
+    @Override
+    void czyUduszone(Kamien kamien) {
+        //TODO: sprawdzUduszone
     }
 
     /*private void sprawdzUduszone(int x, int y, Gracz gracz){
-        if (planszaGo[x+1][y] != null && planszaGo[x+1][y].wezKolor() == gracz.przeciwnik.wezKolor()){
-            if (planszaGo[x+1][y].czyOddechLancuch(x+1, y, planszaGo) != null){
-                ArrayList<Kamien> uduszoneKamienie = planszaGo[x+1][y].czyOddechLancuch(x+1, y, planszaGo);
+        if (planszaGo[kamien.wezX()+1][kamien.wezY()] != null && planszaGo[kamien.wezX()+1][kamien.wezY()].wezKolor() == gracz.przeciwnik.wezKolor()){
+            if (planszaGo[kamien.wezX()+1][kamien.wezY()].czyOddech(kamien.wezX()+1, kamien.wezY(), planszaGo) != null){
+                ArrayList<Kamien> uduszoneKamienie = planszaGo[kamien.wezX()+1][kamien.wezY()].czyOddech(kamien.wezX()+1, kamien.wezY(), planszaGo);
                 wyslijUduszoneKamienie(uduszoneKamienie, gracz);
             }
         }
-        if (planszaGo[x-1][y] != null && planszaGo[x-1][y].wezKolor() == gracz.przeciwnik.wezKolor()){
-            if (planszaGo[x-1][y].czyOddechLancuch(x-1, y, planszaGo) != null){
-                ArrayList<Kamien> uduszoneKamienie = planszaGo[x-1][y].czyOddechLancuch(x-1, y, planszaGo);
+        if (planszaGo[kamien.wezX()-1][kamien.wezY()] != null && planszaGo[kamien.wezX()-1][kamien.wezY()].wezKolor() == gracz.przeciwnik.wezKolor()){
+            if (planszaGo[kamien.wezX()-1][kamien.wezY()].czyOddech(kamien.wezX()-1, kamien.wezY(), planszaGo) != null){
+                ArrayList<Kamien> uduszoneKamienie = planszaGo[kamien.wezX()-1][kamien.wezY()].czyOddech(kamien.wezX()-1, kamien.wezY(), planszaGo);
                 wyslijUduszoneKamienie(uduszoneKamienie, gracz);
             }
         }
-        if (planszaGo[x][y+1] != null && planszaGo[x][y+1].wezKolor() == gracz.przeciwnik.wezKolor()){
-            if (planszaGo[x][y+1].czyOddechLancuch(x, y+1, planszaGo) != null){
-                ArrayList<Kamien> uduszoneKamienie = planszaGo[x][y+1].czyOddechLancuch(x, y+1, planszaGo);
+        if (planszaGo[kamien.wezX()][kamien.wezY()+1] != null && planszaGo[kamien.wezX()][kamien.wezY()+1].wezKolor() == gracz.przeciwnik.wezKolor()){
+            if (planszaGo[kamien.wezX()][kamien.wezY()+1].czyOddech(kamien.wezX(), kamien.wezY()+1, planszaGo) != null){
+                ArrayList<Kamien> uduszoneKamienie = planszaGo[kamien.wezX()][kamien.wezY()+1].czyOddech(kamien.wezX(), kamien.wezY()+1, planszaGo);
                 wyslijUduszoneKamienie(uduszoneKamienie, gracz);
             }
         }
-        if (planszaGo[x][y-1] != null && planszaGo[x][y-1].wezKolor() == gracz.przeciwnik.wezKolor()){
-            if (planszaGo[x][y-1].czyOddechLancuch(x, y-1, planszaGo) != null){
-                ArrayList<Kamien> uduszoneKamienie = planszaGo[x][y-1].czyOddechLancuch(x, y-1, planszaGo);
+        if (planszaGo[kamien.wezX()][kamien.wezY()-1] != null && planszaGo[kamien.wezX()][kamien.wezY()-1].wezKolor() == gracz.przeciwnik.wezKolor()){
+            if (planszaGo[kamien.wezX()][kamien.wezY()-1].czyOddech(kamien.wezX(), kamien.wezY()-1, planszaGo) != null){
+                ArrayList<Kamien> uduszoneKamienie = planszaGo[kamien.wezX()][kamien.wezY()-1].czyOddech(kamien.wezX(), kamien.wezY()-1, planszaGo);
                 wyslijUduszoneKamienie(uduszoneKamienie, gracz);
             }
         }
