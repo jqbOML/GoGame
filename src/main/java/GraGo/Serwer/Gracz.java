@@ -9,7 +9,7 @@ public class Gracz extends AbstractGracz implements Runnable  {
         this.serwer = serwer;
         this.socket = socket;
         this.kolor = kolor;
-        System.out.println("Kolor gracza: "+kolor);
+        System.out.println("Nowy gracz: "+kolor);
     }
 
     @Override

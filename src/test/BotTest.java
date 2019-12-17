@@ -23,7 +23,6 @@ class BotTest {
         kamienie[botX][botY] = new Kamien(2,botX,botY);
 
         assertNull(kamienie[2][3]);
-
     }
 
     @Test

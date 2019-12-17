@@ -48,7 +48,7 @@ public class Serwer extends AbstractSerwer {
             gracz.ustawPrzeciwnika(bot);
             bot.ustawPrzeciwnika(gracz);
             ustawAktualnegoGracza(gracz);
-        } else {
+        } else if (przeciwnik.startsWith(KomunikatyKlienta.GRACZ.toString())){
             if (gracz.wezKolor() == 1) {
                 gracz.output.println(KomunikatySerwera.INFO + " Oczekuje na przeciwnika");
                 ustawAktualnegoGracza(gracz);
@@ -91,25 +91,46 @@ public class Serwer extends AbstractSerwer {
                 } catch (IllegalStateException | InterruptedException e) {
                     gracz.output.println(KomunikatySerwera.INFO + " " + e.getMessage());
                 }
-            }else if (polecenie.startsWith(KomunikatySerwera.ZWYCIESTWO.toString())) {
-                gracz.output.println(KomunikatySerwera.ZWYCIESTWO.toString());
-                gracz.przeciwnik.output.println(KomunikatySerwera.PORAZKA);
-            }else if (polecenie.startsWith(KomunikatySerwera.PORAZKA.toString())) {
-                gracz.output.println(KomunikatySerwera.PORAZKA);
-                gracz.przeciwnik.output.println(KomunikatySerwera.ZWYCIESTWO);
-            }else if (polecenie.startsWith(KomunikatySerwera.REMIS.toString())) {
-                gracz.output.println(KomunikatySerwera.REMIS);
-                gracz.przeciwnik.output.println(KomunikatySerwera.REMIS);
-            }else if (polecenie.startsWith(KomunikatySerwera.PASS.toString())) {
+            }else if (polecenie.startsWith(KomunikatyKlienta.PASS.toString())) {
                 gracz.pass = true;
                 if (!czyBot){
                     gracz.przeciwnik.output.println(KomunikatySerwera.PASS);
                     ustawAktualnegoGracza(gracz.przeciwnik);
                 }
-            }else if (polecenie.startsWith(KomunikatySerwera.WYNIK.toString())) {
-                int a = Integer.parseInt(gracz.input.next());
-                int b = Integer.parseInt(gracz.input.next());
-                gracz.output.println(KomunikatySerwera.WYNIK + " " + a + " " + b);
+            }else if (polecenie.startsWith(KomunikatyKlienta.WYNIK.toString())) {
+                wynik[0] = Integer.parseInt(gracz.input.next());
+                wynik[1] = Integer.parseInt(gracz.input.next());
+
+                if(czyBot){
+                    if(wynik[0] > wynik[1]) {
+                        gracz.output.println(KomunikatySerwera.PORAZKA);
+                    }
+                    else if(wynik[0] < wynik[1]) {
+                        gracz.output.println(KomunikatySerwera.ZWYCIESTWO);
+                    }
+                    else {
+                        gracz.output.println(KomunikatySerwera.REMIS);
+                    }
+                } else{
+                    gracz.output.println(KomunikatySerwera.WYNIK + " " + wynik[0] + " " + wynik[1]);
+                }
+            }else if(polecenie.startsWith(KomunikatyKlienta.ZAAKCEPTUJ_WYNIK.toString())){
+                {
+                    if(wynik[0] > wynik[1]) {
+                        gracz.output.println(KomunikatySerwera.ZWYCIESTWO);
+                        gracz.przeciwnik.output.print(KomunikatySerwera.PORAZKA);
+                    }
+                    else if(wynik[0] < wynik[1]) {
+                        gracz.output.println(KomunikatySerwera.PORAZKA);
+                        gracz.przeciwnik.output.print(KomunikatySerwera.ZWYCIESTWO);
+                    }
+                    else {
+                        gracz.output.println(KomunikatySerwera.REMIS);
+                        gracz.przeciwnik.output.print(KomunikatySerwera.REMIS);
+                    }
+                }
+            }else if(polecenie.startsWith(KomunikatyKlienta.ODRZUC_WYNIK.toString())){
+                gracz.output.print(KomunikatySerwera.KONIEC_GRY);
             }
 
             if(czyBot && gracz.pass){
@@ -158,68 +179,32 @@ public class Serwer extends AbstractSerwer {
      */
     @Override
     public ArrayList<Kamien> czyOddech(Kamien kamien){
+        System.out.println("czyOddech dla: x="+kamien.wezX()+", y="+kamien.wezY());
         int x = kamien.wezX();
         int y = kamien.wezY();
 
-        if(!czySasiedniePoleWolne(kamien))
+        if(czySasiedniePoleWolne(kamien))
         {
-            if(!uduszoneKamienie.contains(planszaGo[x][y])) {
-                uduszoneKamienie.add(planszaGo[x][y]);
-            }
-        }
-        if (x < 18) {
-            if (planszaGo[x + 1][y] != null) {
-                if (!uduszoneKamienie.contains(planszaGo[x + 1][y]) && planszaGo[x + 1][y].wezKolor() == kamien.wezKolor()) {
-                    if (czySasiedniePoleWolne(kamien)){
-                        uduszoneKamienie.clear();
-                        return (ArrayList<Kamien>) uduszoneKamienie;
-                    }else {
-                        uduszoneKamienie.add(planszaGo[x + 1][y]);
-                        czyOddech(kamien);
-                    }
-                }
-            }
-        }
+            uduszoneKamienie.clear();
+            return uduszoneKamienie;
+        } else if (!uduszoneKamienie.contains(kamien)) {
+            uduszoneKamienie.add(kamien);
+            System.out.println("Dodano kamien[" + kamien.wezX() + "][" + kamien.wezY() + "]");
 
-        if (x > 0) {
-            if (planszaGo[x - 1][y] != null) {
-                if (!uduszoneKamienie.contains(planszaGo[x - 1][y]) && planszaGo[x - 1][y].wezKolor() == kamien.wezKolor()) {
-                    if (czySasiedniePoleWolne(kamien)) {
-                        uduszoneKamienie.clear();
-                        return (ArrayList<Kamien>) uduszoneKamienie;
-                    } else{
-                        uduszoneKamienie.add(planszaGo[x - 1][y]);
-                        czyOddech(kamien);
-                    }
-                }
+            if (x < 18 && !uduszoneKamienie.contains(planszaGo[x + 1][y]) && planszaGo[x + 1][y].wezKolor() == kamien.wezKolor()) {
+                czyOddech(planszaGo[x + 1][y]);
             }
-        }
 
-        if (y < 18) {
-            if (planszaGo[x][y + 1] != null) {
-                if (!uduszoneKamienie.contains(planszaGo[x][y + 1]) && planszaGo[x][y + 1].wezKolor() == kamien.wezKolor()) {
-                    if (czySasiedniePoleWolne(kamien)) {
-                        uduszoneKamienie.clear();
-                        return (ArrayList<Kamien>) uduszoneKamienie;
-                    } else {
-                        uduszoneKamienie.add(planszaGo[x][y + 1]);
-                        czyOddech(kamien);
-                    }
-                }
+            if (x > 0 && !uduszoneKamienie.contains(planszaGo[x - 1][y]) && planszaGo[x - 1][y].wezKolor() == kamien.wezKolor()) {
+                czyOddech(planszaGo[x - 1][y]);
             }
-        }
 
-        if (y > 0) {
-            if (planszaGo[x][y - 1] != null) {
-                if (!uduszoneKamienie.contains(planszaGo[x][y - 1]) && planszaGo[x][y - 1].wezKolor() == kamien.wezKolor()) {
-                    if (czySasiedniePoleWolne(kamien)) {
-                        uduszoneKamienie.clear();
-                        return (ArrayList<Kamien>) uduszoneKamienie;
-                    } else {
-                        uduszoneKamienie.add(planszaGo[x][y - 1]);
-                        czyOddech(kamien);
-                    }
-                }
+            if (y < 18 && !uduszoneKamienie.contains(planszaGo[x][y + 1]) && planszaGo[x][y + 1].wezKolor() == kamien.wezKolor()) {
+                czyOddech(planszaGo[x][y + 1]);
+            }
+
+            if (y > 0 && !uduszoneKamienie.contains(planszaGo[x][y - 1]) && planszaGo[x][y - 1].wezKolor() == kamien.wezKolor()) {
+                czyOddech(planszaGo[x][y - 1]);
             }
         }
 
@@ -257,6 +242,12 @@ public class Serwer extends AbstractSerwer {
         //TODO: sprawdzUduszone
     }
 
+    /**
+     * Metoda sprawdzUduszone sprawdza dla położonego kamienia czy jego sąsiednie pola nie zostały pozbawione oddechów,
+     *  o ile znajdują się tam kamienie przeciwnika
+     * @param kamien - kamien który został położony
+     * @param gracz - gracz, który położył kamień
+     */
     private void sprawdzUduszone(Kamien kamien, AbstractGracz gracz){
         System.out.println("czyUduszony Kamien.x: "+kamien.wezX()+", y: "+kamien.wezY()+", kolor: "+kamien.wezKolor());
         int x = kamien.wezX();
@@ -266,8 +257,7 @@ public class Serwer extends AbstractSerwer {
             if (planszaGo[x+1][y] != null){
                 if (planszaGo[x+1][y].wezKolor() == gracz.przeciwnik.wezKolor()){
                     if (czyOddech(planszaGo[x+1][y]) != null){
-                        ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x+1][y]);
-                        wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+                        wyslijUduszoneKamienie(czyOddech(planszaGo[x+1][y]), gracz);
                     }
                 }
             }
@@ -277,8 +267,7 @@ public class Serwer extends AbstractSerwer {
             if (planszaGo[x-1][y] != null){
                 if (planszaGo[x-1][y].wezKolor() == gracz.przeciwnik.wezKolor()){
                     if (czyOddech(planszaGo[x-1][y]) != null){
-                        ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x-1][y]);
-                        wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+                        wyslijUduszoneKamienie(czyOddech(planszaGo[x-1][y]), gracz);
                     }
                 }
             }
@@ -288,8 +277,7 @@ public class Serwer extends AbstractSerwer {
             if (planszaGo[x][y+1] != null){
                 if (planszaGo[x][y+1].wezKolor() == gracz.przeciwnik.wezKolor()){
                     if (czyOddech(planszaGo[x][y+1]) != null){
-                        ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x][y+1]);
-                        wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+                        wyslijUduszoneKamienie(czyOddech(planszaGo[x][y+1]), gracz);
                     }
                 }
             }
@@ -299,8 +287,7 @@ public class Serwer extends AbstractSerwer {
             if(planszaGo[x][y-1] != null){
                 if (planszaGo[x][y-1].wezKolor() == gracz.przeciwnik.wezKolor()){
                     if (czyOddech(planszaGo[x][y-1]) != null){
-                        ArrayList<Kamien> uduszoneKamienie = czyOddech(planszaGo[x][y-1]);
-                        wyslijUduszoneKamienie(uduszoneKamienie, gracz);
+                        wyslijUduszoneKamienie(czyOddech(planszaGo[x][y-1]), gracz);
                     }
                 }
             }
@@ -312,10 +299,12 @@ public class Serwer extends AbstractSerwer {
         System.out.println("Wysylam uduszone kamienie");
         for (Kamien uduszonyKamien : uduszoneKamienie){
             gracz.output.println(KomunikatySerwera.USUN + " " + uduszonyKamien.wezX() + " " + uduszonyKamien.wezY());
+            planszaGo[uduszonyKamien.wezX()][uduszonyKamien.wezY()] = null;
             if(!czyBot){
                 gracz.przeciwnik.output.println(KomunikatySerwera.USUN + " " + uduszonyKamien.wezX() + " " + uduszonyKamien.wezY());
             }
         }
+        uduszoneKamienie.clear();
     }
 
     private void ustawAktualnegoGracza(AbstractGracz gracz){

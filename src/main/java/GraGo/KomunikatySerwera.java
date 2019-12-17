@@ -48,7 +48,7 @@ public enum KomunikatySerwera {
     KONIEC_GRY,
 
     /**
-     * Komunikat o propozycji wyniku gry jednego z graczy
+     * Komunikat propozycji wyniku gry (otrzymanego od pierwszego gracza) wysyłany drugiemu graczu do zaakceptowania
      */
     WYNIK,
 

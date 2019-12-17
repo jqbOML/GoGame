@@ -116,13 +116,12 @@ class Klient extends AbstractKlient{
                 }else if (odpowiedz.startsWith(KomunikatySerwera.WYNIK.toString())) {
                         int a = Integer.parseInt(in.next());
                         int b = Integer.parseInt(in.next());
-                        int z = JOptionPane.showConfirmDialog(planszaGUI, "Twój wynik to: " + b + " Wynik przeciwnika to: " + a
+                        int zgoda = JOptionPane.showConfirmDialog(planszaGUI, "Twój wynik to: " + b + " Wynik przeciwnika to: " + a
                                 , "Czy zgadzasz się z wynikiem?", JOptionPane.YES_NO_OPTION);
-                        if (z == JOptionPane.YES_OPTION)
-                        {
-                            if(a > b  ) out.println(KomunikatySerwera.PORAZKA);
-                            else if(a < b ) out.println(KomunikatySerwera.ZWYCIESTWO);
-                            else out.println(KomunikatySerwera.REMIS);
+                        if (zgoda == JOptionPane.YES_OPTION){
+                            out.print(KomunikatyKlienta.ZAAKCEPTUJ_WYNIK);
+                        } else if(zgoda == JOptionPane.NO_OPTION){
+                            out.print(KomunikatyKlienta.ODRZUC_WYNIK);
                         }
                 } else if (odpowiedz.startsWith(KomunikatySerwera.KONIEC_GRY.toString())) {
                     if (kolor == 1) {
@@ -131,7 +130,7 @@ class Klient extends AbstractKlient{
                             public void actionPerformed(ActionEvent e) {
                                 wynik[0] = Integer.parseInt(wynikGUI.WynikGracza.getText());
                                 wynik[1] = Integer.parseInt(wynikGUI.WynikPrzeciwnika.getText());
-                                out.println(KomunikatySerwera.WYNIK.toString() + " " + wynik[0] + " " + wynik[1]);
+                                out.println(KomunikatyKlienta.WYNIK.toString() + " " + wynik[0] + " " + wynik[1]);
                             }
                         });
                     }
@@ -160,7 +159,7 @@ class Klient extends AbstractKlient{
         planszaGUI.passButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-                out.println(KomunikatySerwera.PASS);
+                out.println(KomunikatyKlienta.PASS);
                 planszaGUI.belkaStatusu.setText("Spasowałeś, ruch przeciwnika!");
                 }
         });

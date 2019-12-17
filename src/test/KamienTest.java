@@ -54,7 +54,7 @@ class KamienTest {
         serwer.planszaGo[0][0] = new Kamien(1,0,0);
         serwer.planszaGo[0][1] = new Kamien(2,0,1);
         serwer.planszaGo[1][0] = new Kamien(2,1,0);
-        assertEquals(1, serwer.czyOddech(serwer.planszaGo[1][1]).size()); // sprawdza serwer.planszaGo w rogu (jeden jest uduszony)
+        assertEquals(1, serwer.czyOddech(serwer.planszaGo[0][0]).size()); // sprawdza serwer.planszaGo w rogu (jeden jest uduszony)
 
         serwer.planszaGo[0][0] = new Kamien(1,0,0);
         serwer.planszaGo[0][1] = new Kamien(1,0,1);
