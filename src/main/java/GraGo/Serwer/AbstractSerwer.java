@@ -16,8 +16,5 @@ abstract class AbstractSerwer {
 
     abstract void wyjscieZGry(Gracz gracz);
 
-    //public abstract Object wyslijUduszoneKamienie();
     abstract void wyslijUduszoneKamienie(ArrayList<Kamien> uduszoneKamienie, AbstractGracz gracz);
-
-    //public abstract Object wyslijUduszoneKamienie(ArrayList<Kamien> czyOddech);
 }

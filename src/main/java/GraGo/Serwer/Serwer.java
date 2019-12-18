@@ -84,9 +84,11 @@ public class Serwer extends AbstractSerwer {
                         String[] parametry = bot.wykonajRuch(interpreter.planszaGo).split(" ");
                         int botX = Integer.parseInt(parametry[0]);
                         int botY = Integer.parseInt(parametry[1]);
+                        System.out.println("Serwer: otrzymałem ruch bota x: "+botX+", "+botY);
                         gracz.output.println(KomunikatySerwera.RUCH_PRZECIWNIKA + " " + botX + " " + botY);
                         interpreter.planszaGo[botX][botY] = new Kamien(aktualnyGracz.wezKolor(), botX, botY);
                         interpreter.sprawdzUduszone(interpreter.planszaGo[botX][botY], aktualnyGracz, this);
+                        System.out.println("Sprawdzono uduszenie dla x:"+botX+", y: "+botY);
                         ustawAktualnegoGracza(aktualnyGracz.przeciwnik);
                     } else{
                         gracz.przeciwnik.output.println(KomunikatySerwera.RUCH_PRZECIWNIKA + " " + x + " " + y);
@@ -149,12 +151,14 @@ public class Serwer extends AbstractSerwer {
     void wyslijUduszoneKamienie(ArrayList<Kamien> uduszoneKamienie, AbstractGracz gracz){
         System.out.println("Wysylam uduszone kamienie: ");
         for (Kamien uduszonyKamien : uduszoneKamienie){
-            gracz.output.println(KomunikatySerwera.USUN + " " + uduszonyKamien.wezX() + " " + uduszonyKamien.wezY());
             System.out.print("("+uduszonyKamien.wezX()+", "+uduszonyKamien.wezY()+"), ");
-            interpreter.planszaGo[uduszonyKamien.wezX()][uduszonyKamien.wezY()] = null;
-            if(!czyBot){
+            if (gracz instanceof Gracz){
+                gracz.output.println(KomunikatySerwera.USUN + " " + uduszonyKamien.wezX() + " " + uduszonyKamien.wezY());
+            }
+            if (gracz.przeciwnik instanceof Gracz){
                 gracz.przeciwnik.output.println(KomunikatySerwera.USUN + " " + uduszonyKamien.wezX() + " " + uduszonyKamien.wezY());
             }
+            interpreter.planszaGo[uduszonyKamien.wezX()][uduszonyKamien.wezY()] = null;
         }
         System.out.println("");
         uduszoneKamienie.clear();
