@@ -11,7 +11,7 @@ abstract class AbstractInterpreter {
 
     abstract ArrayList<Kamien> czyOddech(Kamien kamien);
     abstract boolean czySasiedniePoleWolne(Kamien kamien);
-    abstract void sprawdzUduszone(Kamien kamien, AbstractGracz gracz, Serwer serwer);
+    abstract void sprawdzUduszone(Kamien kamien, AbstractGracz gracz, Gra serwer);
 }
 
 

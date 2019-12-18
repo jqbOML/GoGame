@@ -18,6 +18,11 @@ public enum KomunikatySerwera {
     INFO,
 
     /**
+     *
+     */
+    KOLOR,
+
+    /**
      * Komunikat z serwera akceptujący ruch wysłany w komunikacie 'RUCH x y'
      * Po zatwierdzeniu ruchu wczytywana jest grafika z kamieniem u klienta i tworzony obiekt Kamień w serwerze
      */

@@ -52,11 +52,8 @@ public class Klient extends AbstractKlient{
     @Override
     public void odbierajKomendy() throws Exception {
         try {
-            String odpowiedz = in.nextLine();
-                System.out.println("Wiadomosc z serwera: "+ odpowiedz);
-            int kolor = Character.digit(odpowiedz.charAt(6), 10);
-            planszaGUI.ustawKolorGracza(kolor);
-            planszaGUI.ramka.setTitle("Gra Go: Gracz " + ((kolor == 1) ? "czarny" : "biały"));
+            String odpowiedz;
+
             while (in.hasNextLine()) {
                 odpowiedz = in.next();
                 System.out.println("Respons in.next: " + odpowiedz);
@@ -73,6 +70,10 @@ public class Klient extends AbstractKlient{
                         planszaGUI.planszaKamieni[locX][locY] = 2;
                     }
                     wybranePole.repaint();
+                } else if (odpowiedz.startsWith(KomunikatySerwera.KOLOR.toString())){
+                    kolor = Integer.parseInt(in.next());
+                    planszaGUI.ustawKolorGracza(kolor);
+                    planszaGUI.ramka.setTitle("Gra Go: Gracz " + ((kolor == 1) ? "czarny" : "biały"));
                 } else if (odpowiedz.startsWith(KomunikatySerwera.RUCH_PRZECIWNIKA.toString())) {
                     int locX = Integer.parseInt(in.next());
                     int locY = Integer.parseInt(in.next());

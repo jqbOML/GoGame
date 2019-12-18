@@ -121,7 +121,7 @@ public class Interpreter extends AbstractInterpreter {
      * @param gracz - gracz, który położył kamień
      */
     @Override
-    public void sprawdzUduszone(Kamien kamien, AbstractGracz gracz, Serwer serwer){
+    public void sprawdzUduszone(Kamien kamien, AbstractGracz gracz, Gra serwer){
         System.out.println("czyUduszony dla sąsiadów Kamienia.x: "+kamien.wezX()+", y: "+kamien.wezY()+", kolor: "+kamien.wezKolor());
         int x = kamien.wezX();
         int y = kamien.wezY();

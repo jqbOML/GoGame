@@ -1,14 +1,16 @@
 package GraGo.Serwer;
 
-public class Bot extends AbstractGracz implements BotInterface
-{
-    private Interpreter interpreter;
+public class Bot extends AbstractGracz implements BotInterface {
+    Interpreter interpreter;
     private int licznikRuchow = 0;
 
-    public Bot(Interpreter interpreter, int kolor){
+    public Bot(Interpreter interpreter, int kolor) {
         this.interpreter = interpreter;
         this.kolor = kolor;
-        System.out.println("Kolor bota: "+wezKolor());
+        System.out.println("Kolor bota: " + wezKolor());
+    }
+
+    public Bot() {
     }
 
     @Override
@@ -54,10 +56,10 @@ public class Bot extends AbstractGracz implements BotInterface
                                 System.out.println("Ruch bota: " + (j) + " " + (i - 1) + "zaawansowany4");
                                 parametryRuchu = (j) + " " + (i - 1);
                                 zrobionyRuch = true;
-                                licznikRuchow=3;
+                                licznikRuchow = 3;
                                 break outerloop;
                             } else {
-                                licznikRuchow=3;
+                                licznikRuchow = 3;
                             }
                         }
                     }
@@ -76,10 +78,10 @@ public class Bot extends AbstractGracz implements BotInterface
     private boolean czySamoboj(int x, int y, Kamien[][] planszaGo) {
         planszaGo[x][y] = new Kamien(kolor, x, y);
         interpreter.czyOddech(planszaGo[x][y]);
-        if(interpreter.planszaGo[x][y].czyOddech()){
+        if (interpreter.planszaGo[x][y].czyOddech()) {
             planszaGo[x][y] = null;
             return false;
-        } else{
+        } else {
             planszaGo[x][y] = null;
             return true;
         }

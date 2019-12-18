@@ -4,11 +4,12 @@ import java.net.Socket;
 import java.util.Scanner;
 
 abstract class AbstractGracz {
+    Gra gra;
     Serwer serwer;
     Socket socket;
     Scanner input;
     PrintWriter output;
-    int kolor; //1 - czarny, 2 - bialy
+    int kolor = -1; //1 - czarny, 2 - bialy
     AbstractGracz przeciwnik;
    public boolean pass;
 

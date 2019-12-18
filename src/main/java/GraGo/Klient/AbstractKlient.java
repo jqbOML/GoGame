@@ -9,6 +9,7 @@ abstract class AbstractKlient {
     Socket socket;
     Scanner in;
     PrintWriter out;
+    int kolor;
     AbstractStart startGUI;
     AbstractGra planszaGUI;
     AbstractWynik wynikGUI;
