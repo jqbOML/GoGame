@@ -32,28 +32,21 @@ class Klient extends AbstractKlient{
         while(przeciwnik==null){
             //czekaj
         }
-
         startGUI.oknoStartowe.dispose();
-        if (przeciwnik.equals("Gracz")) {
-            socket = new Socket(adresSerwera, 58901);
-            in = new Scanner(socket.getInputStream());
-            out = new PrintWriter(socket.getOutputStream(), true);
-            out.println(KomunikatyKlienta.GRACZ);
 
-            planszaGUI = new GUIPlansza();
-            wysylajKomendy();
-            odbierajKomendy();
-        }
+        socket = new Socket(adresSerwera, 58900);
+        in = new Scanner(socket.getInputStream());
+        out = new PrintWriter(socket.getOutputStream(), true);
         if (przeciwnik.equals("Bot")){
-            socket = new Socket(adresSerwera, 58901);
-            in = new Scanner(socket.getInputStream());
-            out = new PrintWriter(socket.getOutputStream(), true);
             out.println(KomunikatyKlienta.BOT);
-
-            planszaGUI = new GUIPlansza();
-            wysylajKomendy();
-            odbierajKomendy();
+        } else if(przeciwnik.equals("Gracz")){
+            out.println(KomunikatyKlienta.GRACZ);
         }
+
+        planszaGUI = new GUIPlansza();
+        wysylajKomendy();
+        odbierajKomendy();
+
     }
 
     @Override

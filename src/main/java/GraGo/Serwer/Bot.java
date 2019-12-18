@@ -2,10 +2,11 @@ package GraGo.Serwer;
 
 public class Bot extends AbstractGracz implements BotInterface
 {
+    private Interpreter interpreter;
     private int licznikRuchow = 0;
 
-    public Bot(Serwer serwer, int kolor){
-        this.serwer = serwer;
+    public Bot(Interpreter interpreter, int kolor){
+        this.interpreter = interpreter;
         this.kolor = kolor;
         System.out.println("Kolor bota: "+wezKolor());
     }
@@ -30,7 +31,6 @@ public class Bot extends AbstractGracz implements BotInterface
             } else {
                 for (int i = 1; i < 17; i++) {
                     for (int j = 1; j < 17; j++) {
-
                         if (planszaGo[j][i] != null) {
                             if (licznikRuchow % 4 == 0 && planszaGo[j - 1][i] == null && !czySamoboj(j - 1, i, planszaGo)) {
                                 System.out.println("Ruch bota: " + (j - 1) + " " + (i) + "zaawansowany1");
@@ -75,7 +75,7 @@ public class Bot extends AbstractGracz implements BotInterface
 
     private boolean czySamoboj(int x, int y, Kamien[][] planszaGo) {
         planszaGo[x][y] = new Kamien(kolor, x, y);
-        if(serwer.czyOddech(planszaGo[x][y]).size() == 0){
+        if(interpreter.czyOddech(planszaGo[x][y]).size() == 0){
             planszaGo[x][y] = null;
             return false;
         } else{
