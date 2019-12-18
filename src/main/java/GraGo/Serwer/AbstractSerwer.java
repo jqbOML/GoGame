@@ -7,6 +7,7 @@ abstract class AbstractSerwer {
     Interpreter interpreter;
     AbstractGracz aktualnyGracz;
     Boolean czyBot = false;
+    Bot bot;
     int[] wynik = new int[2];
 
     abstract void polaczenieZGraczami(Gracz gracz) throws IOException;

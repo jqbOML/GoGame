@@ -34,7 +34,7 @@ class Klient extends AbstractKlient{
         }
         startGUI.oknoStartowe.dispose();
 
-        socket = new Socket(adresSerwera, 58900);
+        socket = new Socket(adresSerwera, 58902);
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
         if (przeciwnik.equals("Bot")){

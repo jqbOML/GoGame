@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 abstract class AbstractInterpreter {
     public Kamien[][] planszaGo = new Kamien[19][19];
-    Bot bot;
+    boolean czyOddech;
 
 
     abstract void zweryfikujRuch(int x, int y, Gracz gracz, AbstractGracz aktualnyGracz, boolean czyBot);

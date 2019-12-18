@@ -41,6 +41,7 @@ public class Interpreter extends AbstractInterpreter {
     @Override
     public ArrayList<Kamien> czyOddech(Kamien kamien) {
         uduszoneKamienie.clear();
+        czyOddech = false;
         return czyOddech(kamien, new ArrayList<Kamien>());
     }
 
@@ -54,8 +55,7 @@ public class Interpreter extends AbstractInterpreter {
 
         if(czySasiedniePoleWolne(kamien))
         {
-            System.out.println("Czyszcze arrayliste");
-            uduszoneKamienie.clear();
+            czyOddech = true;
             return uduszoneKamienie;
         } else if (!sprawdzoneKamienie.contains(kamien)) {
             uduszoneKamienie.add(kamien);
@@ -120,12 +120,15 @@ public class Interpreter extends AbstractInterpreter {
         System.out.println("czyUduszony dla Kamienia.x: "+kamien.wezX()+", y: "+kamien.wezY()+", kolor: "+kamien.wezKolor());
         int x = kamien.wezX();
         int y = kamien.wezY();
+        ArrayList<Kamien> kamienieDoUduszenia;
 
         if (x < 18) {
             if (planszaGo[x+1][y] != null){
                 if (planszaGo[x+1][y].wezKolor() == gracz.przeciwnik.wezKolor()){
-                    if (czyOddech(planszaGo[x+1][y]) != null){
-                        serwer.wyslijUduszoneKamienie(czyOddech(planszaGo[x+1][y]), gracz);
+                    kamienieDoUduszenia = czyOddech(planszaGo[x+1][y]);
+                    if (!czyOddech){
+                        System.out.println("Kamien["+(x+1)+"]["+y+"] nie posiada oddechow");
+                        serwer.wyslijUduszoneKamienie(kamienieDoUduszenia, gracz);
                     }
                 }
             }
@@ -134,8 +137,10 @@ public class Interpreter extends AbstractInterpreter {
         if (x > 0) {
             if (planszaGo[x-1][y] != null){
                 if (planszaGo[x-1][y].wezKolor() == gracz.przeciwnik.wezKolor()){
-                    if (czyOddech(planszaGo[x-1][y]) != null){
-                        serwer.wyslijUduszoneKamienie(czyOddech(planszaGo[x-1][y]), gracz);
+                    kamienieDoUduszenia = czyOddech(planszaGo[x-1][y]);
+                    if (!czyOddech){
+                        System.out.println("Kamien["+(x-1)+"]["+y+"] nie posiada oddechow");
+                        serwer.wyslijUduszoneKamienie(kamienieDoUduszenia, gracz);
                     }
                 }
             }
@@ -144,8 +149,10 @@ public class Interpreter extends AbstractInterpreter {
         if (y < 18) {
             if (planszaGo[x][y+1] != null){
                 if (planszaGo[x][y+1].wezKolor() == gracz.przeciwnik.wezKolor()){
-                    if (czyOddech(planszaGo[x][y+1]) != null){
-                        serwer.wyslijUduszoneKamienie(czyOddech(planszaGo[x][y+1]), gracz);
+                    kamienieDoUduszenia = czyOddech(planszaGo[x][y+1]);
+                    if (!czyOddech){
+                        System.out.println("Kamien["+x+"]["+(y+1)+"] nie posiada oddechow");
+                        serwer.wyslijUduszoneKamienie(kamienieDoUduszenia, gracz);
                     }
                 }
             }
@@ -154,8 +161,10 @@ public class Interpreter extends AbstractInterpreter {
         if (y > 0) {
             if(planszaGo[x][y-1] != null){
                 if (planszaGo[x][y-1].wezKolor() == gracz.przeciwnik.wezKolor()){
-                    if (czyOddech(planszaGo[x][y-1]) != null){
-                        serwer.wyslijUduszoneKamienie(czyOddech(planszaGo[x][y-1]), gracz);
+                    kamienieDoUduszenia = czyOddech(planszaGo[x][y-1]);
+                    if (!czyOddech){
+                        System.out.println("Kamien["+(x)+"]["+(y-1)+"] nie posiada oddechow");
+                        serwer.wyslijUduszoneKamienie(kamienieDoUduszenia, gracz);
                     }
                 }
             }

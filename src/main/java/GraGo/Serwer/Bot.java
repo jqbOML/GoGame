@@ -75,7 +75,8 @@ public class Bot extends AbstractGracz implements BotInterface
 
     private boolean czySamoboj(int x, int y, Kamien[][] planszaGo) {
         planszaGo[x][y] = new Kamien(kolor, x, y);
-        if(interpreter.czyOddech(planszaGo[x][y]).size() == 0){
+        interpreter.czyOddech(planszaGo[x][y]);
+        if(interpreter.czyOddech){
             planszaGo[x][y] = null;
             return false;
         } else{

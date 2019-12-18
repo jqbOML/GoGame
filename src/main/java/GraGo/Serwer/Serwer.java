@@ -16,9 +16,9 @@ public class Serwer extends AbstractSerwer {
     public Serwer(){
         interpreter = new Interpreter();
         czyBot = false;
-        try (ServerSocket listener = new ServerSocket(58900)) {
+        try (ServerSocket listener = new ServerSocket(58902)) {
             System.out.println("Serwer Go aktywny...");
-            ExecutorService pool = Executors.newFixedThreadPool(2);
+            ExecutorService pool = Executors.newFixedThreadPool(100);
             while (true) {
                 //socket = listener.accept();
                 //Gracz gracz1 = new Gracz(listener.accept(), 2, this);
@@ -42,10 +42,10 @@ public class Serwer extends AbstractSerwer {
 
         if (przeciwnik.startsWith(KomunikatyKlienta.BOT.toString())){
             czyBot = true;
-            interpreter.bot = new Bot(interpreter, gracz.wezKolor() == 1 ? 2 : 1);
+            bot = new Bot(interpreter, gracz.wezKolor() == 1 ? 2 : 1);
             gracz.output.println(KomunikatySerwera.INFO + " Grasz z botem");
-            gracz.ustawPrzeciwnika(interpreter.bot);
-            interpreter.bot.ustawPrzeciwnika(gracz);
+            gracz.ustawPrzeciwnika(bot);
+            bot.ustawPrzeciwnika(gracz);
             ustawAktualnegoGracza(gracz);
         } else if (przeciwnik.startsWith(KomunikatyKlienta.GRACZ.toString())){
             if (gracz.wezKolor() == 1) {
@@ -79,7 +79,7 @@ public class Serwer extends AbstractSerwer {
                     ustawAktualnegoGracza(aktualnyGracz.przeciwnik);
                     if (czyBot){
                         Thread.sleep(207);
-                        String[] parametry = interpreter.bot.wykonajRuch(interpreter.planszaGo).split(" ");
+                        String[] parametry = bot.wykonajRuch(interpreter.planszaGo).split(" ");
                         int botX = Integer.parseInt(parametry[0]);
                         int botY = Integer.parseInt(parametry[1]);
                         gracz.output.println(KomunikatySerwera.RUCH_PRZECIWNIKA + " " + botX + " " + botY);
@@ -143,8 +143,6 @@ public class Serwer extends AbstractSerwer {
             }
         }
     }
-
-
 
     void wyslijUduszoneKamienie(ArrayList<Kamien> uduszoneKamienie, AbstractGracz gracz){
         System.out.println("Wysylam uduszone kamienie: ");
