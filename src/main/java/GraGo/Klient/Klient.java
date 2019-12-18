@@ -13,7 +13,7 @@ import java.net.Socket;
 
 import javax.swing.*;
 
-class Klient extends AbstractKlient{
+public class Klient extends AbstractKlient{
 
     Klient(String adresSerwera) throws Exception {
         startGUI = new GUIStart();
@@ -119,9 +119,10 @@ class Klient extends AbstractKlient{
                                 , "Czy zgadzasz się z wynikiem?", JOptionPane.YES_NO_OPTION);
                         if (zgoda == JOptionPane.YES_OPTION){
                             out.print(KomunikatyKlienta.ZAAKCEPTUJ_WYNIK);
-                        } else if(zgoda == JOptionPane.NO_OPTION){
-                            out.print(KomunikatyKlienta.ODRZUC_WYNIK);
-                        }
+                            System.out.println("wysyłąm zgodę");
+                        } //else if(zgoda == JOptionPane.NO_OPTION){
+                           // out.print(KomunikatyKlienta.ODRZUC_WYNIK);
+                       // }
                 } else if (odpowiedz.startsWith(KomunikatySerwera.KONIEC_GRY.toString())) {
                     if (kolor == 1) {
                         wynikGUI = new GUIWynik();

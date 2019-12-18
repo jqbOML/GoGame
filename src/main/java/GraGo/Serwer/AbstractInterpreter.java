@@ -13,3 +13,12 @@ abstract class AbstractInterpreter {
     abstract boolean czySasiedniePoleWolne(Kamien kamien);
     abstract void sprawdzUduszone(Kamien kamien, AbstractGracz gracz, Serwer serwer);
 }
+
+
+
+
+
+
+
+
+

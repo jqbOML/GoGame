@@ -1,3 +1,4 @@
+import GraGo.Klient.Klient;
 import GraGo.KomunikatyKlienta;
 import GraGo.KomunikatySerwera;
 import GraGo.Serwer.Gracz;
@@ -9,16 +10,18 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
 public class PolaczenieTest  {
-    private Serwer serwer = new Serwer();
+
     Socket socket = new Socket();
 
     @Test
     public void KomendyDoKlientaTest() throws IOException {
 
-
+        Serwer serwer = new Serwer();
         socket = new Socket("127.0.0.1", 58900);
 
         Scanner input;
@@ -26,18 +29,24 @@ public class PolaczenieTest  {
         String polecenieOdSerwera = input.next(); //polecenie które klient dostaje od serwera po połączeniu się
         assertEquals("WITAJ", polecenieOdSerwera);
 
+        socket.close();
     }
 
    /* @Test
     public void KomendyDoSerweraTest() throws IOException {
+        Serwer serwer = new Serwer();
         PrintWriter out;
         Gracz graczTest = new Gracz(socket, 1, serwer);
-        socket = new Socket("127.0.0.1", 58901);
+        socket = new Socket("127.0.0.1", 58900);
 
         out = new PrintWriter(socket.getOutputStream(), true);
-        out.println(KomunikatyKlienta.PASS); //klient wysyła wiadomosć
+       // out.println(KomunikatyKlienta.PASS); //klient wysyła wiadomosć
+
+        Klient klient = mock(Klient.class);
+        when(klient.wysylajKomendy()).thenReturn(klient.out.println(KomunikatyKlienta.PASS));
 
         serwer.interpretujKomendy(graczTest);
+
 
         assertEquals(true, graczTest.pass); //polecenie które serwer dostaje od klienta
 

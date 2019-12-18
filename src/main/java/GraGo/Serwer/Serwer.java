@@ -173,4 +173,3 @@ public class Serwer extends AbstractSerwer {
         try {gracz.socket.close();} catch (IOException ignored) {}
     }
 }
-

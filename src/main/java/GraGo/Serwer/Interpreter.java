@@ -24,7 +24,6 @@ public class Interpreter extends AbstractInterpreter {
                 throw new IllegalStateException("Niedozwolony ruch KO!");
             }
         }
-
     }
 
     //@Override

@@ -66,6 +66,17 @@ class KamienTest {
         assertEquals(0, interpreter.czyOddech(interpreter.planszaGo[10][10]).size());
 
     }
+    @Test
+    public void czySamobojTest() {
 
+        interpreter.planszaGo[3][1] = new Kamien(2,3,1);
+        interpreter.planszaGo[3][3] = new Kamien(2,3,3);
+        interpreter.planszaGo[2][2] = new Kamien(2,2,2);
+        interpreter.planszaGo[4][2] = new Kamien(2,4,2); //kamienie tworzące koszyczek
+        interpreter.planszaGo[3][2] = new Kamien(1, 3, 2); //ruch samobójczy
+        interpreter.planszaGo[2][1] = new Kamien(1, 2, 1); //ruch poprawny
+        assertTrue(interpreter.czySamoboj(interpreter.planszaGo[3][2])); //kamień nie może zostać postawiony
+        assertFalse(interpreter.czySamoboj(interpreter.planszaGo[2][1])); //kamień może zostać postawiony
+    }
 
 }
