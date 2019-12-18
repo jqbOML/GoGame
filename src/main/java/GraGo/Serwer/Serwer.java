@@ -14,8 +14,6 @@ import java.util.concurrent.Executors;
 public class Serwer extends AbstractSerwer {
 
     public Serwer(){
-        interpreter = new Interpreter();
-        czyBot = false;
         try (ServerSocket listener = new ServerSocket(58902)) {
             System.out.println("Serwer Go aktywny...");
             ExecutorService pool = Executors.newFixedThreadPool(100);
@@ -41,6 +39,7 @@ public class Serwer extends AbstractSerwer {
         String przeciwnik = gracz.input.next();
 
         if (przeciwnik.startsWith(KomunikatyKlienta.BOT.toString())){
+            interpreter = new Interpreter();
             czyBot = true;
             bot = new Bot(interpreter, gracz.wezKolor() == 1 ? 2 : 1);
             gracz.output.println(KomunikatySerwera.INFO + " Grasz z botem");
@@ -48,6 +47,9 @@ public class Serwer extends AbstractSerwer {
             bot.ustawPrzeciwnika(gracz);
             ustawAktualnegoGracza(gracz);
         } else if (przeciwnik.startsWith(KomunikatyKlienta.GRACZ.toString())){
+            interpreter = new Interpreter();
+            czyBot = false;
+
             if (gracz.wezKolor() == 1) {
                 gracz.output.println(KomunikatySerwera.INFO + " Oczekuje na przeciwnika");
                 ustawAktualnegoGracza(gracz);
