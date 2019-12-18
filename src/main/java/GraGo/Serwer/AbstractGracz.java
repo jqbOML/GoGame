@@ -10,7 +10,7 @@ abstract class AbstractGracz {
     PrintWriter output;
     int kolor; //1 - czarny, 2 - bialy
     AbstractGracz przeciwnik;
-    boolean pass;
+   public boolean pass;
 
     void ustawPrzeciwnika(AbstractGracz przeciwnik){
         this.przeciwnik = przeciwnik;

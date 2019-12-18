@@ -1,6 +1,7 @@
 package GraGo.Serwer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 abstract class AbstractSerwer {
     Interpreter interpreter;
@@ -14,4 +15,8 @@ abstract class AbstractSerwer {
 
     abstract void wyjscieZGry(Gracz gracz);
 
+    //public abstract Object wyslijUduszoneKamienie();
+    abstract void wyslijUduszoneKamienie(ArrayList<Kamien> uduszoneKamienie, AbstractGracz gracz);
+
+    //public abstract Object wyslijUduszoneKamienie(ArrayList<Kamien> czyOddech);
 }
