@@ -130,17 +130,17 @@ public class Gra {
                 {
                     if (wynik[0] < wynik[1]) {
                         gracz.output.println(KomunikatySerwera.ZWYCIESTWO);
-                        gracz.przeciwnik.output.print(KomunikatySerwera.PORAZKA);
+                        gracz.przeciwnik.output.println(KomunikatySerwera.PORAZKA);
                     } else if (wynik[0] > wynik[1]) {
                         gracz.output.println(KomunikatySerwera.PORAZKA);
-                        gracz.przeciwnik.output.print(KomunikatySerwera.ZWYCIESTWO);
+                        gracz.przeciwnik.output.println(KomunikatySerwera.ZWYCIESTWO);
                     } else {
                         gracz.output.println(KomunikatySerwera.REMIS);
-                        gracz.przeciwnik.output.print(KomunikatySerwera.REMIS);
+                        gracz.przeciwnik.output.println(KomunikatySerwera.REMIS);
                     }
                 }
             } else if (polecenie.startsWith(KomunikatyKlienta.ODRZUC_WYNIK.toString())) {
-                gracz.przeciwnik.output.print(KomunikatySerwera.WYNIK);
+                gracz.przeciwnik.output.println(KomunikatySerwera.KONIEC_GRY);
             }
 
             if (czyBot && gracz.pass) {
@@ -148,7 +148,6 @@ public class Gra {
             } else if (gracz.pass && gracz.przeciwnik.pass) {
                 gracz.output.println(KomunikatySerwera.KONIEC_GRY);
                 gracz.pass = false;
-                gracz.przeciwnik.output.println(KomunikatySerwera.KONIEC_GRY);
                 gracz.przeciwnik.pass = false;
             }
         }

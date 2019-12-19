@@ -38,16 +38,21 @@ public class Interpreter extends AbstractInterpreter {
     @Override
     public boolean czySamoboj(Kamien kamien) {
         uduszoneKamienie.clear();
-        czyOddech(kamien);
-        if (kamien.czyOddech()){
+
+        if (czyOddech(kamien).size() == 0){
+            System.out.println("znalazlem oddech");
             return false;
-        } else if(kamien.wezX()<18 && planszaGo[kamien.wezX()+1][kamien.wezY()].wezKolor() != kamien.wezKolor() && czyOddech(planszaGo[kamien.wezX()+1][kamien.wezY()]).size() == 0){
+        } else if(kamien.wezX()<18 && planszaGo[kamien.wezX()+1][kamien.wezY()].wezKolor() != kamien.wezKolor() && czyOddech(planszaGo[kamien.wezX()+1][kamien.wezY()]).size() != 0){
+            System.out.println("Prawy uduszony");
             return false;
-        } else if(kamien.wezX()>0 && planszaGo[kamien.wezX()-1][kamien.wezY()].wezKolor() != kamien.wezKolor() && czyOddech(planszaGo[kamien.wezX()-1][kamien.wezY()]).size() == 0){
+        } else if(kamien.wezX()>0 && planszaGo[kamien.wezX()-1][kamien.wezY()].wezKolor() != kamien.wezKolor() && czyOddech(planszaGo[kamien.wezX()-1][kamien.wezY()]).size() != 0){
+            System.out.println("Lewy uduszony");
             return false;
-        } else if(kamien.wezY()<18 && planszaGo[kamien.wezX()][kamien.wezY()+1].wezKolor() != kamien.wezKolor() && czyOddech(planszaGo[kamien.wezX()][kamien.wezY()+1]).size() == 0){
+        } else if(kamien.wezY()<18 && planszaGo[kamien.wezX()][kamien.wezY()+1].wezKolor() != kamien.wezKolor() && czyOddech(planszaGo[kamien.wezX()][kamien.wezY()+1]).size() != 0){
+            System.out.println("Gorny uduszony");
             return false;
-        } else if (kamien.wezY()>0 && planszaGo[kamien.wezX()][kamien.wezY()-1].wezKolor() != kamien.wezKolor() && czyOddech(planszaGo[kamien.wezX()][kamien.wezY()-1]).size() == 0){
+        } else if (kamien.wezY()>0 && planszaGo[kamien.wezX()][kamien.wezY()-1].wezKolor() != kamien.wezKolor() && czyOddech(planszaGo[kamien.wezX()][kamien.wezY()-1]).size() != 0){
+            System.out.println("Dolny uduszony");
             return false;
         }else{
             return true;
@@ -68,6 +73,7 @@ public class Interpreter extends AbstractInterpreter {
      * metoda czyOddech() zwraca ArrayList<Kamien>
      */
     private ArrayList<Kamien> czyOddech(Kamien kamienSprawdzany, Kamien kamienZGrupy, ArrayList<Kamien> sprawdzoneKamienie){
+
         int x = kamienZGrupy.wezX();
         int y = kamienZGrupy.wezY();
 

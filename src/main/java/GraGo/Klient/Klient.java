@@ -77,7 +77,6 @@ public class Klient extends AbstractKlient{
                 } else if (odpowiedz.startsWith(KomunikatySerwera.RUCH_PRZECIWNIKA.toString())) {
                     int locX = Integer.parseInt(in.next());
                     int locY = Integer.parseInt(in.next());
-                    System.out.println("Przeciwnik> locX: " + locX + ", locY: " + locY);
                     if (kolor == 1) {
                         planszaGUI.pole[locX][locY].setIcon(planszaGUI.tekstury.Im_bialyxx);
                         planszaGUI.planszaKamieni[locX][locY] = 2;
@@ -89,9 +88,7 @@ public class Klient extends AbstractKlient{
                     planszaGUI.belkaStatusu.setText("Przeciwnik wykonał ruch, Twoja kolej");
                 } else if (odpowiedz.startsWith(KomunikatySerwera.USUN.toString())){
                     int locX = Integer.parseInt(in.next());
-                    System.out.println("Usun x: " + locX);
                     int locY = Integer.parseInt(in.next());
-                    System.out.println("Usun y: "+ locY);
                     planszaGUI.planszaKamieni[locX][locY] = 0;
                     planszaGUI.pole[locX][locY].setIcon(planszaGUI.tekstury.Im_pustexx); //wczytanie tekstury bez uwzględnienia granic
                     planszaGUI.pole[locX][locY].repaint();
@@ -125,18 +122,16 @@ public class Klient extends AbstractKlient{
                             out.println(KomunikatyKlienta.ODRZUC_WYNIK);
                         }
                 } else if (odpowiedz.startsWith(KomunikatySerwera.KONIEC_GRY.toString())) {
-                    if (kolor == 1) {
-                        wynikGUI = new GUIWynik();
-                        wynikGUI.zakonczenie.setTitle("Gracz "+((kolor == 1) ? "czarny" : "biały") +": podaj wynik");
-                        wynikGUI.okButton.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {
-                                wynik[0] = Integer.parseInt(wynikGUI.WynikGracza.getText());
-                                wynik[1] = Integer.parseInt(wynikGUI.WynikPrzeciwnika.getText());
-                                out.println(KomunikatyKlienta.WYNIK.toString() + " " + wynik[0] + " " + wynik[1]);
-                                wynikGUI.zakonczenie.dispose();
-                            }
-                        });
-                    }
+                    wynikGUI = new GUIWynik();
+                    wynikGUI.zakonczenie.setTitle("Gracz "+((kolor == 1) ? "czarny" : "biały") +": podaj wynik");
+                    wynikGUI.okButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            wynik[0] = Integer.parseInt(wynikGUI.WynikGracza.getText());
+                            wynik[1] = Integer.parseInt(wynikGUI.WynikPrzeciwnika.getText());
+                            out.println(KomunikatyKlienta.WYNIK.toString() + " " + wynik[0] + " " + wynik[1]);
+                            wynikGUI.zakonczenie.dispose();
+                        }
+                    });
                 }
             }
 
