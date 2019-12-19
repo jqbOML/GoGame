@@ -5,18 +5,12 @@ import GraGo.KomunikatySerwera;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Serwer extends AbstractSerwer implements Runnable {
     ArrayList<Gracz> oczekujacyGracze = new ArrayList<>();
 
-    public Serwer(){
-
-    }
     @Override
     public void run() {
         while(true){

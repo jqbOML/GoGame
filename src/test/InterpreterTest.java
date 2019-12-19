@@ -3,7 +3,7 @@ import GraGo.Serwer.Kamien;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class KamienTest {
+class InterpreterTest {
     private Interpreter interpreter = new Interpreter();
 
     @Test

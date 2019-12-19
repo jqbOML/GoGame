@@ -2,7 +2,6 @@ package GraGo.Serwer;
 
 import GraGo.KomunikatyKlienta;
 import GraGo.KomunikatySerwera;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -74,6 +73,7 @@ public class Gra {
     public void interpretujKomendy(Gracz gracz) {
         while (gracz.input.hasNext()) {
             String polecenie = gracz.input.next();
+            System.out.println("Serwer nowe polecenie: "+polecenie);
             if (polecenie.startsWith(KomunikatyKlienta.WYJSCIE.toString())) {
                 return;
             } else if (polecenie.startsWith(KomunikatyKlienta.RUCH.toString())) {
@@ -117,21 +117,21 @@ public class Gra {
 
                 if (czyBot) {
                     if (wynik[0] > wynik[1]) {
-                        gracz.output.println(KomunikatySerwera.PORAZKA);
-                    } else if (wynik[0] < wynik[1]) {
                         gracz.output.println(KomunikatySerwera.ZWYCIESTWO);
+                    } else if (wynik[0] < wynik[1]) {
+                        gracz.output.println(KomunikatySerwera.PORAZKA);
                     } else {
                         gracz.output.println(KomunikatySerwera.REMIS);
                     }
                 } else {
-                    gracz.output.println(KomunikatySerwera.WYNIK + " " + wynik[0] + " " + wynik[1]);
+                    gracz.przeciwnik.output.println(KomunikatySerwera.WYNIK + " " + wynik[1] + " " + wynik[0]);
                 }
             } else if (polecenie.startsWith(KomunikatyKlienta.ZAAKCEPTUJ_WYNIK.toString())) {
                 {
-                    if (wynik[0] > wynik[1]) {
+                    if (wynik[0] < wynik[1]) {
                         gracz.output.println(KomunikatySerwera.ZWYCIESTWO);
                         gracz.przeciwnik.output.print(KomunikatySerwera.PORAZKA);
-                    } else if (wynik[0] < wynik[1]) {
+                    } else if (wynik[0] > wynik[1]) {
                         gracz.output.println(KomunikatySerwera.PORAZKA);
                         gracz.przeciwnik.output.print(KomunikatySerwera.ZWYCIESTWO);
                     } else {
@@ -140,14 +140,16 @@ public class Gra {
                     }
                 }
             } else if (polecenie.startsWith(KomunikatyKlienta.ODRZUC_WYNIK.toString())) {
-                gracz.output.print(KomunikatySerwera.KONIEC_GRY);
+                gracz.przeciwnik.output.print(KomunikatySerwera.WYNIK);
             }
 
             if (czyBot && gracz.pass) {
                 gracz.output.println(KomunikatySerwera.KONIEC_GRY);
             } else if (gracz.pass && gracz.przeciwnik.pass) {
                 gracz.output.println(KomunikatySerwera.KONIEC_GRY);
+                gracz.pass = false;
                 gracz.przeciwnik.output.println(KomunikatySerwera.KONIEC_GRY);
+                gracz.przeciwnik.pass = false;
             }
         }
     }

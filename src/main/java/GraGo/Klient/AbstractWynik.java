@@ -3,6 +3,8 @@ package GraGo.Klient;
 import javax.swing.*;
 
 abstract class AbstractWynik {
+    JFrame zakonczenie;
+
     /**
      * Wpisz swoją liczbę punktów
      */

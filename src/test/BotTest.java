@@ -46,7 +46,6 @@ class BotTest {
                     ++ilosc;
             }
 
-
         assertEquals(5, ilosc);
 
     }

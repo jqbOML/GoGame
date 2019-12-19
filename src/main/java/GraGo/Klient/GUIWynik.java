@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 
 public class GUIWynik extends AbstractWynik {
     GUIWynik(){
-        JFrame zakonczenie = new JFrame("Podaj wyniki");
+        zakonczenie = new JFrame("Podaj wyniki");
         WynikGracza = new JTextArea(1, 10);
         WynikPrzeciwnika = new JTextArea(1, 10);
         okButton = new JButton("OK");

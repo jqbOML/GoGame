@@ -1,12 +1,6 @@
 package GraGo;
 
 public enum KomunikatySerwera {
-    /**
-     * Komunikat wysyłany podczas inicjalizacji połączenia Klienta z serwerem, serwer informuje gracza o kolorze
-     * WITAJ <" "gracz.kolor>
-     * <" "gracz.kolor>: (1 (czarny), 2 (biały));
-     */
-    WITAJ,
 
     /**
      * Komunikaty wyświetlane na ekranie Klienta, np. o niedozwolonym ruchu
@@ -18,7 +12,8 @@ public enum KomunikatySerwera {
     INFO,
 
     /**
-     *
+     * Komunikat z informacją o przydzielonym kolorze dla użytkownika
+     * KOLOR: 1 - czarny, 2 - biały
      */
     KOLOR,
 
@@ -54,6 +49,7 @@ public enum KomunikatySerwera {
 
     /**
      * Komunikat propozycji wyniku gry (otrzymanego od pierwszego gracza) wysyłany drugiemu graczu do zaakceptowania
+     * WYNIK <wynik gracza do którego wysyłamy" "wynik gracza wysyłającego>
      */
     WYNIK,
 

@@ -114,24 +114,26 @@ public class Klient extends AbstractKlient{
                     JOptionPane.showMessageDialog(planszaGUI.ramka, "Przeciwnik wyszedł z gry!");
                     break;
                 }else if (odpowiedz.startsWith(KomunikatySerwera.WYNIK.toString())) {
-                        int a = Integer.parseInt(in.next());
-                        int b = Integer.parseInt(in.next());
-                        int zgoda = JOptionPane.showConfirmDialog(planszaGUI, "Twój wynik to: " + b + " Wynik przeciwnika to: " + a
+                        int mojWynik = Integer.parseInt(in.next());
+                        int wynikPrzeciwnika = Integer.parseInt(in.next());
+                        int zgoda = JOptionPane.showConfirmDialog(planszaGUI, "Twój wynik to: " + mojWynik + " Wynik przeciwnika to: " + wynikPrzeciwnika
                                 , "Czy zgadzasz się z wynikiem?", JOptionPane.YES_NO_OPTION);
                         if (zgoda == JOptionPane.YES_OPTION){
-                            out.print(KomunikatyKlienta.ZAAKCEPTUJ_WYNIK);
-                            System.out.println("wysyłąm zgodę");
-                        } //else if(zgoda == JOptionPane.NO_OPTION){
-                           // out.print(KomunikatyKlienta.ODRZUC_WYNIK);
-                       // }
+                            out.println(KomunikatyKlienta.ZAAKCEPTUJ_WYNIK);
+
+                        } else if(zgoda == JOptionPane.NO_OPTION){
+                            out.println(KomunikatyKlienta.ODRZUC_WYNIK);
+                        }
                 } else if (odpowiedz.startsWith(KomunikatySerwera.KONIEC_GRY.toString())) {
                     if (kolor == 1) {
                         wynikGUI = new GUIWynik();
+                        wynikGUI.zakonczenie.setTitle("Gracz "+((kolor == 1) ? "czarny" : "biały") +": podaj wynik");
                         wynikGUI.okButton.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
                                 wynik[0] = Integer.parseInt(wynikGUI.WynikGracza.getText());
                                 wynik[1] = Integer.parseInt(wynikGUI.WynikPrzeciwnika.getText());
                                 out.println(KomunikatyKlienta.WYNIK.toString() + " " + wynik[0] + " " + wynik[1]);
+                                wynikGUI.zakonczenie.dispose();
                             }
                         });
                     }
